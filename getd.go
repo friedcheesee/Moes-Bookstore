@@ -1,13 +1,12 @@
 package main
-
 import (
 	"database/sql"
+	"fmt"
 
 	_ "github.com/lib/pq" // postgres golang driver
 )
-
 func getdata(db *sql.DB) (*sql.Rows, error) {
-	query := "SELECT name FROM joe"
+	query := "SELECT name,roll,id FROM joe"
 	rows, err := db.Query(query)
 	if err != nil {
 		return nil, err
@@ -15,20 +14,13 @@ func getdata(db *sql.DB) (*sql.Rows, error) {
 	return rows, nil
 }
 
-
-// func getdata(db *sql.DB) (*sql.Rows, error) {
-// 	rows, err := db.Query(`SELECT name, Roll FROM joe`)
-// 	CheckError(err)
-
-// 	defer rows.Close()
-// 	for rows.Next() {
-// 		var name string
-// 		var roll int
-// 		err = rows.Scan(&name, &roll)
-// 		CheckError(err)
-
-// 		fmt.Println(name, roll)
-// 	}
-
-// 	CheckError(err)
-// }
+func printnames(rows *sql.Rows) {
+	defer rows.Close()
+	for rows.Next() {
+		var id,roll int
+		var name string
+		err := rows.Scan(&name,&roll,&id)
+		CheckError(err)
+		fmt.Printf("Name: %s\nRoll: %d\nID: %d\n", name,roll,id)
+	}
+}

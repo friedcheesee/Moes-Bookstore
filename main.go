@@ -19,9 +19,9 @@ func main() {
 	//CheckError(err)
 	//printnames(rows)
 	//reguser(db)
-	username := "friedcheese"
+	username := "apple"
 	password := "abcd"
-	//reguser(db,username,password)
+	reguser(db, username, password)
 	logindb(db, username, password)
 }
 
