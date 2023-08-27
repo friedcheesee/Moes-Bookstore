@@ -15,9 +15,14 @@ const (
 func main() {
 	//conecct
 	db := adminconnect()
-	rows, err := getdata(db)
-	CheckError(err)
-	printnames(rows)
+	//rows, err := getdata(db)
+	//CheckError(err)
+	//printnames(rows)
+	//reguser(db)
+	username := "friedcheese"
+	password := "abcd"
+	//reguser(db,username,password)
+	logindb(db, username, password)
 }
 
 func CheckError(err error) {
