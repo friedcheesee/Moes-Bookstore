@@ -1,9 +1,6 @@
 package main
 
 import (
-	"database/sql"
-	"fmt"
-
 	_ "github.com/lib/pq"
 )
 
@@ -17,31 +14,10 @@ const (
 
 func main() {
 	//conecct
-	psqlconn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
-
-	// open database
-	db, err := sql.Open("postgres", psqlconn)
-	CheckError(err)
-
-	// close database
-	defer db.Close()
-
-	//fmt.Println(db)
-	// check db
-	err = db.Ping()
-	CheckError(err)
-
-	fmt.Println("Connected!")
+	db := adminconnect()
 	rows, err := getdata(db)
 	CheckError(err)
-	defer rows.Close()
-	for rows.Next() {
-		var id int
-		var name string
-		err := rows.Scan(&name)
-		CheckError(err)
-		fmt.Printf("ID: %d, Name: %s\n", id, name)
-	}
+	printnames(rows)
 }
 
 func CheckError(err error) {

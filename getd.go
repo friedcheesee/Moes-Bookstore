@@ -15,6 +15,7 @@ func getdata(db *sql.DB) (*sql.Rows, error) {
 	return rows, nil
 }
 
+
 // func getdata(db *sql.DB) (*sql.Rows, error) {
 // 	rows, err := db.Query(`SELECT name, Roll FROM joe`)
 // 	CheckError(err)
