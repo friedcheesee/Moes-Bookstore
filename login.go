@@ -36,7 +36,6 @@ func printnames(rows *sql.Rows) {
 		fmt.Printf("ID: %d, Name: %s\n", id, name)
 	}
 }
-
 func hashPassword(password string) (string, error) {
 	hashedBytes, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {
@@ -45,12 +44,7 @@ func hashPassword(password string) (string, error) {
 	return string(hashedBytes), nil
 }
 func logindb(db *sql.DB, username string, password string) {
-	hashedPassword, err := hashPassword(password)
-	CheckError(err)
-
-	err = authenticateUser(db, username, hashedPassword)
-	fmt.Print("this is the password from login db-")
-	fmt.Println(hashedPassword)
+	err := authenticateUser(db, username, password)
 	if err != nil {
 		fmt.Println("Authentication failed:", err)
 		return
@@ -58,15 +52,13 @@ func logindb(db *sql.DB, username string, password string) {
 		fmt.Println("Authentication successful")
 	}
 }
-func authenticateUser(db *sql.DB, username, hashedPassword string) error {
+func authenticateUser(db *sql.DB, username, password string) error {
 	var storedPasswordHash string
 	row := db.QueryRow("SELECT password FROM users WHERE username = $1", username)
 	CheckError(row.Scan(&storedPasswordHash))
-	password := "abcd"
 	// Compare stored password hash with provided hashed password
 	err := bcrypt.CompareHashAndPassword([]byte(storedPasswordHash), []byte(password))
 	CheckError(err)
-
 	return nil
 }
 func reguser(db *sql.DB, username string, password string) {
