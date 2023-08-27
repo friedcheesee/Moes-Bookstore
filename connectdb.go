@@ -26,11 +26,22 @@ func main() {
 	// close database
 	defer db.Close()
 
+	//fmt.Println(db)
 	// check db
 	err = db.Ping()
 	CheckError(err)
 
 	fmt.Println("Connected!")
+	rows, err := getdata(db)
+	CheckError(err)
+	defer rows.Close()
+	for rows.Next() {
+		var id int
+		var name string
+		err := rows.Scan(&name)
+		CheckError(err)
+		fmt.Printf("ID: %d, Name: %s\n", id, name)
+	}
 }
 
 func CheckError(err error) {
