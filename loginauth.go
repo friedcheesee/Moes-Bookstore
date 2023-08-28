@@ -29,6 +29,7 @@ func hashPassword(password string) (string, error) {
 
 func logindb(db *sql.DB, username string, password string) {
 	err := authenticateUser(db, username, password)
+
 	if err != nil {
 		fmt.Println("Authentication failed:", err)
 		return
@@ -59,7 +60,11 @@ func reguser(db *sql.DB, username string, password string) {
 }
 
 func storeCredentials(db *sql.DB, username, hashedPassword string) error {
-	_, err := db.Exec("INSERT INTO users (username, password) VALUES ($1, $2)", username, hashedPassword)
+	var maxUID int
+    err := db.QueryRow("SELECT MAX(uid) FROM users").Scan(&maxUID)
+    CheckError(err)
+    uid := maxUID + 1
+	_,err = db.Exec("INSERT INTO users (username, password, uid, active) VALUES ($1, $2, $3, 1)", username, hashedPassword, uid)
 	return err
 }
 

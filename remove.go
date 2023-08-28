@@ -33,12 +33,12 @@ func deactivate(db *sql.DB,username string,password string){
 }
 func reactivate(db *sql.DB,username string,password string){
 	logindb(db, username, password)
-	_, err := db.Exec("update users set active=1 where username=$1)", username)
+	_, err := db.Exec("update users set active=1 where username=$1", username)
 	CheckError(err)
 	fmt.Println("User account reactivated")
 }
 
-func readID(rows *sql.Rows) {
+func readID(rows *sql.Rows) int{
     defer rows.Close()
     for rows.Next() {
         var userID int
@@ -46,8 +46,29 @@ func readID(rows *sql.Rows) {
             panic(err)
         }
         fmt.Printf("User ID: %d\n", userID)
+		return userID
     }
     if err := rows.Err(); err != nil {
-        panic(err)
+        CheckError(err)
     }
+	return 0
+	
+}
+func readID1(rows *sql.Rows) (int) {
+    defer rows.Close()
+    if rows.Next() {
+        var userID int
+        if err := rows.Scan(&userID); err != nil {
+			CheckError(err)
+            return userID   // Return error if scanning fails
+        }
+        fmt.Printf("User ID: %d\n", userID)
+        return userID// Return userID if scanning is successful
+    }
+
+    if err := rows.Err(); err != nil {
+        CheckError(err) // Return error if there's an error in rows
+    }
+
+    	return 0  // Return specific error for no rows found
 }
