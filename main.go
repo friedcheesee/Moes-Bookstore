@@ -45,5 +45,5 @@ func initiatelog() *os.File{
 	logFile, err := os.OpenFile("app.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	CheckError(err)
 	log.SetOutput(logFile)
-	return logFile
+	return 
 }
