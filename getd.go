@@ -6,7 +6,7 @@ import (
 	_ "github.com/lib/pq" // postgres golang driver
 )
 func getdata(db *sql.DB) (*sql.Rows, error) {
-	query := "SELECT name,roll,id FROM joe"
+	query := "SELECT name,roll,uid FROM joe"
 	rows, err := db.Query(query)
 	if err != nil {
 		return nil, err
@@ -17,10 +17,10 @@ func getdata(db *sql.DB) (*sql.Rows, error) {
 func printnames(rows *sql.Rows) {
 	defer rows.Close()
 	for rows.Next() {
-		var id,roll int
+		var uid,roll int
 		var name string
-		err := rows.Scan(&name,&roll,&id)
+		err := rows.Scan(&name,&roll,&uid)
 		CheckError(err)
-		fmt.Printf("Name: %s\nRoll: %d\nID: %d\n", name,roll,id)
+		fmt.Printf("Name: %s\nRoll: %d\nID: %d\n", name,roll,uid)
 	}
 }
