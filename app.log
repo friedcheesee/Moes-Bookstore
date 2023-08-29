@@ -5,3 +5,4 @@
 2023/08/29 15:06:52 Error: &s pq: column "active" is of type boolean but expression is of type integer
 2023/08/29 15:07:05 Error: &s pq: null value in column "email" of relation "users" violates not-null constraint
 2023/08/29 15:08:33 Error: &s pq: null value in column "email" of relation "users" violates not-null constraint
+2023/08/29 15:16:38 Invalid email

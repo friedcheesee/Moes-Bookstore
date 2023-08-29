@@ -28,7 +28,7 @@ func main() {
 	//printnames(rows)
 	//reguser(db)
 	username := "friedcheese"
-	email:= "fried@mail.com"
+	email:= "friedd@mail.com"
 	password := "abcd"
 	reguser(db, username, password,email)
 	//logindb(db, username, password)
