@@ -1,7 +1,8 @@
 package main
 import (
 	"fmt"
-"log"
+	"log"
+	"strings"
 	"database/sql"
 )
 func addToCart(db *sql.DB, uid, bookid int){
@@ -191,4 +192,63 @@ func giveReview(db *sql.DB, uid, bookID int, review string) error {
 	}
 	fmt.Println("Review added successfully")
 	return nil
+}
+
+func displayBookReviews(db *sql.DB, bookID int) error {
+    rows, err := db.Query("SELECT review FROM reviews WHERE bookid = $1", bookID)
+    if err != nil {
+        log.Println("Error retrieving reviews:", err)
+        return err
+    }
+    defer rows.Close()
+
+    fmt.Println("Reviews for Book ID:", bookID)
+    fmt.Println("=============================")
+    
+    for rows.Next() {
+        var review string
+        if err := rows.Scan(&review); err != nil {
+            log.Println("Error retrieving reviews:", err)
+            return err
+        }
+        fmt.Println(review)
+    }
+    return nil
+}
+
+func searchBooks(db *sql.DB, searchTerm string, genreFilter string, authorFilter string) error {
+    query := "SELECT bookid, book_name, author, genre, cost FROM books WHERE lower(book_name) LIKE $1"
+    params := []interface{}{"%" + strings.ToLower(searchTerm) + "%"}
+
+    if genreFilter != "" {
+        query += " AND lower(genre) = $2"
+        params = append(params, strings.ToLower(genreFilter))
+    }
+
+    if authorFilter != "" {
+        query += " AND lower(author) = $3"
+        params = append(params, strings.ToLower(authorFilter))
+    }
+
+    rows, err := db.Query(query, params...)
+    if err != nil {
+        log.Println("Error searching for books:", err)
+        return err
+    }
+    defer rows.Close()
+
+    fmt.Println("Search Results:")
+    fmt.Println("================")
+    for rows.Next() {
+        var bookID int
+        var bookName, author, genre string
+        var cost float64
+        if err := rows.Scan(&bookID, &bookName, &author, &genre, &cost); err != nil {
+            log.Println("Error retrieving search results:", err)
+            return err
+        }
+        fmt.Printf("Book ID: %d\nTitle: %s\nAuthor: %s\nGenre: %s\nCost: $%.2f\n\n",
+            bookID, bookName, author, genre, cost)
+    }
+    return nil
 }

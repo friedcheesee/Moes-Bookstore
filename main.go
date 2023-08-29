@@ -31,16 +31,19 @@ func main() {
 	username := "banana"
 	email:= "fried@mail.com"
 	password := "abcd"
-	review:= "this is a review2"
+	//review:= "this is a review2"
 	reguser(db, email, password, username)
 	logindb(db, email, password)
+	//displayBookReviews(db, 1)
+	bookname:="Sample"
+	searchBooks(db,bookname, "", "")
 	ff := getuserid(db, email)
 	fmt.Println(ff)
 	//deactivate(db, username, password)
 	//addToCart(db, ff, 1)
-	viewOwnedBooks(db, ff)
-	giveReview(db, ff, 1, review)
-	displayAvailableBooks(db)
+	//viewOwnedBooks(db, ff)
+	//giveReview(db, ff, 1, review)
+	//displayAvailableBooks(db)
 	//deleteFromCart(db, ff, 1)
 	//err := buyBooks(db, ff)
 	//CheckError(err)

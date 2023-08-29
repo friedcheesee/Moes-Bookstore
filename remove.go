@@ -3,6 +3,8 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	"log"
+	"time"
 	_ "github.com/lib/pq"
 )
 
@@ -72,4 +74,20 @@ func readID1(rows *sql.Rows) (int) {
     }
 
     	return 0  // Return specific error for no rows found
+}
+
+func isAccountExpired(db *sql.DB, uid int) (bool, error) {
+    var expiryDate time.Time
+
+    err := db.QueryRow("SELECT expiry FROM users WHERE uid = $1", uid).Scan(&expiryDate)
+    if err != nil {
+        if err == sql.ErrNoRows {
+            return false, fmt.Errorf("User with UID %d not found", uid)
+        }
+        log.Println("Error querying user's expiry:", err)
+        return false, err
+    }
+
+    currentDate := time.Now()
+    return currentDate.After(expiryDate), nil
 }
