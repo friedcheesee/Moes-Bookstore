@@ -32,7 +32,7 @@ func hashPassword(password string) (string, error) {
 
 func logindb(db *sql.DB, username string, password string) {
 	err := authenticateUser(db, username, password)
-
+	
 	if err != nil {
 		fmt.Println("Authentication failed:", err)
 		return

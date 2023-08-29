@@ -19,8 +19,8 @@ func delconnect() *sql.DB {
 }
 
 //call fn only after authentication
-func getuserid(db *sql.DB,username string) int {
-	rows, err := db.Query("select UID from users where username=$1", username)
+func getuserid(db *sql.DB,email string) int {
+	rows, err := db.Query("select UID from users where email=$1", email)
 	CheckError(err)
 	return readID(rows)
 
@@ -28,7 +28,7 @@ func getuserid(db *sql.DB,username string) int {
 
 func deactivate(db *sql.DB,username string,password string){
 	logindb(db, username, password)
-	_, err := db.Exec("update users set active=true where username=$1", username)
+	_, err := db.Exec("update users set active=false where username=$1", username)
 	CheckError(err)
 	fmt.Println("User account deactivated")
 }

@@ -28,14 +28,15 @@ func main() {
 	//CheckError(err)
 	//printnames(rows)
 	//reguser(db)
-	username := "friedcheese"
-	email:= "friedd@mail.com"
+	username := "apple"
+	email:= "apple@mail.com"
 	password := "abcd"
 	reguser(db, username, password,email)
 	//logindb(db, username, password)
-	ff := getuserid(db, username)
+	ff := getuserid(db, email)
 	//deactivate(db, username, password)
 	addToCart(db, ff, 1)
+	//deleteFromCart(db, ff, 1)
 	err := buyBooks(db, ff)
 	CheckError(err)
 	if(!isUserActive(db,ff)){

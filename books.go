@@ -60,8 +60,9 @@ func buyBooks(db *sql.DB, uid int) error {
 			return err
 		}
 		if isBought {
-			fmt.Printf("Book %s is already bought\n", bookName)
-			continue
+			fmt.Printf("Book %s is already bought, please remove it from the cart to buy other books\n", bookName)
+			log.Printf("Book %s is already bought\n", bookName)
+			return nil
 		}
 
 		// Move the book from cart to bought_books
@@ -87,4 +88,13 @@ func buyBooks(db *sql.DB, uid int) error {
 
 	fmt.Println("Books bought successfully")
 	return nil
+}
+
+func deleteFromCart(db *sql.DB, uid, bookid int) {
+    _, err := db.Exec("DELETE FROM cart WHERE uid = $1 AND bookid = $2", uid, bookid)
+    if err != nil {
+        log.Println("Error deleting book from cart:", err)
+        panic(err)
+    }
+	fmt.Println("Book deleted from cart successfully")
 }
