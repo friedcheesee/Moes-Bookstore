@@ -98,3 +98,27 @@ func deleteFromCart(db *sql.DB, uid, bookid int) {
     }
 	fmt.Println("Book deleted from cart successfully")
 }
+
+func displayAvailableBooks(db *sql.DB) error {
+    rows, err := db.Query("SELECT bookid, book_name, author, genre, cost FROM books")
+    if err != nil {
+        log.Println("Error retrieving available books:", err)
+        return err
+    }
+    defer rows.Close()
+
+    fmt.Println("Available Books:")
+    fmt.Println("================")
+    for rows.Next() {
+        var bookID int
+        var bookName, author, genre string
+        var cost float64
+        if err := rows.Scan(&bookID, &bookName, &author, &genre, &cost); err != nil {
+            log.Println("Error retrieving available books:", err)
+            return err
+        }
+        fmt.Printf("Book ID: %d\nTitle: %s\nAuthor: %s\nGenre: %s\nCost: $%.2f\n\n",
+            bookID, bookName, author, genre, cost)
+    }
+    return nil
+}

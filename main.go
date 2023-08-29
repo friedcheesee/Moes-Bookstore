@@ -28,17 +28,18 @@ func main() {
 	//CheckError(err)
 	//printnames(rows)
 	//reguser(db)
-	username := "apple"
-	email:= "apple@mail.com"
+	username := "banana"
+	email:= "banana@mail.com"
 	password := "abcd"
 	reguser(db, username, password,email)
 	//logindb(db, username, password)
 	ff := getuserid(db, email)
 	//deactivate(db, username, password)
-	addToCart(db, ff, 1)
+	//addToCart(db, ff, 1)
+	displayAvailableBooks(db)
 	//deleteFromCart(db, ff, 1)
-	err := buyBooks(db, ff)
-	CheckError(err)
+	//err := buyBooks(db, ff)
+	//CheckError(err)
 	if(!isUserActive(db,ff)){
 		fmt.Println("User is not active")
 	}

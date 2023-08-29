@@ -29,3 +29,5 @@
 2023/08/29 20:31:26 Book Sample Book is already bought
 2023/08/29 20:36:05 Book Sample Book is already bought
 2023/08/29 20:37:53 Book Sample Book is already bought
+2023/08/29 20:45:48 Error: &s pq: duplicate key value violates unique constraint "users_pkey"
+2023/08/29 20:48:53 Error: &s pq: duplicate key value violates unique constraint "users_pkey"

@@ -32,7 +32,7 @@ func hashPassword(password string) (string, error) {
 
 func logindb(db *sql.DB, username string, password string) {
 	err := authenticateUser(db, username, password)
-	
+
 	if err != nil {
 		fmt.Println("Authentication failed:", err)
 		return
@@ -51,26 +51,23 @@ func authenticateUser(db *sql.DB, username, password string) error {
 	return nil
 }
 
-func reguser(db *sql.DB, username string, password string,email string) {
+func reguser(db *sql.DB, username string, password string, email string) {
 	hashedPassword, err := hashPassword(password)
 	if userExists(db, email) {
 		fmt.Println("User already exists.")
 		return
 	}
 	CheckError(err)
-	if(!validateEmail(email)){
+	if !validateEmail(email) {
 		fmt.Println("Invalid email")
-		log.Fatal("Invalid email")}
-	storeCredentials(db, username, hashedPassword,email)
+		log.Fatal("Invalid email")
+	}
+	storeCredentials(db, username, hashedPassword, email)
 	CheckError(err)
 }
 
-func storeCredentials(db *sql.DB, username string, hashedPassword string,email string){
-	var maxUID int
-    err := db.QueryRow("SELECT COALESCE(MAX(uid),0) FROM users").Scan(&maxUID)
-    CheckError(err)
-    uid := maxUID + 1
-	_,err = db.Exec("INSERT INTO users (username, password, uid, active,email) VALUES ($1, $2, $3, TRUE,$4)", username, hashedPassword, uid,email)
+func storeCredentials(db *sql.DB, username string, hashedPassword string, email string) {
+	_, err := db.Exec("INSERT INTO users (username, password, email) VALUES ($1, $2, $3)", username, hashedPassword, email)
 	CheckError(err)
 	fmt.Println("User registered successfully")
 }
@@ -84,15 +81,15 @@ func userExists(db *sql.DB, email string) bool {
 func validateEmail(email string) bool {
 	// Regular expression pattern for basic email validation
 	pattern := `^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$`
-	
+
 	// Compile the regular expression
 	re := regexp.MustCompile(pattern)
-	
+
 	// Use the regular expression to match against the email
 	return re.MatchString(email)
 }
 
-func isUserActive(db *sql.DB, uid int) (bool) {
+func isUserActive(db *sql.DB, uid int) bool {
 	var isActive bool
 	err := db.QueryRow("SELECT active FROM users WHERE uid = $1", uid).Scan(&isActive)
 	CheckError(err)
