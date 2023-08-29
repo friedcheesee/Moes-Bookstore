@@ -30,8 +30,8 @@ func hashPassword(password string) (string, error) {
 	return string(hashedBytes), nil
 }
 
-func logindb(db *sql.DB, username string, password string) {
-	err := authenticateUser(db, username, password)
+func logindb(db *sql.DB, email string, password string) {
+	err := authenticateUser(db, email, password)
 
 	if err != nil {
 		fmt.Println("Authentication failed:", err)
@@ -41,9 +41,9 @@ func logindb(db *sql.DB, username string, password string) {
 	}
 }
 
-func authenticateUser(db *sql.DB, username, password string) error {
+func authenticateUser(db *sql.DB, email, password string) error {
 	var storedPasswordHash string
-	row := db.QueryRow("SELECT password FROM users WHERE username = $1", username)
+	row := db.QueryRow("SELECT password FROM users WHERE email = $1", email)
 	CheckError(row.Scan(&storedPasswordHash))
 	// Compare stored password hash with provided hashed password
 	err := bcrypt.CompareHashAndPassword([]byte(storedPasswordHash), []byte(password))
@@ -51,7 +51,7 @@ func authenticateUser(db *sql.DB, username, password string) error {
 	return nil
 }
 
-func reguser(db *sql.DB, username string, password string, email string) {
+func reguser(db *sql.DB, email , password ,username string) {
 	hashedPassword, err := hashPassword(password)
 	if userExists(db, email) {
 		fmt.Println("User already exists.")

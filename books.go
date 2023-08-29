@@ -122,3 +122,25 @@ func displayAvailableBooks(db *sql.DB) error {
     }
     return nil
 }
+
+func viewOwnedBooks(db *sql.DB, uid int) error {
+	rows, err := db.Query("SELECT bookid, book_name, genre FROM bought_books WHERE uid = $1", uid)
+	if err != nil {
+		log.Println("Error retrieving owned books:", err)
+		return err
+	}
+	defer rows.Close()
+
+	fmt.Println("Owned Books:")
+	fmt.Println("=============")
+	for rows.Next() {
+		var bookID int
+		var bookName, genre string
+		if err := rows.Scan(&bookID, &bookName, &genre); err != nil {
+			log.Println("Error retrieving owned books:", err)
+			return err
+		}
+		fmt.Printf("Book ID: %d\nTitle: %s\nGenre: %s\n\n", bookID, bookName, genre)
+	}
+	return nil
+}
