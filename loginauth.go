@@ -48,23 +48,23 @@ func authenticateUser(db *sql.DB, username, password string) error {
 	return nil
 }
 
-func reguser(db *sql.DB, username string, password string) {
+func reguser(db *sql.DB, username string, password string,email string) {
 	hashedPassword, err := hashPassword(password)
 	if userExists(db, username) {
 		fmt.Println("User already exists.")
 		return
 	}
 	CheckError(err)
-	err = storeCredentials(db, username, hashedPassword)
+	err = storeCredentials(db, username, hashedPassword,email)
 	CheckError(err)
 }
 
-func storeCredentials(db *sql.DB, username, hashedPassword string) error {
+func storeCredentials(db *sql.DB, username string, hashedPassword string,email string) error {
 	var maxUID int
-    err := db.QueryRow("SELECT MAX(uid) FROM users").Scan(&maxUID)
+    err := db.QueryRow("SELECT COALESCE(MAX(uid),0) FROM users").Scan(&maxUID)
     CheckError(err)
     uid := maxUID + 1
-	_,err = db.Exec("INSERT INTO users (username, password, uid, active) VALUES ($1, $2, $3, 1)", username, hashedPassword, uid)
+	_,err = db.Exec("INSERT INTO users (username, password, uid, active,email) VALUES ($1, $2, $3, TRUE,$4)", username, hashedPassword, uid,email)
 	return err
 }
 

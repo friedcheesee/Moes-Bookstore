@@ -13,7 +13,7 @@ const (
 	port     = 5432
 	user     = "postgres"
 	password = "admin"
-	dbname   = "joe"
+	dbname   = "moe"
 )
 
 func main() {
@@ -27,12 +27,13 @@ func main() {
 	//CheckError(err)
 	//printnames(rows)
 	//reguser(db)
-	username := "banana"
+	username := "friedcheese"
+	email:= "fried@mail.com"
 	password := "abcd"
-	reguser(db, username, password)
+	reguser(db, username, password,email)
 	//logindb(db, username, password)
-	ff := getuserid(db, username)
-	readID1(ff)
+	//ff := getuserid(db, username)
+	//readID1(ff)
 	//deactivate(db, username, password)
 }
 func CheckError(err error) {
