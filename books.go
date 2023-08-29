@@ -36,7 +36,7 @@ func buyBooks(db *sql.DB, uid int) error {
 	defer tx.Rollback()
 
 	// Get all books from the cart for the user
-	rows, err := tx.Query("SELECT c.bookid, b.book_name, b.genre FROM cart c JOIN books b ON c.bookid = b.bookid WHERE c.uid = $1", uid)
+	rows, err := tx.Query("SELECT c.bookid, b.book_name, b.genre, b.download_url FROM cart c JOIN books b ON c.bookid = b.bookid WHERE c.uid = $1", uid)
 	if err != nil {
 		log.Println("Error during transaction: &s", err)
 		return err
@@ -44,15 +44,15 @@ func buyBooks(db *sql.DB, uid int) error {
 
 	for rows.Next() {
 		var bookID int
-		var bookName, genre string
-		if err := rows.Scan(&bookID, &bookName, &genre); err != nil {
+		var bookName, genre, download_url string
+		if err := rows.Scan(&bookID, &bookName, &genre, &download_url); err != nil {
 			log.Println("Error during transaction: &s", err)
 			return err
 		}
 		rows.Close()
 		// Move the book from cart to bought_books
 		_, err := tx.Exec("INSERT INTO bought_books (uid, bookid, book_name, genre, download_url) VALUES ($1, $2, $3, $4, $5)",
-		uid, bookID, bookName, genre, "abc.com")
+		uid, bookID, bookName, genre, download_url)
 		if err != nil {
 			log.Println("Error during transaction: &s", err)
 			return err

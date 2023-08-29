@@ -34,7 +34,7 @@ func main() {
 	//logindb(db, username, password)
 	ff := getuserid(db, username)
 	//deactivate(db, username, password)
-	addToCart(db, ff, 1)
+	addToCart(db, ff, 2)
 	err := buyBooks(db, ff)
 	CheckError(err)
 
