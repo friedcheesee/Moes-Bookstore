@@ -2,6 +2,7 @@ package main
 
 import (
 	//"fmt"
+	"fmt"
 	"log"
 	"os"
 
@@ -34,10 +35,12 @@ func main() {
 	//logindb(db, username, password)
 	ff := getuserid(db, username)
 	//deactivate(db, username, password)
-	addToCart(db, ff, 2)
+	addToCart(db, ff, 1)
 	err := buyBooks(db, ff)
 	CheckError(err)
-
+	if(!isUserActive(db,ff)){
+		fmt.Println("User is not active")
+	}
 }
 func CheckError(err error) {
 	if err != nil {

@@ -21,3 +21,5 @@
 2023/08/29 18:32:13 Error: &s pq: duplicate key value violates unique constraint "bought_books_pkey"
 2023/08/29 18:35:39 Error during transaction: &s pq: column "genre" does not exist
 2023/08/29 18:35:39 Error: &s pq: column "genre" does not exist
+2023/08/29 18:49:47 Error during transaction: &s pq: duplicate key value violates unique constraint "bought_books_pkey"
+2023/08/29 18:49:47 Error: &s pq: duplicate key value violates unique constraint "bought_books_pkey"

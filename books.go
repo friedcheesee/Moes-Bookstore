@@ -41,6 +41,7 @@ func buyBooks(db *sql.DB, uid int) error {
 		log.Println("Error during transaction: &s", err)
 		return err
 	}
+	defer rows.Close()
 
 	for rows.Next() {
 		var bookID int
@@ -49,9 +50,22 @@ func buyBooks(db *sql.DB, uid int) error {
 			log.Println("Error during transaction: &s", err)
 			return err
 		}
-		rows.Close()
+		rows.Close() //i added
+
+		// Check if the book has already been bought
+		var isBought bool
+		err := tx.QueryRow("SELECT EXISTS (SELECT 1 FROM bought_books WHERE uid = $1 AND bookid = $2)", uid, bookID).Scan(&isBought)
+		if err != nil {
+			log.Println("Error during transaction:", err)
+			return err
+		}
+		if isBought {
+			fmt.Printf("Book %s is already bought\n", bookName)
+			continue
+		}
+
 		// Move the book from cart to bought_books
-		_, err := tx.Exec("INSERT INTO bought_books (uid, bookid, book_name, genre, download_url) VALUES ($1, $2, $3, $4, $5)",
+		_, err = tx.Exec("INSERT INTO bought_books (uid, bookid, book_name, genre, download_url) VALUES ($1, $2, $3, $4, $5)",
 		uid, bookID, bookName, genre, download_url)
 		if err != nil {
 			log.Println("Error during transaction: &s", err)

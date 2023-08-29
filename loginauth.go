@@ -91,3 +91,10 @@ func validateEmail(email string) bool {
 	// Use the regular expression to match against the email
 	return re.MatchString(email)
 }
+
+func isUserActive(db *sql.DB, uid int) (bool) {
+	var isActive bool
+	err := db.QueryRow("SELECT active FROM users WHERE uid = $1", uid).Scan(&isActive)
+	CheckError(err)
+	return isActive
+}
