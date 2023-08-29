@@ -100,7 +100,8 @@ func deleteFromCart(db *sql.DB, uid, bookid int) {
 }
 
 func displayAvailableBooks(db *sql.DB) error {
-    rows, err := db.Query("SELECT bookid, book_name, author, genre, cost FROM books")
+    rows, err := db.Query("SELECT b.bookid, b.book_name, b.author, b.genre, b.cost, r.review "+
+        "FROM books b LEFT JOIN reviews r ON b.bookid = r.bookid")
     if err != nil {
         log.Println("Error retrieving available books:", err)
         return err
@@ -109,19 +110,44 @@ func displayAvailableBooks(db *sql.DB) error {
 
     fmt.Println("Available Books:")
     fmt.Println("================")
+    
+    var currentBookID int
+    var currentBookName, currentAuthor, currentGenre string
+    var currentCost float64
+    
     for rows.Next() {
         var bookID int
         var bookName, author, genre string
         var cost float64
-        if err := rows.Scan(&bookID, &bookName, &author, &genre, &cost); err != nil {
+        var review sql.NullString
+        if err := rows.Scan(&bookID, &bookName, &author, &genre, &cost, &review); err != nil {
             log.Println("Error retrieving available books:", err)
             return err
         }
-        fmt.Printf("Book ID: %d\nTitle: %s\nAuthor: %s\nGenre: %s\nCost: $%.2f\n\n",
-            bookID, bookName, author, genre, cost)
+        
+        if currentBookID != bookID {
+            if currentBookID != 0 {
+                fmt.Println() // Print a new line before the next book
+            }
+            currentBookID = bookID
+            currentBookName = bookName
+            currentAuthor = author
+            currentGenre = genre
+            currentCost = cost
+
+            fmt.Printf("Book ID: %d\nTitle: %s\nAuthor: %s\nGenre: %s\nCost: $%.2f\n",
+                currentBookID, currentBookName, currentAuthor, currentGenre, currentCost)
+        }
+
+        if review.Valid {
+            fmt.Printf("Review: %s\n", review.String)
+        } else {
+            fmt.Println("No reviews available")
+        }
     }
     return nil
 }
+
 
 func viewOwnedBooks(db *sql.DB, uid int) error {
 	rows, err := db.Query("SELECT bookid, book_name, genre FROM bought_books WHERE uid = $1", uid)
@@ -142,5 +168,27 @@ func viewOwnedBooks(db *sql.DB, uid int) error {
 		}
 		fmt.Printf("Book ID: %d\nTitle: %s\nGenre: %s\n\n", bookID, bookName, genre)
 	}
+	return nil
+}
+
+func giveReview(db *sql.DB, uid, bookID int, review string) error {
+	// Check if a review by the same user for the same book already exists
+	var existingReview int
+	err := db.QueryRow("SELECT reviewid FROM reviews WHERE uid = $1 AND bookid = $2", uid, bookID).Scan(&existingReview)
+	if err == nil {
+		fmt.Println("A review by the same user for the same book already exists")
+		return nil
+	} else if err != sql.ErrNoRows {
+		log.Println("Error checking for existing review:", err)
+		return err
+	}
+
+	// Insert the new review
+	_, err = db.Exec("INSERT INTO reviews (uid, bookid, review) VALUES ($1, $2, $3)", uid, bookID, review)
+	if err != nil {
+		log.Println("Error giving review:", err)
+		return err
+	}
+	fmt.Println("Review added successfully")
 	return nil
 }

@@ -29,8 +29,9 @@ func main() {
 	//printnames(rows)
 	//reguser(db)
 	username := "banana"
-	email:= "friedd@mail.com"
+	email:= "fried@mail.com"
 	password := "abcd"
+	review:= "this is a review2"
 	reguser(db, email, password, username)
 	logindb(db, email, password)
 	ff := getuserid(db, email)
@@ -38,7 +39,8 @@ func main() {
 	//deactivate(db, username, password)
 	//addToCart(db, ff, 1)
 	viewOwnedBooks(db, ff)
-	//displayAvailableBooks(db)
+	giveReview(db, ff, 1, review)
+	displayAvailableBooks(db)
 	//deleteFromCart(db, ff, 1)
 	//err := buyBooks(db, ff)
 	//CheckError(err)
