@@ -6,3 +6,18 @@
 2023/08/29 15:07:05 Error: &s pq: null value in column "email" of relation "users" violates not-null constraint
 2023/08/29 15:08:33 Error: &s pq: null value in column "email" of relation "users" violates not-null constraint
 2023/08/29 15:16:38 Invalid email
+2023/08/29 17:40:56 Error: &s pq: duplicate key value violates unique constraint "cart_pkey"
+2023/08/29 18:17:17 Error during transaction: &s pq: unexpected Parse response 'C'
+2023/08/29 18:17:17 Error: &s pq: unexpected Parse response 'C'
+2023/08/29 18:17:37 Error during transaction: &s pq: unexpected Parse response 'C'
+2023/08/29 18:17:37 Error: &s pq: unexpected Parse response 'C'
+2023/08/29 18:17:52 Error during transaction: &s pq: unexpected Parse response 'C'
+2023/08/29 18:17:52 Error: &s pq: unexpected Parse response 'C'
+2023/08/29 18:23:58 Error during transaction: &s pq: column "author" of relation "bought_books" does not exist
+2023/08/29 18:23:58 Error: &s pq: column "author" of relation "bought_books" does not exist
+2023/08/29 18:31:07 Error during transaction: &s pq: column "cost" of relation "bought_books" does not exist
+2023/08/29 18:31:07 Error: &s pq: column "cost" of relation "bought_books" does not exist
+2023/08/29 18:32:13 Error during transaction: &s pq: duplicate key value violates unique constraint "bought_books_pkey"
+2023/08/29 18:32:13 Error: &s pq: duplicate key value violates unique constraint "bought_books_pkey"
+2023/08/29 18:35:39 Error during transaction: &s pq: column "genre" does not exist
+2023/08/29 18:35:39 Error: &s pq: column "genre" does not exist

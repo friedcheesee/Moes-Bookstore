@@ -32,9 +32,12 @@ func main() {
 	password := "abcd"
 	reguser(db, username, password,email)
 	//logindb(db, username, password)
-	//ff := getuserid(db, username)
-	//readID1(ff)
+	ff := getuserid(db, username)
 	//deactivate(db, username, password)
+	addToCart(db, ff, 1)
+	err := buyBooks(db, ff)
+	CheckError(err)
+
 }
 func CheckError(err error) {
 	if err != nil {

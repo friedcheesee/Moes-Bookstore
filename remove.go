@@ -19,10 +19,11 @@ func delconnect() *sql.DB {
 }
 
 //call fn only after authentication
-func getuserid(db *sql.DB,username string) (*sql.Rows) {
+func getuserid(db *sql.DB,username string) int {
 	rows, err := db.Query("select UID from users where username=$1", username)
 	CheckError(err)
-	return rows 
+	return readID(rows)
+
 }
 
 func deactivate(db *sql.DB,username string,password string){
@@ -45,7 +46,7 @@ func readID(rows *sql.Rows) int{
         if err := rows.Scan(&userID); err != nil {
             panic(err)
         }
-        fmt.Printf("User ID: %d\n", userID)
+        //fmt.Printf("User ID: %d\n", userID)
 		return userID
     }
     if err := rows.Err(); err != nil {

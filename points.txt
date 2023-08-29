@@ -1,0 +1,4 @@
+has checkerror function to log everything
+uses paramtered sql question to prevent injections
+has roles to reduce risk
+appropriate logging methods during transaction, to perform roll back too.
