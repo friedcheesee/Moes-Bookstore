@@ -2,10 +2,11 @@ package main
 
 import (
 	//"fmt"
-	"fmt"
 	"log"
+	"net/http"
 	"os"
 
+	"github.com/go-chi/chi"
 	_ "github.com/lib/pq"
 )
 
@@ -17,28 +18,45 @@ const (
 	dbname   = "moe"
 )
 
+
+func main1(){
+	db := adminconnect()
+	defer db.Close()
+	//username := "banana"
+	email:= "fried@mail.com"
+	password := "abcd"
+
+	//reguser(db, email, password, username)
+	logindb(db, email, password)
+}
+
+
 func main() {
 	logFile := initiatelog()
 	defer logFile.Close()
-
+	r := chi.NewRouter()
+	// Define the login route
+	r.Post("/login", loginHandler)
+	// Start the HTTP server
+	http.ListenAndServe(":8080", r)
 	//conecct
-	db := adminconnect()
-	defer db.Close()
+	////db := adminconnect()
+	////defer db.Close()
 	//rows, err := getdata(db)
 	//CheckError(err)
 	//printnames(rows)
 	//reguser(db)
-	username := "banana"
-	email:= "fried@mail.com"
-	password := "abcd"
+	////username := "banana"
+	////email:= "fried@mail.com"
+	////password := "abcd"
 	//review:= "this is a review2"
-	reguser(db, email, password, username)
-	logindb(db, email, password)
+	////reguser(db, email, password, username)
+	////logindb(db, email, password)
 	//displayBookReviews(db, 1)
-	bookname:="Sample"
-	searchBooks(db,bookname, "", "")
-	ff := getuserid(db, email)
-	fmt.Println(ff)
+	////bookname:="Sample"
+	////searchBooks(db,bookname, "", "")
+	////ff := getuserid(db, email)
+	////fmt.Println(ff)
 	//deactivate(db, username, password)
 	//addToCart(db, ff, 1)
 	//viewOwnedBooks(db, ff)
@@ -47,17 +65,17 @@ func main() {
 	//deleteFromCart(db, ff, 1)
 	//err := buyBooks(db, ff)
 	//CheckError(err)
-	if(!isUserActive(db,ff)){
-		fmt.Println("User is not active")
-	}
+	////if(!isUserActive(db,ff)){
+	////	fmt.Println("User is not active")
+	////}
 }
 func CheckError(err error) {
 	if err != nil {
 		log.Println("Error: &s", err)
-		panic(err)
+		//panic(err)
 	}
 }
-func initiatelog() *os.File{
+func initiatelog() *os.File {
 	logFile, err := os.OpenFile("app.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	CheckError(err)
 	log.SetOutput(logFile)

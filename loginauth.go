@@ -30,25 +30,39 @@ func hashPassword(password string) (string, error) {
 	return string(hashedBytes), nil
 }
 
-func logindb(db *sql.DB, email string, password string) {
-	err := authenticateUser(db, email, password)
-
-	if err != nil {
-		fmt.Println("Authentication failed:", err)
-		return
-	} else {
-		fmt.Println("Authentication successful")
+// 0 - success
+// 1 - email not registered
+// 2 - wrong password
+func logindb(db *sql.DB, email string, password string) (bool, error, int) {
+	if !userExists(db, email) {
+		fmt.Println("User not found")
+		return false, nil, 1 // User not found
 	}
+	isAuthenticated, err := authenticateUser(db, email, password)
+	if err != nil {
+		fmt.Println("wring pw",err)
+		return false, err, 2 // Authentication error
+	}
+	if !isAuthenticated {
+		fmt.Println("wrong pw")
+		return false, nil, 3 // Incorrect password
+	}
+	fmt.Println("Login successful fron db func")
+	return true, nil, 0 // Success
 }
 
-func authenticateUser(db *sql.DB, email, password string) error {
+
+func authenticateUser(db *sql.DB, email, password string) (bool,error) {
 	var storedPasswordHash string
 	row := db.QueryRow("SELECT password FROM users WHERE email = $1", email)
 	CheckError(row.Scan(&storedPasswordHash))
 	// Compare stored password hash with provided hashed password
 	err := bcrypt.CompareHashAndPassword([]byte(storedPasswordHash), []byte(password))
-	CheckError(err)
-	return nil
+	if err != nil {
+		log.Println("Wrong password",err)
+		return false, err
+	}
+	return true,nil
 }
 
 func reguser(db *sql.DB, email , password ,username string) {
