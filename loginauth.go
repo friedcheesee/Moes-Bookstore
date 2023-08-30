@@ -47,7 +47,6 @@ func logindb(db *sql.DB, email string, password string) (bool, error, int) {
 		fmt.Println("wrong pw")
 		return false, nil, 3 // Incorrect password
 	}
-	fmt.Println("Login successful fron db func")
 	return true, nil, 0 // Success
 }
 

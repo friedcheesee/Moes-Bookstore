@@ -16,10 +16,8 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 	password := r.FormValue("password")
 
 	// Call the login function
-	db := adminconnect()
-	defer db.Close()
-
-	isLoggedIn, err, code := logindb(db, email, password)
+    	
+    isLoggedIn, err, code := logindb(db, email, password)
 	if err != nil {
 		// Set custom HTTP status and error message based on the error code
 		httpStatus, errorMessage := getErrorDetails(code)
@@ -44,8 +42,6 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, `{"status": "error", "message": "`+errorMessage+`"}`)
 	}
 }
-
-
 
 // Utility function to get custom HTTP status and error message based on code
 func getErrorDetails(code int) (int, string) {

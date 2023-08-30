@@ -487,3 +487,884 @@ created by net/http.(*Server).Serve in goroutine 1
 2023/08/31 01:18:41 Wrong password crypto/bcrypt: hashedPassword is not the hash of the given password
 2023/08/31 01:19:54 Wrong password crypto/bcrypt: hashedPassword is not the hash of the given password
 2023/08/31 01:20:02 Wrong password crypto/bcrypt: hashedPassword is not the hash of the given password
+2023/08/31 01:39:29 http: panic serving 127.0.0.1:54256: runtime error: invalid memory address or nil pointer dereference
+goroutine 8 [running]:
+net/http.(*conn).serve.func1()
+	C:/Program Files/Go/src/net/http/server.go:1868 +0xb9
+panic({0xe67fc0?, 0x10eefd0?})
+	C:/Program Files/Go/src/runtime/panic.go:920 +0x270
+database/sql.(*DB).conn(0x0, {0xf361d0, 0x1152a60}, 0x1)
+	C:/Program Files/Go/src/database/sql/sql.go:1282 +0x54
+database/sql.(*DB).query(0xe9e700?, {0xf361d0, 0x1152a60}, {0xec36fb, 0x2b}, {0xc0001278d8, 0x1, 0x1}, 0xe8?)
+	C:/Program Files/Go/src/database/sql/sql.go:1721 +0x57
+database/sql.(*DB).QueryContext.func1(0x0?)
+	C:/Program Files/Go/src/database/sql/sql.go:1704 +0x4f
+database/sql.(*DB).retry(0x0?, 0xc0001277c8)
+	C:/Program Files/Go/src/database/sql/sql.go:1538 +0x42
+database/sql.(*DB).QueryContext(0x1e1f07e1e38?, {0xf361d0?, 0x1152a60?}, {0xec36fb?, 0xc000094250?}, {0xc0001278d8?, 0xc000127888?, 0xbcafa5?})
+	C:/Program Files/Go/src/database/sql/sql.go:1703 +0xc5
+database/sql.(*DB).QueryRowContext(...)
+	C:/Program Files/Go/src/database/sql/sql.go:1804
+database/sql.(*DB).QueryRow(0xc0000a4740?, {0xec36fb?, 0x2000000?}, {0xc0001278d8?, 0x0?, 0xbcccde?})
+	C:/Program Files/Go/src/database/sql/sql.go:1818 +0x45
+main.userExists(0xe55e60?, {0xc0000a4740, 0xf})
+	D:/Jao/loginauth.go:90 +0x7b
+main.logindb(0xc00011e100?, {0xc0000a4740, 0xf}, {0xc0000c24d1, 0x4})
+	D:/Jao/loginauth.go:37 +0x45
+main.loginHandler({0xf35b60, 0xc000130000}, 0x0?)
+	D:/Jao/appi.go:20 +0x85
+net/http.HandlerFunc.ServeHTTP(0xe66460?, {0xf35b60?, 0xc000130000?}, 0xc0000b83dd?)
+	C:/Program Files/Go/src/net/http/server.go:2136 +0x29
+github.com/go-chi/chi.(*Mux).routeHTTP(0xc00002a420, {0xf35b60, 0xc000130000}, 0xc00011e100)
+	C:/Users/Piyush/go/pkg/mod/github.com/go-chi/chi@v1.5.4/mux.go:436 +0x1f4
+net/http.HandlerFunc.ServeHTTP(0xf36320?, {0xf35b60?, 0xc000130000?}, 0x10ee890?)
+	C:/Program Files/Go/src/net/http/server.go:2136 +0x29
+github.com/go-chi/chi.(*Mux).ServeHTTP(0xc00002a420, {0xf35b60, 0xc000130000}, 0xc00011e000)
+	C:/Users/Piyush/go/pkg/mod/github.com/go-chi/chi@v1.5.4/mux.go:87 +0x331
+net/http.serverHandler.ServeHTTP({0xf34d78?}, {0xf35b60?, 0xc000130000?}, 0x6?)
+	C:/Program Files/Go/src/net/http/server.go:2938 +0x8e
+net/http.(*conn).serve(0xc000206120, {0xf362e8, 0xc000022420})
+	C:/Program Files/Go/src/net/http/server.go:2009 +0x5f4
+created by net/http.(*Server).Serve in goroutine 1
+	C:/Program Files/Go/src/net/http/server.go:3086 +0x5cb
+2023/08/31 01:39:32 http: panic serving 127.0.0.1:54262: runtime error: invalid memory address or nil pointer dereference
+goroutine 24 [running]:
+net/http.(*conn).serve.func1()
+	C:/Program Files/Go/src/net/http/server.go:1868 +0xb9
+panic({0xe67fc0?, 0x10eefd0?})
+	C:/Program Files/Go/src/runtime/panic.go:920 +0x270
+database/sql.(*DB).conn(0x0, {0xf361d0, 0x1152a60}, 0x1)
+	C:/Program Files/Go/src/database/sql/sql.go:1282 +0x54
+database/sql.(*DB).query(0xe9e700?, {0xf361d0, 0x1152a60}, {0xec36fb, 0x2b}, {0xc0001238d8, 0x1, 0x1}, 0xe8?)
+	C:/Program Files/Go/src/database/sql/sql.go:1721 +0x57
+database/sql.(*DB).QueryContext.func1(0x0?)
+	C:/Program Files/Go/src/database/sql/sql.go:1704 +0x4f
+database/sql.(*DB).retry(0x0?, 0xc0001237c8)
+	C:/Program Files/Go/src/database/sql/sql.go:1538 +0x42
+database/sql.(*DB).QueryContext(0x1e1f07e1e38?, {0xf361d0?, 0x1152a60?}, {0xec36fb?, 0xc0000942f0?}, {0xc0001238d8?, 0xc000123888?, 0xbcafa5?})
+	C:/Program Files/Go/src/database/sql/sql.go:1703 +0xc5
+database/sql.(*DB).QueryRowContext(...)
+	C:/Program Files/Go/src/database/sql/sql.go:1804
+database/sql.(*DB).QueryRow(0xc0000a47f0?, {0xec36fb?, 0x2000000?}, {0xc0001238d8?, 0x0?, 0xc0001238e8?})
+	C:/Program Files/Go/src/database/sql/sql.go:1818 +0x45
+main.userExists(0xe55e60?, {0xc0000a47f0, 0xf})
+	D:/Jao/loginauth.go:90 +0x7b
+main.logindb(0xc00011e200?, {0xc0000a47f0, 0xf}, {0xc0000c2561, 0x4})
+	D:/Jao/loginauth.go:37 +0x45
+main.loginHandler({0xf35b60, 0xc0001300e0}, 0x0?)
+	D:/Jao/appi.go:20 +0x85
+net/http.HandlerFunc.ServeHTTP(0xe66460?, {0xf35b60?, 0xc0001300e0?}, 0xc0000b8455?)
+	C:/Program Files/Go/src/net/http/server.go:2136 +0x29
+github.com/go-chi/chi.(*Mux).routeHTTP(0xc00002a420, {0xf35b60, 0xc0001300e0}, 0xc00011e200)
+	C:/Users/Piyush/go/pkg/mod/github.com/go-chi/chi@v1.5.4/mux.go:436 +0x1f4
+net/http.HandlerFunc.ServeHTTP(0xf36320?, {0xf35b60?, 0xc0001300e0?}, 0x10ee890?)
+	C:/Program Files/Go/src/net/http/server.go:2136 +0x29
+github.com/go-chi/chi.(*Mux).ServeHTTP(0xc00002a420, {0xf35b60, 0xc0001300e0}, 0xc00020e000)
+	C:/Users/Piyush/go/pkg/mod/github.com/go-chi/chi@v1.5.4/mux.go:87 +0x331
+net/http.serverHandler.ServeHTTP({0xf34d78?}, {0xf35b60?, 0xc0001300e0?}, 0x6?)
+	C:/Program Files/Go/src/net/http/server.go:2938 +0x8e
+net/http.(*conn).serve(0xc000128120, {0xf362e8, 0xc000022420})
+	C:/Program Files/Go/src/net/http/server.go:2009 +0x5f4
+created by net/http.(*Server).Serve in goroutine 1
+	C:/Program Files/Go/src/net/http/server.go:3086 +0x5cb
+2023/08/31 01:39:33 http: panic serving 127.0.0.1:54265: runtime error: invalid memory address or nil pointer dereference
+goroutine 26 [running]:
+net/http.(*conn).serve.func1()
+	C:/Program Files/Go/src/net/http/server.go:1868 +0xb9
+panic({0xe67fc0?, 0x10eefd0?})
+	C:/Program Files/Go/src/runtime/panic.go:920 +0x270
+database/sql.(*DB).conn(0x0, {0xf361d0, 0x1152a60}, 0x1)
+	C:/Program Files/Go/src/database/sql/sql.go:1282 +0x54
+database/sql.(*DB).query(0xe9e700?, {0xf361d0, 0x1152a60}, {0xec36fb, 0x2b}, {0xc0002178d8, 0x1, 0x1}, 0xe8?)
+	C:/Program Files/Go/src/database/sql/sql.go:1721 +0x57
+database/sql.(*DB).QueryContext.func1(0x0?)
+	C:/Program Files/Go/src/database/sql/sql.go:1704 +0x4f
+database/sql.(*DB).retry(0x0?, 0xc0002177c8)
+	C:/Program Files/Go/src/database/sql/sql.go:1538 +0x42
+database/sql.(*DB).QueryContext(0x1e1cb539df8?, {0xf361d0?, 0x1152a60?}, {0xec36fb?, 0xc0000281e0?}, {0xc0002178d8?, 0xc000217888?, 0xbcafa5?})
+	C:/Program Files/Go/src/database/sql/sql.go:1703 +0xc5
+database/sql.(*DB).QueryRowContext(...)
+	C:/Program Files/Go/src/database/sql/sql.go:1804
+database/sql.(*DB).QueryRow(0xc00000a2e0?, {0xec36fb?, 0x2000000?}, {0xc0002178d8?, 0x0?, 0xbcccde?})
+	C:/Program Files/Go/src/database/sql/sql.go:1818 +0x45
+main.userExists(0xe55e60?, {0xc00000a2e0, 0xf})
+	D:/Jao/loginauth.go:90 +0x7b
+main.logindb(0xc00020e200?, {0xc00000a2e0, 0xf}, {0xc000010561, 0x4})
+	D:/Jao/loginauth.go:37 +0x45
+main.loginHandler({0xf35b60, 0xc0000680e0}, 0x0?)
+	D:/Jao/appi.go:20 +0x85
+net/http.HandlerFunc.ServeHTTP(0xe66460?, {0xf35b60?, 0xc0000680e0?}, 0xc00000e275?)
+	C:/Program Files/Go/src/net/http/server.go:2136 +0x29
+github.com/go-chi/chi.(*Mux).routeHTTP(0xc00002a420, {0xf35b60, 0xc0000680e0}, 0xc00020e200)
+	C:/Users/Piyush/go/pkg/mod/github.com/go-chi/chi@v1.5.4/mux.go:436 +0x1f4
+net/http.HandlerFunc.ServeHTTP(0xf36320?, {0xf35b60?, 0xc0000680e0?}, 0x10ee890?)
+	C:/Program Files/Go/src/net/http/server.go:2136 +0x29
+github.com/go-chi/chi.(*Mux).ServeHTTP(0xc00002a420, {0xf35b60, 0xc0000680e0}, 0xc00020e100)
+	C:/Users/Piyush/go/pkg/mod/github.com/go-chi/chi@v1.5.4/mux.go:87 +0x331
+net/http.serverHandler.ServeHTTP({0xf34d78?}, {0xf35b60?, 0xc0000680e0?}, 0x6?)
+	C:/Program Files/Go/src/net/http/server.go:2938 +0x8e
+net/http.(*conn).serve(0xc0001282d0, {0xf362e8, 0xc000022420})
+	C:/Program Files/Go/src/net/http/server.go:2009 +0x5f4
+created by net/http.(*Server).Serve in goroutine 1
+	C:/Program Files/Go/src/net/http/server.go:3086 +0x5cb
+2023/08/31 01:39:33 http: panic serving 127.0.0.1:54271: runtime error: invalid memory address or nil pointer dereference
+goroutine 27 [running]:
+net/http.(*conn).serve.func1()
+	C:/Program Files/Go/src/net/http/server.go:1868 +0xb9
+panic({0xe67fc0?, 0x10eefd0?})
+	C:/Program Files/Go/src/runtime/panic.go:920 +0x270
+database/sql.(*DB).conn(0x0, {0xf361d0, 0x1152a60}, 0x1)
+	C:/Program Files/Go/src/database/sql/sql.go:1282 +0x54
+database/sql.(*DB).query(0xe9e700?, {0xf361d0, 0x1152a60}, {0xec36fb, 0x2b}, {0xc0001238d8, 0x1, 0x1}, 0xe8?)
+	C:/Program Files/Go/src/database/sql/sql.go:1721 +0x57
+database/sql.(*DB).QueryContext.func1(0x0?)
+	C:/Program Files/Go/src/database/sql/sql.go:1704 +0x4f
+database/sql.(*DB).retry(0x0?, 0xc0001237c8)
+	C:/Program Files/Go/src/database/sql/sql.go:1538 +0x42
+database/sql.(*DB).QueryContext(0x1e1cb539df8?, {0xf361d0?, 0x1152a60?}, {0xec36fb?, 0xc000028290?}, {0xc0001238d8?, 0xc000123888?, 0xbcafa5?})
+	C:/Program Files/Go/src/database/sql/sql.go:1703 +0xc5
+database/sql.(*DB).QueryRowContext(...)
+	C:/Program Files/Go/src/database/sql/sql.go:1804
+database/sql.(*DB).QueryRow(0xc00000a360?, {0xec36fb?, 0x2000000?}, {0xc0001238d8?, 0x0?, 0xc0001238e8?})
+	C:/Program Files/Go/src/database/sql/sql.go:1818 +0x45
+main.userExists(0xe55e60?, {0xc00000a360, 0xf})
+	D:/Jao/loginauth.go:90 +0x7b
+main.logindb(0xc00020e400?, {0xc00000a360, 0xf}, {0xc0000105f1, 0x4})
+	D:/Jao/loginauth.go:37 +0x45
+main.loginHandler({0xf35b60, 0xc0000681c0}, 0x0?)
+	D:/Jao/appi.go:20 +0x85
+net/http.HandlerFunc.ServeHTTP(0xe66460?, {0xf35b60?, 0xc0000681c0?}, 0xc00000e2bd?)
+	C:/Program Files/Go/src/net/http/server.go:2136 +0x29
+github.com/go-chi/chi.(*Mux).routeHTTP(0xc00002a420, {0xf35b60, 0xc0000681c0}, 0xc00020e400)
+	C:/Users/Piyush/go/pkg/mod/github.com/go-chi/chi@v1.5.4/mux.go:436 +0x1f4
+net/http.HandlerFunc.ServeHTTP(0xf36320?, {0xf35b60?, 0xc0000681c0?}, 0x10ee890?)
+	C:/Program Files/Go/src/net/http/server.go:2136 +0x29
+github.com/go-chi/chi.(*Mux).ServeHTTP(0xc00002a420, {0xf35b60, 0xc0000681c0}, 0xc00020e300)
+	C:/Users/Piyush/go/pkg/mod/github.com/go-chi/chi@v1.5.4/mux.go:87 +0x331
+net/http.serverHandler.ServeHTTP({0xf34d78?}, {0xf35b60?, 0xc0000681c0?}, 0x6?)
+	C:/Program Files/Go/src/net/http/server.go:2938 +0x8e
+net/http.(*conn).serve(0xc000128360, {0xf362e8, 0xc000022420})
+	C:/Program Files/Go/src/net/http/server.go:2009 +0x5f4
+created by net/http.(*Server).Serve in goroutine 1
+	C:/Program Files/Go/src/net/http/server.go:3086 +0x5cb
+2023/08/31 01:39:53 http: panic serving [::1]:54290: runtime error: invalid memory address or nil pointer dereference
+goroutine 10 [running]:
+net/http.(*conn).serve.func1()
+	C:/Program Files/Go/src/net/http/server.go:1868 +0xb9
+panic({0xb47fc0?, 0xdcefd0?})
+	C:/Program Files/Go/src/runtime/panic.go:920 +0x270
+database/sql.(*DB).conn(0x0, {0xc161d0, 0xe32a60}, 0x1)
+	C:/Program Files/Go/src/database/sql/sql.go:1282 +0x54
+database/sql.(*DB).query(0xb7e700?, {0xc161d0, 0xe32a60}, {0xba36f2, 0x2b}, {0xc00014b8d8, 0x1, 0x1}, 0xe8?)
+	C:/Program Files/Go/src/database/sql/sql.go:1721 +0x57
+database/sql.(*DB).QueryContext.func1(0x0?)
+	C:/Program Files/Go/src/database/sql/sql.go:1704 +0x4f
+database/sql.(*DB).retry(0x0?, 0xc00014b7c8)
+	C:/Program Files/Go/src/database/sql/sql.go:1538 +0x42
+database/sql.(*DB).QueryContext(0x1df629d0b30?, {0xc161d0?, 0xe32a60?}, {0xba36f2?, 0xc000188090?}, {0xc00014b8d8?, 0xc00014b888?, 0x8aafa5?})
+	C:/Program Files/Go/src/database/sql/sql.go:1703 +0xc5
+database/sql.(*DB).QueryRowContext(...)
+	C:/Program Files/Go/src/database/sql/sql.go:1804
+database/sql.(*DB).QueryRow(0xc000182050?, {0xba36f2?, 0x2000000?}, {0xc00014b8d8?, 0x0?, 0xc00014b900?})
+	C:/Program Files/Go/src/database/sql/sql.go:1818 +0x45
+main.userExists(0xb35e60?, {0xc000182050, 0xf})
+	D:/Jao/loginauth.go:90 +0x7b
+main.logindb(0xc00018e100?, {0xc000182050, 0xf}, {0xc0001a2081, 0x4})
+	D:/Jao/loginauth.go:37 +0x45
+main.loginHandler({0xc15b60, 0xc0001aa000}, 0x0?)
+	D:/Jao/appi.go:20 +0x85
+net/http.HandlerFunc.ServeHTTP(0xb46460?, {0xc15b60?, 0xc0001aa000?}, 0xc000190005?)
+	C:/Program Files/Go/src/net/http/server.go:2136 +0x29
+github.com/go-chi/chi.(*Mux).routeHTTP(0xc000088360, {0xc15b60, 0xc0001aa000}, 0xc00018e100)
+	C:/Users/Piyush/go/pkg/mod/github.com/go-chi/chi@v1.5.4/mux.go:436 +0x1f4
+net/http.HandlerFunc.ServeHTTP(0xc16320?, {0xc15b60?, 0xc0001aa000?}, 0xdce890?)
+	C:/Program Files/Go/src/net/http/server.go:2136 +0x29
+github.com/go-chi/chi.(*Mux).ServeHTTP(0xc000088360, {0xc15b60, 0xc0001aa000}, 0xc00018e000)
+	C:/Users/Piyush/go/pkg/mod/github.com/go-chi/chi@v1.5.4/mux.go:87 +0x331
+net/http.serverHandler.ServeHTTP({0xc14d78?}, {0xc15b60?, 0xc0001aa000?}, 0x6?)
+	C:/Program Files/Go/src/net/http/server.go:2938 +0x8e
+net/http.(*conn).serve(0xc000150000, {0xc162e8, 0xc00008a300})
+	C:/Program Files/Go/src/net/http/server.go:2009 +0x5f4
+created by net/http.(*Server).Serve in goroutine 1
+	C:/Program Files/Go/src/net/http/server.go:3086 +0x5cb
+2023/08/31 01:39:53 http: panic serving [::1]:54293: runtime error: invalid memory address or nil pointer dereference
+goroutine 11 [running]:
+net/http.(*conn).serve.func1()
+	C:/Program Files/Go/src/net/http/server.go:1868 +0xb9
+panic({0xb47fc0?, 0xdcefd0?})
+	C:/Program Files/Go/src/runtime/panic.go:920 +0x270
+database/sql.(*DB).conn(0x0, {0xc161d0, 0xe32a60}, 0x1)
+	C:/Program Files/Go/src/database/sql/sql.go:1282 +0x54
+database/sql.(*DB).query(0xb7e700?, {0xc161d0, 0xe32a60}, {0xba36f2, 0x2b}, {0xc00014f8d8, 0x1, 0x1}, 0xe8?)
+	C:/Program Files/Go/src/database/sql/sql.go:1721 +0x57
+database/sql.(*DB).QueryContext.func1(0x0?)
+	C:/Program Files/Go/src/database/sql/sql.go:1704 +0x4f
+database/sql.(*DB).retry(0x0?, 0xc00014f7c8)
+	C:/Program Files/Go/src/database/sql/sql.go:1538 +0x42
+database/sql.(*DB).QueryContext(0x1df629d0b30?, {0xc161d0?, 0xe32a60?}, {0xba36f2?, 0xc000188130?}, {0xc00014f8d8?, 0xc00014f888?, 0x8aafa5?})
+	C:/Program Files/Go/src/database/sql/sql.go:1703 +0xc5
+database/sql.(*DB).QueryRowContext(...)
+	C:/Program Files/Go/src/database/sql/sql.go:1804
+database/sql.(*DB).QueryRow(0xc0001820f0?, {0xba36f2?, 0x2000000?}, {0xc00014f8d8?, 0x0?, 0xc00014f8e8?})
+	C:/Program Files/Go/src/database/sql/sql.go:1818 +0x45
+main.userExists(0xb35e60?, {0xc0001820f0, 0xf})
+	D:/Jao/loginauth.go:90 +0x7b
+main.logindb(0xc00018e200?, {0xc0001820f0, 0xf}, {0xc0001a2141, 0x4})
+	D:/Jao/loginauth.go:37 +0x45
+main.loginHandler({0xc15b60, 0xc0001aa0e0}, 0x0?)
+	D:/Jao/appi.go:20 +0x85
+net/http.HandlerFunc.ServeHTTP(0xb46460?, {0xc15b60?, 0xc0001aa0e0?}, 0xc000190095?)
+	C:/Program Files/Go/src/net/http/server.go:2136 +0x29
+github.com/go-chi/chi.(*Mux).routeHTTP(0xc000088360, {0xc15b60, 0xc0001aa0e0}, 0xc00018e200)
+	C:/Users/Piyush/go/pkg/mod/github.com/go-chi/chi@v1.5.4/mux.go:436 +0x1f4
+net/http.HandlerFunc.ServeHTTP(0xc16320?, {0xc15b60?, 0xc0001aa0e0?}, 0xdce890?)
+	C:/Program Files/Go/src/net/http/server.go:2136 +0x29
+github.com/go-chi/chi.(*Mux).ServeHTTP(0xc000088360, {0xc15b60, 0xc0001aa0e0}, 0xc0000d8000)
+	C:/Users/Piyush/go/pkg/mod/github.com/go-chi/chi@v1.5.4/mux.go:87 +0x331
+net/http.serverHandler.ServeHTTP({0xc14d78?}, {0xc15b60?, 0xc0001aa0e0?}, 0x6?)
+	C:/Program Files/Go/src/net/http/server.go:2938 +0x8e
+net/http.(*conn).serve(0xc000150090, {0xc162e8, 0xc00008a300})
+	C:/Program Files/Go/src/net/http/server.go:2009 +0x5f4
+created by net/http.(*Server).Serve in goroutine 1
+	C:/Program Files/Go/src/net/http/server.go:3086 +0x5cb
+2023/08/31 01:39:54 http: panic serving [::1]:54296: runtime error: invalid memory address or nil pointer dereference
+goroutine 20 [running]:
+net/http.(*conn).serve.func1()
+	C:/Program Files/Go/src/net/http/server.go:1868 +0xb9
+panic({0xb47fc0?, 0xdcefd0?})
+	C:/Program Files/Go/src/runtime/panic.go:920 +0x270
+database/sql.(*DB).conn(0x0, {0xc161d0, 0xe32a60}, 0x1)
+	C:/Program Files/Go/src/database/sql/sql.go:1282 +0x54
+database/sql.(*DB).query(0xb7e700?, {0xc161d0, 0xe32a60}, {0xba36f2, 0x2b}, {0xc0000dd8d8, 0x1, 0x1}, 0xe8?)
+	C:/Program Files/Go/src/database/sql/sql.go:1721 +0x57
+database/sql.(*DB).QueryContext.func1(0x0?)
+	C:/Program Files/Go/src/database/sql/sql.go:1704 +0x4f
+database/sql.(*DB).retry(0x0?, 0xc0000dd7c8)
+	C:/Program Files/Go/src/database/sql/sql.go:1538 +0x42
+database/sql.(*DB).QueryContext(0x1df629d0b30?, {0xc161d0?, 0xe32a60?}, {0xba36f2?, 0xc0001881d0?}, {0xc0000dd8d8?, 0xc0000dd888?, 0x8aafa5?})
+	C:/Program Files/Go/src/database/sql/sql.go:1703 +0xc5
+database/sql.(*DB).QueryRowContext(...)
+	C:/Program Files/Go/src/database/sql/sql.go:1804
+database/sql.(*DB).QueryRow(0xc000182140?, {0xba36f2?, 0x2000000?}, {0xc0000dd8d8?, 0x0?, 0xc0000dd8e8?})
+	C:/Program Files/Go/src/database/sql/sql.go:1818 +0x45
+main.userExists(0xb35e60?, {0xc000182140, 0xf})
+	D:/Jao/loginauth.go:90 +0x7b
+main.logindb(0xc00018e300?, {0xc000182140, 0xf}, {0xc0001a21d1, 0x4})
+	D:/Jao/loginauth.go:37 +0x45
+main.loginHandler({0xc15b60, 0xc0001aa1c0}, 0x0?)
+	D:/Jao/appi.go:20 +0x85
+net/http.HandlerFunc.ServeHTTP(0xb46460?, {0xc15b60?, 0xc0001aa1c0?}, 0xc0001900dd?)
+	C:/Program Files/Go/src/net/http/server.go:2136 +0x29
+github.com/go-chi/chi.(*Mux).routeHTTP(0xc000088360, {0xc15b60, 0xc0001aa1c0}, 0xc00018e300)
+	C:/Users/Piyush/go/pkg/mod/github.com/go-chi/chi@v1.5.4/mux.go:436 +0x1f4
+net/http.HandlerFunc.ServeHTTP(0xc16320?, {0xc15b60?, 0xc0001aa1c0?}, 0xdce890?)
+	C:/Program Files/Go/src/net/http/server.go:2136 +0x29
+github.com/go-chi/chi.(*Mux).ServeHTTP(0xc000088360, {0xc15b60, 0xc0001aa1c0}, 0xc000146200)
+	C:/Users/Piyush/go/pkg/mod/github.com/go-chi/chi@v1.5.4/mux.go:87 +0x331
+net/http.serverHandler.ServeHTTP({0xc14d78?}, {0xc15b60?, 0xc0001aa1c0?}, 0x6?)
+	C:/Program Files/Go/src/net/http/server.go:2938 +0x8e
+net/http.(*conn).serve(0xc0000ce1b0, {0xc162e8, 0xc00008a300})
+	C:/Program Files/Go/src/net/http/server.go:2009 +0x5f4
+created by net/http.(*Server).Serve in goroutine 1
+	C:/Program Files/Go/src/net/http/server.go:3086 +0x5cb
+2023/08/31 01:39:54 http: panic serving [::1]:54299: runtime error: invalid memory address or nil pointer dereference
+goroutine 21 [running]:
+net/http.(*conn).serve.func1()
+	C:/Program Files/Go/src/net/http/server.go:1868 +0xb9
+panic({0xb47fc0?, 0xdcefd0?})
+	C:/Program Files/Go/src/runtime/panic.go:920 +0x270
+database/sql.(*DB).conn(0x0, {0xc161d0, 0xe32a60}, 0x1)
+	C:/Program Files/Go/src/database/sql/sql.go:1282 +0x54
+database/sql.(*DB).query(0xb7e700?, {0xc161d0, 0xe32a60}, {0xba36f2, 0x2b}, {0xc0000dd8d8, 0x1, 0x1}, 0xe8?)
+	C:/Program Files/Go/src/database/sql/sql.go:1721 +0x57
+database/sql.(*DB).QueryContext.func1(0x0?)
+	C:/Program Files/Go/src/database/sql/sql.go:1704 +0x4f
+database/sql.(*DB).retry(0x0?, 0xc0000dd7c8)
+	C:/Program Files/Go/src/database/sql/sql.go:1538 +0x42
+database/sql.(*DB).QueryContext(0x1df629d0b30?, {0xc161d0?, 0xe32a60?}, {0xba36f2?, 0xc000188280?}, {0xc0000dd8d8?, 0xc0000dd888?, 0x8aafa5?})
+	C:/Program Files/Go/src/database/sql/sql.go:1703 +0xc5
+database/sql.(*DB).QueryRowContext(...)
+	C:/Program Files/Go/src/database/sql/sql.go:1804
+database/sql.(*DB).QueryRow(0xc0001821b0?, {0xba36f2?, 0x2000000?}, {0xc0000dd8d8?, 0x0?, 0xc0000dd8e8?})
+	C:/Program Files/Go/src/database/sql/sql.go:1818 +0x45
+main.userExists(0xb35e60?, {0xc0001821b0, 0xf})
+	D:/Jao/loginauth.go:90 +0x7b
+main.logindb(0xc00018e500?, {0xc0001821b0, 0xf}, {0xc0001a2261, 0x4})
+	D:/Jao/loginauth.go:37 +0x45
+main.loginHandler({0xc15b60, 0xc0001aa2a0}, 0x0?)
+	D:/Jao/appi.go:20 +0x85
+net/http.HandlerFunc.ServeHTTP(0xb46460?, {0xc15b60?, 0xc0001aa2a0?}, 0xc000190125?)
+	C:/Program Files/Go/src/net/http/server.go:2136 +0x29
+github.com/go-chi/chi.(*Mux).routeHTTP(0xc000088360, {0xc15b60, 0xc0001aa2a0}, 0xc00018e500)
+	C:/Users/Piyush/go/pkg/mod/github.com/go-chi/chi@v1.5.4/mux.go:436 +0x1f4
+net/http.HandlerFunc.ServeHTTP(0xc16320?, {0xc15b60?, 0xc0001aa2a0?}, 0xdce890?)
+	C:/Program Files/Go/src/net/http/server.go:2136 +0x29
+github.com/go-chi/chi.(*Mux).ServeHTTP(0xc000088360, {0xc15b60, 0xc0001aa2a0}, 0xc00018e400)
+	C:/Users/Piyush/go/pkg/mod/github.com/go-chi/chi@v1.5.4/mux.go:87 +0x331
+net/http.serverHandler.ServeHTTP({0xc14d78?}, {0xc15b60?, 0xc0001aa2a0?}, 0x6?)
+	C:/Program Files/Go/src/net/http/server.go:2938 +0x8e
+net/http.(*conn).serve(0xc0000ce240, {0xc162e8, 0xc00008a300})
+	C:/Program Files/Go/src/net/http/server.go:2009 +0x5f4
+created by net/http.(*Server).Serve in goroutine 1
+	C:/Program Files/Go/src/net/http/server.go:3086 +0x5cb
+2023/08/31 01:39:55 http: panic serving [::1]:54303: runtime error: invalid memory address or nil pointer dereference
+goroutine 12 [running]:
+net/http.(*conn).serve.func1()
+	C:/Program Files/Go/src/net/http/server.go:1868 +0xb9
+panic({0xb47fc0?, 0xdcefd0?})
+	C:/Program Files/Go/src/runtime/panic.go:920 +0x270
+database/sql.(*DB).conn(0x0, {0xc161d0, 0xe32a60}, 0x1)
+	C:/Program Files/Go/src/database/sql/sql.go:1282 +0x54
+database/sql.(*DB).query(0xb7e700?, {0xc161d0, 0xe32a60}, {0xba36f2, 0x2b}, {0xc0000e18d8, 0x1, 0x1}, 0xe8?)
+	C:/Program Files/Go/src/database/sql/sql.go:1721 +0x57
+database/sql.(*DB).QueryContext.func1(0x0?)
+	C:/Program Files/Go/src/database/sql/sql.go:1704 +0x4f
+database/sql.(*DB).retry(0x0?, 0xc0000e17c8)
+	C:/Program Files/Go/src/database/sql/sql.go:1538 +0x42
+database/sql.(*DB).QueryContext(0x1df5d6c1f88?, {0xc161d0?, 0xe32a60?}, {0xba36f2?, 0xc00008c1a0?}, {0xc0000e18d8?, 0xc0000e1888?, 0x8aafa5?})
+	C:/Program Files/Go/src/database/sql/sql.go:1703 +0xc5
+database/sql.(*DB).QueryRowContext(...)
+	C:/Program Files/Go/src/database/sql/sql.go:1804
+database/sql.(*DB).QueryRow(0xc000094290?, {0xba36f2?, 0x2000000?}, {0xc0000e18d8?, 0x0?, 0x8accde?})
+	C:/Program Files/Go/src/database/sql/sql.go:1818 +0x45
+main.userExists(0xb35e60?, {0xc000094290, 0xf})
+	D:/Jao/loginauth.go:90 +0x7b
+main.logindb(0xc0000d8400?, {0xc000094290, 0xf}, {0xc0000a8171, 0x4})
+	D:/Jao/loginauth.go:37 +0x45
+main.loginHandler({0xc15b60, 0xc0000a60e0}, 0x0?)
+	D:/Jao/appi.go:20 +0x85
+net/http.HandlerFunc.ServeHTTP(0xb46460?, {0xc15b60?, 0xc0000a60e0?}, 0xc00009013d?)
+	C:/Program Files/Go/src/net/http/server.go:2136 +0x29
+github.com/go-chi/chi.(*Mux).routeHTTP(0xc000088360, {0xc15b60, 0xc0000a60e0}, 0xc0000d8400)
+	C:/Users/Piyush/go/pkg/mod/github.com/go-chi/chi@v1.5.4/mux.go:436 +0x1f4
+net/http.HandlerFunc.ServeHTTP(0xc16320?, {0xc15b60?, 0xc0000a60e0?}, 0xdce890?)
+	C:/Program Files/Go/src/net/http/server.go:2136 +0x29
+github.com/go-chi/chi.(*Mux).ServeHTTP(0xc000088360, {0xc15b60, 0xc0000a60e0}, 0xc0000d8300)
+	C:/Users/Piyush/go/pkg/mod/github.com/go-chi/chi@v1.5.4/mux.go:87 +0x331
+net/http.serverHandler.ServeHTTP({0xc14d78?}, {0xc15b60?, 0xc0000a60e0?}, 0x6?)
+	C:/Program Files/Go/src/net/http/server.go:2938 +0x8e
+net/http.(*conn).serve(0xc000150120, {0xc162e8, 0xc00008a300})
+	C:/Program Files/Go/src/net/http/server.go:2009 +0x5f4
+created by net/http.(*Server).Serve in goroutine 1
+	C:/Program Files/Go/src/net/http/server.go:3086 +0x5cb
+2023/08/31 01:39:56 http: panic serving [::1]:54306: runtime error: invalid memory address or nil pointer dereference
+goroutine 42 [running]:
+net/http.(*conn).serve.func1()
+	C:/Program Files/Go/src/net/http/server.go:1868 +0xb9
+panic({0xb47fc0?, 0xdcefd0?})
+	C:/Program Files/Go/src/runtime/panic.go:920 +0x270
+database/sql.(*DB).conn(0x0, {0xc161d0, 0xe32a60}, 0x1)
+	C:/Program Files/Go/src/database/sql/sql.go:1282 +0x54
+database/sql.(*DB).query(0xb7e700?, {0xc161d0, 0xe32a60}, {0xba36f2, 0x2b}, {0xc0000dd8d8, 0x1, 0x1}, 0xe8?)
+	C:/Program Files/Go/src/database/sql/sql.go:1721 +0x57
+database/sql.(*DB).QueryContext.func1(0x0?)
+	C:/Program Files/Go/src/database/sql/sql.go:1704 +0x4f
+database/sql.(*DB).retry(0x0?, 0xc0000dd7c8)
+	C:/Program Files/Go/src/database/sql/sql.go:1538 +0x42
+database/sql.(*DB).QueryContext(0x1df5d6c1f88?, {0xc161d0?, 0xe32a60?}, {0xba36f2?, 0xc00008c240?}, {0xc0000dd8d8?, 0xc0000dd888?, 0x8aafa5?})
+	C:/Program Files/Go/src/database/sql/sql.go:1703 +0xc5
+database/sql.(*DB).QueryRowContext(...)
+	C:/Program Files/Go/src/database/sql/sql.go:1804
+database/sql.(*DB).QueryRow(0xc000094300?, {0xba36f2?, 0x2000000?}, {0xc0000dd8d8?, 0x0?, 0xc0000dd8e8?})
+	C:/Program Files/Go/src/database/sql/sql.go:1818 +0x45
+main.userExists(0xb35e60?, {0xc000094300, 0xf})
+	D:/Jao/loginauth.go:90 +0x7b
+main.logindb(0xc0000d8500?, {0xc000094300, 0xf}, {0xc0000a8201, 0x4})
+	D:/Jao/loginauth.go:37 +0x45
+main.loginHandler({0xc15b60, 0xc0000a61c0}, 0x0?)
+	D:/Jao/appi.go:20 +0x85
+net/http.HandlerFunc.ServeHTTP(0xb46460?, {0xc15b60?, 0xc0000a61c0?}, 0xc000090185?)
+	C:/Program Files/Go/src/net/http/server.go:2136 +0x29
+github.com/go-chi/chi.(*Mux).routeHTTP(0xc000088360, {0xc15b60, 0xc0000a61c0}, 0xc0000d8500)
+	C:/Users/Piyush/go/pkg/mod/github.com/go-chi/chi@v1.5.4/mux.go:436 +0x1f4
+net/http.HandlerFunc.ServeHTTP(0xc16320?, {0xc15b60?, 0xc0000a61c0?}, 0xdce890?)
+	C:/Program Files/Go/src/net/http/server.go:2136 +0x29
+github.com/go-chi/chi.(*Mux).ServeHTTP(0xc000088360, {0xc15b60, 0xc0000a61c0}, 0xc000146400)
+	C:/Users/Piyush/go/pkg/mod/github.com/go-chi/chi@v1.5.4/mux.go:87 +0x331
+net/http.serverHandler.ServeHTTP({0xc14d78?}, {0xc15b60?, 0xc0000a61c0?}, 0x6?)
+	C:/Program Files/Go/src/net/http/server.go:2938 +0x8e
+net/http.(*conn).serve(0xc0001926c0, {0xc162e8, 0xc00008a300})
+	C:/Program Files/Go/src/net/http/server.go:2009 +0x5f4
+created by net/http.(*Server).Serve in goroutine 1
+	C:/Program Files/Go/src/net/http/server.go:3086 +0x5cb
+2023/08/31 01:39:57 http: panic serving [::1]:54309: runtime error: invalid memory address or nil pointer dereference
+goroutine 50 [running]:
+net/http.(*conn).serve.func1()
+	C:/Program Files/Go/src/net/http/server.go:1868 +0xb9
+panic({0xb47fc0?, 0xdcefd0?})
+	C:/Program Files/Go/src/runtime/panic.go:920 +0x270
+database/sql.(*DB).conn(0x0, {0xc161d0, 0xe32a60}, 0x1)
+	C:/Program Files/Go/src/database/sql/sql.go:1282 +0x54
+database/sql.(*DB).query(0xb7e700?, {0xc161d0, 0xe32a60}, {0xba36f2, 0x2b}, {0xc0000dd8d8, 0x1, 0x1}, 0xe8?)
+	C:/Program Files/Go/src/database/sql/sql.go:1721 +0x57
+database/sql.(*DB).QueryContext.func1(0x0?)
+	C:/Program Files/Go/src/database/sql/sql.go:1704 +0x4f
+database/sql.(*DB).retry(0x0?, 0xc0000dd7c8)
+	C:/Program Files/Go/src/database/sql/sql.go:1538 +0x42
+database/sql.(*DB).QueryContext(0x1df629d35d8?, {0xc161d0?, 0xe32a60?}, {0xba36f2?, 0xc00015c090?}, {0xc0000dd8d8?, 0xc0000dd888?, 0x8aafa5?})
+	C:/Program Files/Go/src/database/sql/sql.go:1703 +0xc5
+database/sql.(*DB).QueryRowContext(...)
+	C:/Program Files/Go/src/database/sql/sql.go:1804
+database/sql.(*DB).QueryRow(0xc000156050?, {0xba36f2?, 0x2000000?}, {0xc0000dd8d8?, 0x0?, 0xc0000dd900?})
+	C:/Program Files/Go/src/database/sql/sql.go:1818 +0x45
+main.userExists(0xb35e60?, {0xc000156050, 0xf})
+	D:/Jao/loginauth.go:90 +0x7b
+main.logindb(0xc000220100?, {0xc000156050, 0xf}, {0xc000238081, 0x4})
+	D:/Jao/loginauth.go:37 +0x45
+main.loginHandler({0xc15b60, 0xc000240000}, 0x0?)
+	D:/Jao/appi.go:20 +0x85
+net/http.HandlerFunc.ServeHTTP(0xb46460?, {0xc15b60?, 0xc000240000?}, 0xc000232005?)
+	C:/Program Files/Go/src/net/http/server.go:2136 +0x29
+github.com/go-chi/chi.(*Mux).routeHTTP(0xc000088360, {0xc15b60, 0xc000240000}, 0xc000220100)
+	C:/Users/Piyush/go/pkg/mod/github.com/go-chi/chi@v1.5.4/mux.go:436 +0x1f4
+net/http.HandlerFunc.ServeHTTP(0xc16320?, {0xc15b60?, 0xc000240000?}, 0xdce890?)
+	C:/Program Files/Go/src/net/http/server.go:2136 +0x29
+github.com/go-chi/chi.(*Mux).ServeHTTP(0xc000088360, {0xc15b60, 0xc000240000}, 0xc000146500)
+	C:/Users/Piyush/go/pkg/mod/github.com/go-chi/chi@v1.5.4/mux.go:87 +0x331
+net/http.serverHandler.ServeHTTP({0xc14d78?}, {0xc15b60?, 0xc000240000?}, 0x6?)
+	C:/Program Files/Go/src/net/http/server.go:2938 +0x8e
+net/http.(*conn).serve(0xc00022a000, {0xc162e8, 0xc00008a300})
+	C:/Program Files/Go/src/net/http/server.go:2009 +0x5f4
+created by net/http.(*Server).Serve in goroutine 1
+	C:/Program Files/Go/src/net/http/server.go:3086 +0x5cb
+2023/08/31 01:40:32 http: panic serving [::1]:54337: runtime error: invalid memory address or nil pointer dereference
+goroutine 10 [running]:
+net/http.(*conn).serve.func1()
+	C:/Program Files/Go/src/net/http/server.go:1868 +0xb9
+panic({0x1037fc0?, 0x12befd0?})
+	C:/Program Files/Go/src/runtime/panic.go:920 +0x270
+database/sql.(*DB).conn(0x0, {0x11061d0, 0x1322a60}, 0x1)
+	C:/Program Files/Go/src/database/sql/sql.go:1282 +0x54
+database/sql.(*DB).query(0x106e700?, {0x11061d0, 0x1322a60}, {0x10936f2, 0x2b}, {0xc00014b8d8, 0x1, 0x1}, 0xe8?)
+	C:/Program Files/Go/src/database/sql/sql.go:1721 +0x57
+database/sql.(*DB).QueryContext.func1(0x0?)
+	C:/Program Files/Go/src/database/sql/sql.go:1704 +0x4f
+database/sql.(*DB).retry(0x0?, 0xc00014b7c8)
+	C:/Program Files/Go/src/database/sql/sql.go:1538 +0x42
+database/sql.(*DB).QueryContext(0x16bc6d41f88?, {0x11061d0?, 0x1322a60?}, {0x10936f2?, 0xc00008c160?}, {0xc00014b8d8?, 0xc00014b888?, 0xd9afa5?})
+	C:/Program Files/Go/src/database/sql/sql.go:1703 +0xc5
+database/sql.(*DB).QueryRowContext(...)
+	C:/Program Files/Go/src/database/sql/sql.go:1804
+database/sql.(*DB).QueryRow(0xc000094230?, {0x10936f2?, 0x2000000?}, {0xc00014b8d8?, 0x0?, 0xd9ccde?})
+	C:/Program Files/Go/src/database/sql/sql.go:1818 +0x45
+main.userExists(0x1025e60?, {0xc000094230, 0xf})
+	D:/Jao/loginauth.go:90 +0x7b
+main.logindb(0xc0000e8000?, {0xc000094230, 0xf}, {0xc0000a8171, 0x4})
+	D:/Jao/loginauth.go:37 +0x45
+main.loginHandler({0x1105b60, 0xc0000a60e0}, 0x0?)
+	D:/Jao/appi.go:20 +0x85
+net/http.HandlerFunc.ServeHTTP(0x1036460?, {0x1105b60?, 0xc0000a60e0?}, 0xc00009013d?)
+	C:/Program Files/Go/src/net/http/server.go:2136 +0x29
+github.com/go-chi/chi.(*Mux).routeHTTP(0xc000088360, {0x1105b60, 0xc0000a60e0}, 0xc0000e8000)
+	C:/Users/Piyush/go/pkg/mod/github.com/go-chi/chi@v1.5.4/mux.go:436 +0x1f4
+net/http.HandlerFunc.ServeHTTP(0x1106320?, {0x1105b60?, 0xc0000a60e0?}, 0x12be890?)
+	C:/Program Files/Go/src/net/http/server.go:2136 +0x29
+github.com/go-chi/chi.(*Mux).ServeHTTP(0xc000088360, {0x1105b60, 0xc0000a60e0}, 0xc00018e000)
+	C:/Users/Piyush/go/pkg/mod/github.com/go-chi/chi@v1.5.4/mux.go:87 +0x331
+net/http.serverHandler.ServeHTTP({0x1104d78?}, {0x1105b60?, 0xc0000a60e0?}, 0x6?)
+	C:/Program Files/Go/src/net/http/server.go:2938 +0x8e
+net/http.(*conn).serve(0xc000150000, {0x11062e8, 0xc00008a300})
+	C:/Program Files/Go/src/net/http/server.go:2009 +0x5f4
+created by net/http.(*Server).Serve in goroutine 1
+	C:/Program Files/Go/src/net/http/server.go:3086 +0x5cb
+2023/08/31 01:40:33 http: panic serving [::1]:54340: runtime error: invalid memory address or nil pointer dereference
+goroutine 11 [running]:
+net/http.(*conn).serve.func1()
+	C:/Program Files/Go/src/net/http/server.go:1868 +0xb9
+panic({0x1037fc0?, 0x12befd0?})
+	C:/Program Files/Go/src/runtime/panic.go:920 +0x270
+database/sql.(*DB).conn(0x0, {0x11061d0, 0x1322a60}, 0x1)
+	C:/Program Files/Go/src/database/sql/sql.go:1282 +0x54
+database/sql.(*DB).query(0x106e700?, {0x11061d0, 0x1322a60}, {0x10936f2, 0x2b}, {0xc00014b8d8, 0x1, 0x1}, 0xe8?)
+	C:/Program Files/Go/src/database/sql/sql.go:1721 +0x57
+database/sql.(*DB).QueryContext.func1(0x0?)
+	C:/Program Files/Go/src/database/sql/sql.go:1704 +0x4f
+database/sql.(*DB).retry(0x0?, 0xc00014b7c8)
+	C:/Program Files/Go/src/database/sql/sql.go:1538 +0x42
+database/sql.(*DB).QueryContext(0x16bc6d41f88?, {0x11061d0?, 0x1322a60?}, {0x10936f2?, 0xc00008c210?}, {0xc00014b8d8?, 0xc00014b888?, 0xd9afa5?})
+	C:/Program Files/Go/src/database/sql/sql.go:1703 +0xc5
+database/sql.(*DB).QueryRowContext(...)
+	C:/Program Files/Go/src/database/sql/sql.go:1804
+database/sql.(*DB).QueryRow(0xc0000942e0?, {0x10936f2?, 0x2000000?}, {0xc00014b8d8?, 0x0?, 0xc00014b8e8?})
+	C:/Program Files/Go/src/database/sql/sql.go:1818 +0x45
+main.userExists(0x1025e60?, {0xc0000942e0, 0xf})
+	D:/Jao/loginauth.go:90 +0x7b
+main.logindb(0xc0000e8200?, {0xc0000942e0, 0xf}, {0xc0000a8201, 0x4})
+	D:/Jao/loginauth.go:37 +0x45
+main.loginHandler({0x1105b60, 0xc0000a61c0}, 0x0?)
+	D:/Jao/appi.go:20 +0x85
+net/http.HandlerFunc.ServeHTTP(0x1036460?, {0x1105b60?, 0xc0000a61c0?}, 0xc0000901b5?)
+	C:/Program Files/Go/src/net/http/server.go:2136 +0x29
+github.com/go-chi/chi.(*Mux).routeHTTP(0xc000088360, {0x1105b60, 0xc0000a61c0}, 0xc0000e8200)
+	C:/Users/Piyush/go/pkg/mod/github.com/go-chi/chi@v1.5.4/mux.go:436 +0x1f4
+net/http.HandlerFunc.ServeHTTP(0x1106320?, {0x1105b60?, 0xc0000a61c0?}, 0x12be890?)
+	C:/Program Files/Go/src/net/http/server.go:2136 +0x29
+github.com/go-chi/chi.(*Mux).ServeHTTP(0xc000088360, {0x1105b60, 0xc0000a61c0}, 0xc0000e8100)
+	C:/Users/Piyush/go/pkg/mod/github.com/go-chi/chi@v1.5.4/mux.go:87 +0x331
+net/http.serverHandler.ServeHTTP({0x1104d78?}, {0x1105b60?, 0xc0000a61c0?}, 0x6?)
+	C:/Program Files/Go/src/net/http/server.go:2938 +0x8e
+net/http.(*conn).serve(0xc000150090, {0x11062e8, 0xc00008a300})
+	C:/Program Files/Go/src/net/http/server.go:2009 +0x5f4
+created by net/http.(*Server).Serve in goroutine 1
+	C:/Program Files/Go/src/net/http/server.go:3086 +0x5cb
+2023/08/31 01:40:35 http: panic serving [::1]:54345: runtime error: invalid memory address or nil pointer dereference
+goroutine 12 [running]:
+net/http.(*conn).serve.func1()
+	C:/Program Files/Go/src/net/http/server.go:1868 +0xb9
+panic({0x1037fc0?, 0x12befd0?})
+	C:/Program Files/Go/src/runtime/panic.go:920 +0x270
+database/sql.(*DB).conn(0x0, {0x11061d0, 0x1322a60}, 0x1)
+	C:/Program Files/Go/src/database/sql/sql.go:1282 +0x54
+database/sql.(*DB).query(0x106e700?, {0x11061d0, 0x1322a60}, {0x10936f2, 0x2b}, {0xc0001578d8, 0x1, 0x1}, 0xe8?)
+	C:/Program Files/Go/src/database/sql/sql.go:1721 +0x57
+database/sql.(*DB).QueryContext.func1(0x0?)
+	C:/Program Files/Go/src/database/sql/sql.go:1704 +0x4f
+database/sql.(*DB).retry(0x0?, 0xc0001577c8)
+	C:/Program Files/Go/src/database/sql/sql.go:1538 +0x42
+database/sql.(*DB).QueryContext(0x16bc6d41f88?, {0x11061d0?, 0x1322a60?}, {0x10936f2?, 0xc00008c2b0?}, {0xc0001578d8?, 0xc000157888?, 0xd9afa5?})
+	C:/Program Files/Go/src/database/sql/sql.go:1703 +0xc5
+database/sql.(*DB).QueryRowContext(...)
+	C:/Program Files/Go/src/database/sql/sql.go:1804
+database/sql.(*DB).QueryRow(0xc000094330?, {0x10936f2?, 0x2000000?}, {0xc0001578d8?, 0x0?, 0xc0001578e8?})
+	C:/Program Files/Go/src/database/sql/sql.go:1818 +0x45
+main.userExists(0x1025e60?, {0xc000094330, 0xf})
+	D:/Jao/loginauth.go:90 +0x7b
+main.logindb(0xc0000e8300?, {0xc000094330, 0xf}, {0xc0000a8291, 0x4})
+	D:/Jao/loginauth.go:37 +0x45
+main.loginHandler({0x1105b60, 0xc0000a62a0}, 0x0?)
+	D:/Jao/appi.go:20 +0x85
+net/http.HandlerFunc.ServeHTTP(0x1036460?, {0x1105b60?, 0xc0000a62a0?}, 0xc0000901fd?)
+	C:/Program Files/Go/src/net/http/server.go:2136 +0x29
+github.com/go-chi/chi.(*Mux).routeHTTP(0xc000088360, {0x1105b60, 0xc0000a62a0}, 0xc0000e8300)
+	C:/Users/Piyush/go/pkg/mod/github.com/go-chi/chi@v1.5.4/mux.go:436 +0x1f4
+net/http.HandlerFunc.ServeHTTP(0x1106320?, {0x1105b60?, 0xc0000a62a0?}, 0x12be890?)
+	C:/Program Files/Go/src/net/http/server.go:2136 +0x29
+github.com/go-chi/chi.(*Mux).ServeHTTP(0xc000088360, {0x1105b60, 0xc0000a62a0}, 0xc00018e100)
+	C:/Users/Piyush/go/pkg/mod/github.com/go-chi/chi@v1.5.4/mux.go:87 +0x331
+net/http.serverHandler.ServeHTTP({0x1104d78?}, {0x1105b60?, 0xc0000a62a0?}, 0x6?)
+	C:/Program Files/Go/src/net/http/server.go:2938 +0x8e
+net/http.(*conn).serve(0xc000150120, {0x11062e8, 0xc00008a300})
+	C:/Program Files/Go/src/net/http/server.go:2009 +0x5f4
+created by net/http.(*Server).Serve in goroutine 1
+	C:/Program Files/Go/src/net/http/server.go:3086 +0x5cb
+2023/08/31 01:40:36 http: panic serving [::1]:54349: runtime error: invalid memory address or nil pointer dereference
+goroutine 34 [running]:
+net/http.(*conn).serve.func1()
+	C:/Program Files/Go/src/net/http/server.go:1868 +0xb9
+panic({0x1037fc0?, 0x12befd0?})
+	C:/Program Files/Go/src/runtime/panic.go:920 +0x270
+database/sql.(*DB).conn(0x0, {0x11061d0, 0x1322a60}, 0x1)
+	C:/Program Files/Go/src/database/sql/sql.go:1282 +0x54
+database/sql.(*DB).query(0x106e700?, {0x11061d0, 0x1322a60}, {0x10936f2, 0x2b}, {0xc00014b8d8, 0x1, 0x1}, 0xe8?)
+	C:/Program Files/Go/src/database/sql/sql.go:1721 +0x57
+database/sql.(*DB).QueryContext.func1(0x0?)
+	C:/Program Files/Go/src/database/sql/sql.go:1704 +0x4f
+database/sql.(*DB).retry(0x0?, 0xc00014b7c8)
+	C:/Program Files/Go/src/database/sql/sql.go:1538 +0x42
+database/sql.(*DB).QueryContext(0x16bc6d41f88?, {0x11061d0?, 0x1322a60?}, {0x10936f2?, 0xc00008c350?}, {0xc00014b8d8?, 0xc00014b888?, 0xd9afa5?})
+	C:/Program Files/Go/src/database/sql/sql.go:1703 +0xc5
+database/sql.(*DB).QueryRowContext(...)
+	C:/Program Files/Go/src/database/sql/sql.go:1804
+database/sql.(*DB).QueryRow(0xc000094380?, {0x10936f2?, 0x2000000?}, {0xc00014b8d8?, 0x0?, 0xc00014b8e8?})
+	C:/Program Files/Go/src/database/sql/sql.go:1818 +0x45
+main.userExists(0x1025e60?, {0xc000094380, 0xf})
+	D:/Jao/loginauth.go:90 +0x7b
+main.logindb(0xc0000e8400?, {0xc000094380, 0xf}, {0xc0000a8321, 0x4})
+	D:/Jao/loginauth.go:37 +0x45
+main.loginHandler({0x1105b60, 0xc0000a6380}, 0x0?)
+	D:/Jao/appi.go:20 +0x85
+net/http.HandlerFunc.ServeHTTP(0x1036460?, {0x1105b60?, 0xc0000a6380?}, 0xc000090245?)
+	C:/Program Files/Go/src/net/http/server.go:2136 +0x29
+github.com/go-chi/chi.(*Mux).routeHTTP(0xc000088360, {0x1105b60, 0xc0000a6380}, 0xc0000e8400)
+	C:/Users/Piyush/go/pkg/mod/github.com/go-chi/chi@v1.5.4/mux.go:436 +0x1f4
+net/http.HandlerFunc.ServeHTTP(0x1106320?, {0x1105b60?, 0xc0000a6380?}, 0x12be890?)
+	C:/Program Files/Go/src/net/http/server.go:2136 +0x29
+github.com/go-chi/chi.(*Mux).ServeHTTP(0xc000088360, {0x1105b60, 0xc0000a6380}, 0xc000146300)
+	C:/Users/Piyush/go/pkg/mod/github.com/go-chi/chi@v1.5.4/mux.go:87 +0x331
+net/http.serverHandler.ServeHTTP({0x1104d78?}, {0x1105b60?, 0xc0000a6380?}, 0x6?)
+	C:/Program Files/Go/src/net/http/server.go:2938 +0x8e
+net/http.(*conn).serve(0xc000196000, {0x11062e8, 0xc00008a300})
+	C:/Program Files/Go/src/net/http/server.go:2009 +0x5f4
+created by net/http.(*Server).Serve in goroutine 1
+	C:/Program Files/Go/src/net/http/server.go:3086 +0x5cb
+2023/08/31 01:40:58 http: panic serving [::1]:54365: runtime error: invalid memory address or nil pointer dereference
+goroutine 13 [running]:
+net/http.(*conn).serve.func1()
+	C:/Program Files/Go/src/net/http/server.go:1868 +0xb9
+panic({0x1037fc0?, 0x12befd0?})
+	C:/Program Files/Go/src/runtime/panic.go:920 +0x270
+database/sql.(*DB).conn(0x0, {0x11061d0, 0x1322a60}, 0x1)
+	C:/Program Files/Go/src/database/sql/sql.go:1282 +0x54
+database/sql.(*DB).query(0x106e700?, {0x11061d0, 0x1322a60}, {0x10936f2, 0x2b}, {0xc00015f8d8, 0x1, 0x1}, 0xe8?)
+	C:/Program Files/Go/src/database/sql/sql.go:1721 +0x57
+database/sql.(*DB).QueryContext.func1(0x0?)
+	C:/Program Files/Go/src/database/sql/sql.go:1704 +0x4f
+database/sql.(*DB).retry(0x40?, 0xc00015f7c8)
+	C:/Program Files/Go/src/database/sql/sql.go:1538 +0x42
+database/sql.(*DB).QueryContext(0x16bc6d41f88?, {0x11061d0?, 0x1322a60?}, {0x10936f2?, 0xc00008c3f0?}, {0xc00015f8d8?, 0xc00015f888?, 0xd9afa5?})
+	C:/Program Files/Go/src/database/sql/sql.go:1703 +0xc5
+database/sql.(*DB).QueryRowContext(...)
+	C:/Program Files/Go/src/database/sql/sql.go:1804
+database/sql.(*DB).QueryRow(0xc0000943d0?, {0x10936f2?, 0x2000000?}, {0xc00015f8d8?, 0x0?, 0xd9ccde?})
+	C:/Program Files/Go/src/database/sql/sql.go:1818 +0x45
+main.userExists(0x1025e60?, {0xc0000943d0, 0xf})
+	D:/Jao/loginauth.go:90 +0x7b
+main.logindb(0xc0000e8500?, {0xc0000943d0, 0xf}, {0xc0000a83b1, 0x4})
+	D:/Jao/loginauth.go:37 +0x45
+main.loginHandler({0x1105b60, 0xc0000a6460}, 0x0?)
+	D:/Jao/appi.go:20 +0x85
+net/http.HandlerFunc.ServeHTTP(0x1036460?, {0x1105b60?, 0xc0000a6460?}, 0xc00009028d?)
+	C:/Program Files/Go/src/net/http/server.go:2136 +0x29
+github.com/go-chi/chi.(*Mux).routeHTTP(0xc000088360, {0x1105b60, 0xc0000a6460}, 0xc0000e8500)
+	C:/Users/Piyush/go/pkg/mod/github.com/go-chi/chi@v1.5.4/mux.go:436 +0x1f4
+net/http.HandlerFunc.ServeHTTP(0x1106320?, {0x1105b60?, 0xc0000a6460?}, 0x12be890?)
+	C:/Program Files/Go/src/net/http/server.go:2136 +0x29
+github.com/go-chi/chi.(*Mux).ServeHTTP(0xc000088360, {0x1105b60, 0xc0000a6460}, 0xc00018e300)
+	C:/Users/Piyush/go/pkg/mod/github.com/go-chi/chi@v1.5.4/mux.go:87 +0x331
+net/http.serverHandler.ServeHTTP({0x1104d78?}, {0x1105b60?, 0xc0000a6460?}, 0x6?)
+	C:/Program Files/Go/src/net/http/server.go:2938 +0x8e
+net/http.(*conn).serve(0xc0001501b0, {0x11062e8, 0xc00008a300})
+	C:/Program Files/Go/src/net/http/server.go:2009 +0x5f4
+created by net/http.(*Server).Serve in goroutine 1
+	C:/Program Files/Go/src/net/http/server.go:3086 +0x5cb
+2023/08/31 01:41:05 http: panic serving [::1]:54373: runtime error: invalid memory address or nil pointer dereference
+goroutine 14 [running]:
+net/http.(*conn).serve.func1()
+	C:/Program Files/Go/src/net/http/server.go:1868 +0xb9
+panic({0x1037fc0?, 0x12befd0?})
+	C:/Program Files/Go/src/runtime/panic.go:920 +0x270
+database/sql.(*DB).conn(0x0, {0x11061d0, 0x1322a60}, 0x1)
+	C:/Program Files/Go/src/database/sql/sql.go:1282 +0x54
+database/sql.(*DB).query(0x106e700?, {0x11061d0, 0x1322a60}, {0x10936f2, 0x2b}, {0xc00014b8d8, 0x1, 0x1}, 0xe8?)
+	C:/Program Files/Go/src/database/sql/sql.go:1721 +0x57
+database/sql.(*DB).QueryContext.func1(0x0?)
+	C:/Program Files/Go/src/database/sql/sql.go:1704 +0x4f
+database/sql.(*DB).retry(0x0?, 0xc00014b7c8)
+	C:/Program Files/Go/src/database/sql/sql.go:1538 +0x42
+database/sql.(*DB).QueryContext(0x16bc6d41f88?, {0x11061d0?, 0x1322a60?}, {0x10936f2?, 0xc00008c490?}, {0xc00014b8d8?, 0xc00014b888?, 0xd9afa5?})
+	C:/Program Files/Go/src/database/sql/sql.go:1703 +0xc5
+database/sql.(*DB).QueryRowContext(...)
+	C:/Program Files/Go/src/database/sql/sql.go:1804
+database/sql.(*DB).QueryRow(0xc000094420?, {0x10936f2?, 0x2000000?}, {0xc00014b8d8?, 0x0?, 0xc00014b8e8?})
+	C:/Program Files/Go/src/database/sql/sql.go:1818 +0x45
+main.userExists(0x1025e60?, {0xc000094420, 0xf})
+	D:/Jao/loginauth.go:90 +0x7b
+main.logindb(0xc0000e8600?, {0xc000094420, 0xf}, {0xc0000a8441, 0x4})
+	D:/Jao/loginauth.go:37 +0x45
+main.loginHandler({0x1105b60, 0xc0000a6540}, 0x0?)
+	D:/Jao/appi.go:20 +0x85
+net/http.HandlerFunc.ServeHTTP(0x1036460?, {0x1105b60?, 0xc0000a6540?}, 0xc0000902d5?)
+	C:/Program Files/Go/src/net/http/server.go:2136 +0x29
+github.com/go-chi/chi.(*Mux).routeHTTP(0xc000088360, {0x1105b60, 0xc0000a6540}, 0xc0000e8600)
+	C:/Users/Piyush/go/pkg/mod/github.com/go-chi/chi@v1.5.4/mux.go:436 +0x1f4
+net/http.HandlerFunc.ServeHTTP(0x1106320?, {0x1105b60?, 0xc0000a6540?}, 0x12be890?)
+	C:/Program Files/Go/src/net/http/server.go:2136 +0x29
+github.com/go-chi/chi.(*Mux).ServeHTTP(0xc000088360, {0x1105b60, 0xc0000a6540}, 0xc00018e400)
+	C:/Users/Piyush/go/pkg/mod/github.com/go-chi/chi@v1.5.4/mux.go:87 +0x331
+net/http.serverHandler.ServeHTTP({0x1104d78?}, {0x1105b60?, 0xc0000a6540?}, 0x6?)
+	C:/Program Files/Go/src/net/http/server.go:2938 +0x8e
+net/http.(*conn).serve(0xc000150240, {0x11062e8, 0xc00008a300})
+	C:/Program Files/Go/src/net/http/server.go:2009 +0x5f4
+created by net/http.(*Server).Serve in goroutine 1
+	C:/Program Files/Go/src/net/http/server.go:3086 +0x5cb
+2023/08/31 01:41:06 http: panic serving [::1]:54377: runtime error: invalid memory address or nil pointer dereference
+goroutine 35 [running]:
+net/http.(*conn).serve.func1()
+	C:/Program Files/Go/src/net/http/server.go:1868 +0xb9
+panic({0x1037fc0?, 0x12befd0?})
+	C:/Program Files/Go/src/runtime/panic.go:920 +0x270
+database/sql.(*DB).conn(0x0, {0x11061d0, 0x1322a60}, 0x1)
+	C:/Program Files/Go/src/database/sql/sql.go:1282 +0x54
+database/sql.(*DB).query(0x106e700?, {0x11061d0, 0x1322a60}, {0x10936f2, 0x2b}, {0xc00019f8d8, 0x1, 0x1}, 0xe8?)
+	C:/Program Files/Go/src/database/sql/sql.go:1721 +0x57
+database/sql.(*DB).QueryContext.func1(0x0?)
+	C:/Program Files/Go/src/database/sql/sql.go:1704 +0x4f
+database/sql.(*DB).retry(0x0?, 0xc00019f7c8)
+	C:/Program Files/Go/src/database/sql/sql.go:1538 +0x42
+database/sql.(*DB).QueryContext(0x16bc6d41f88?, {0x11061d0?, 0x1322a60?}, {0x10936f2?, 0xc00008c530?}, {0xc00019f8d8?, 0xc00019f888?, 0xd9afa5?})
+	C:/Program Files/Go/src/database/sql/sql.go:1703 +0xc5
+database/sql.(*DB).QueryRowContext(...)
+	C:/Program Files/Go/src/database/sql/sql.go:1804
+database/sql.(*DB).QueryRow(0xc000094470?, {0x10936f2?, 0x2000000?}, {0xc00019f8d8?, 0x0?, 0xc00019f8e8?})
+	C:/Program Files/Go/src/database/sql/sql.go:1818 +0x45
+main.userExists(0x1025e60?, {0xc000094470, 0xf})
+	D:/Jao/loginauth.go:90 +0x7b
+main.logindb(0xc0000e8700?, {0xc000094470, 0xf}, {0xc0000a84d1, 0x4})
+	D:/Jao/loginauth.go:37 +0x45
+main.loginHandler({0x1105b60, 0xc0000a6620}, 0x0?)
+	D:/Jao/appi.go:20 +0x85
+net/http.HandlerFunc.ServeHTTP(0x1036460?, {0x1105b60?, 0xc0000a6620?}, 0xc00009031d?)
+	C:/Program Files/Go/src/net/http/server.go:2136 +0x29
+github.com/go-chi/chi.(*Mux).routeHTTP(0xc000088360, {0x1105b60, 0xc0000a6620}, 0xc0000e8700)
+	C:/Users/Piyush/go/pkg/mod/github.com/go-chi/chi@v1.5.4/mux.go:436 +0x1f4
+net/http.HandlerFunc.ServeHTTP(0x1106320?, {0x1105b60?, 0xc0000a6620?}, 0x12be890?)
+	C:/Program Files/Go/src/net/http/server.go:2136 +0x29
+github.com/go-chi/chi.(*Mux).ServeHTTP(0xc000088360, {0x1105b60, 0xc0000a6620}, 0xc000146600)
+	C:/Users/Piyush/go/pkg/mod/github.com/go-chi/chi@v1.5.4/mux.go:87 +0x331
+net/http.serverHandler.ServeHTTP({0x1104d78?}, {0x1105b60?, 0xc0000a6620?}, 0x6?)
+	C:/Program Files/Go/src/net/http/server.go:2938 +0x8e
+net/http.(*conn).serve(0xc000196090, {0x11062e8, 0xc00008a300})
+	C:/Program Files/Go/src/net/http/server.go:2009 +0x5f4
+created by net/http.(*Server).Serve in goroutine 1
+	C:/Program Files/Go/src/net/http/server.go:3086 +0x5cb
+2023/08/31 01:41:53 http: panic serving [::1]:54417: runtime error: invalid memory address or nil pointer dereference
+goroutine 50 [running]:
+net/http.(*conn).serve.func1()
+	C:/Program Files/Go/src/net/http/server.go:1868 +0xb9
+panic({0x1037fc0?, 0x12befd0?})
+	C:/Program Files/Go/src/runtime/panic.go:920 +0x270
+database/sql.(*DB).conn(0x0, {0x11061d0, 0x1322a60}, 0x1)
+	C:/Program Files/Go/src/database/sql/sql.go:1282 +0x54
+database/sql.(*DB).query(0x106e700?, {0x11061d0, 0x1322a60}, {0x10936f2, 0x2b}, {0xc00014b8d8, 0x1, 0x1}, 0xe8?)
+	C:/Program Files/Go/src/database/sql/sql.go:1721 +0x57
+database/sql.(*DB).QueryContext.func1(0x0?)
+	C:/Program Files/Go/src/database/sql/sql.go:1704 +0x4f
+database/sql.(*DB).retry(0x0?, 0xc00014b7c8)
+	C:/Program Files/Go/src/database/sql/sql.go:1538 +0x42
+database/sql.(*DB).QueryContext(0x16bc6e30b30?, {0x11061d0?, 0x1322a60?}, {0x10936f2?, 0xc0001880f0?}, {0xc00014b8d8?, 0xc00014b888?, 0xd9afa5?})
+	C:/Program Files/Go/src/database/sql/sql.go:1703 +0xc5
+database/sql.(*DB).QueryRowContext(...)
+	C:/Program Files/Go/src/database/sql/sql.go:1804
+database/sql.(*DB).QueryRow(0xc0001820d0?, {0x10936f2?, 0x2000000?}, {0xc00014b8d8?, 0x0?, 0xc00014b900?})
+	C:/Program Files/Go/src/database/sql/sql.go:1818 +0x45
+main.userExists(0x1025e60?, {0xc0001820d0, 0xf})
+	D:/Jao/loginauth.go:90 +0x7b
+main.logindb(0xc00018e700?, {0xc0001820d0, 0xf}, {0xc0001ae081, 0x4})
+	D:/Jao/loginauth.go:37 +0x45
+main.loginHandler({0x1105b60, 0xc0001b6000}, 0x0?)
+	D:/Jao/appi.go:20 +0x85
+net/http.HandlerFunc.ServeHTTP(0x1036460?, {0x1105b60?, 0xc0001b6000?}, 0xc0001a8005?)
+	C:/Program Files/Go/src/net/http/server.go:2136 +0x29
+github.com/go-chi/chi.(*Mux).routeHTTP(0xc000088360, {0x1105b60, 0xc0001b6000}, 0xc00018e700)
+	C:/Users/Piyush/go/pkg/mod/github.com/go-chi/chi@v1.5.4/mux.go:436 +0x1f4
+net/http.HandlerFunc.ServeHTTP(0x1106320?, {0x1105b60?, 0xc0001b6000?}, 0x12be890?)
+	C:/Program Files/Go/src/net/http/server.go:2136 +0x29
+github.com/go-chi/chi.(*Mux).ServeHTTP(0xc000088360, {0x1105b60, 0xc0001b6000}, 0xc00018e600)
+	C:/Users/Piyush/go/pkg/mod/github.com/go-chi/chi@v1.5.4/mux.go:87 +0x331
+net/http.serverHandler.ServeHTTP({0x1104d78?}, {0x1105b60?, 0xc0001b6000?}, 0x6?)
+	C:/Program Files/Go/src/net/http/server.go:2938 +0x8e
+net/http.(*conn).serve(0xc0000ced80, {0x11062e8, 0xc00008a300})
+	C:/Program Files/Go/src/net/http/server.go:2009 +0x5f4
+created by net/http.(*Server).Serve in goroutine 1
+	C:/Program Files/Go/src/net/http/server.go:3086 +0x5cb
+2023/08/31 01:43:39 http: panic serving [::1]:54499: runtime error: invalid memory address or nil pointer dereference
+goroutine 15 [running]:
+net/http.(*conn).serve.func1()
+	C:/Program Files/Go/src/net/http/server.go:1868 +0xb9
+panic({0x1037fc0?, 0x12befd0?})
+	C:/Program Files/Go/src/runtime/panic.go:920 +0x270
+database/sql.(*DB).conn(0x0, {0x11061d0, 0x1322a60}, 0x1)
+	C:/Program Files/Go/src/database/sql/sql.go:1282 +0x54
+database/sql.(*DB).query(0x106e700?, {0x11061d0, 0x1322a60}, {0x10936f2, 0x2b}, {0xc00019f8d8, 0x1, 0x1}, 0xe8?)
+	C:/Program Files/Go/src/database/sql/sql.go:1721 +0x57
+database/sql.(*DB).QueryContext.func1(0x0?)
+	C:/Program Files/Go/src/database/sql/sql.go:1704 +0x4f
+database/sql.(*DB).retry(0x0?, 0xc00019f7c8)
+	C:/Program Files/Go/src/database/sql/sql.go:1538 +0x42
+database/sql.(*DB).QueryContext(0x16bc6e30b30?, {0x11061d0?, 0x1322a60?}, {0x10936f2?, 0xc000188190?}, {0xc00019f8d8?, 0xc00019f888?, 0xd9afa5?})
+	C:/Program Files/Go/src/database/sql/sql.go:1703 +0xc5
+database/sql.(*DB).QueryRowContext(...)
+	C:/Program Files/Go/src/database/sql/sql.go:1804
+database/sql.(*DB).QueryRow(0xc000182140?, {0x10936f2?, 0x2000000?}, {0xc00019f8d8?, 0x0?, 0xc00019f8e8?})
+	C:/Program Files/Go/src/database/sql/sql.go:1818 +0x45
+main.userExists(0x1025e60?, {0xc000182140, 0xf})
+	D:/Jao/loginauth.go:90 +0x7b
+main.logindb(0xc00018e800?, {0xc000182140, 0xf}, {0xc0001ae141, 0x4})
+	D:/Jao/loginauth.go:37 +0x45
+main.loginHandler({0x1105b60, 0xc0001b60e0}, 0x0?)
+	D:/Jao/appi.go:20 +0x85
+net/http.HandlerFunc.ServeHTTP(0x1036460?, {0x1105b60?, 0xc0001b60e0?}, 0xc0001a8065?)
+	C:/Program Files/Go/src/net/http/server.go:2136 +0x29
+github.com/go-chi/chi.(*Mux).routeHTTP(0xc000088360, {0x1105b60, 0xc0001b60e0}, 0xc00018e800)
+	C:/Users/Piyush/go/pkg/mod/github.com/go-chi/chi@v1.5.4/mux.go:436 +0x1f4
+net/http.HandlerFunc.ServeHTTP(0x1106320?, {0x1105b60?, 0xc0001b60e0?}, 0x12be890?)
+	C:/Program Files/Go/src/net/http/server.go:2136 +0x29
+github.com/go-chi/chi.(*Mux).ServeHTTP(0xc000088360, {0x1105b60, 0xc0001b60e0}, 0xc0000e8800)
+	C:/Users/Piyush/go/pkg/mod/github.com/go-chi/chi@v1.5.4/mux.go:87 +0x331
+net/http.serverHandler.ServeHTTP({0x1104d78?}, {0x1105b60?, 0xc0001b60e0?}, 0x6?)
+	C:/Program Files/Go/src/net/http/server.go:2938 +0x8e
+net/http.(*conn).serve(0xc0001502d0, {0x11062e8, 0xc00008a300})
+	C:/Program Files/Go/src/net/http/server.go:2009 +0x5f4
+created by net/http.(*Server).Serve in goroutine 1
+	C:/Program Files/Go/src/net/http/server.go:3086 +0x5cb
+2023/08/31 01:45:56 Wrong password crypto/bcrypt: hashedPassword is not the hash of the given password
+2023/08/31 01:56:01 http: panic serving 127.0.0.1:55115: runtime error: invalid memory address or nil pointer dereference
+goroutine 21 [running]:
+net/http.(*conn).serve.func1()
+	C:/Program Files/Go/src/net/http/server.go:1868 +0xb9
+panic({0xd71940?, 0xfcabb0?})
+	C:/Program Files/Go/src/runtime/panic.go:920 +0x270
+database/sql.(*DB).conn(0x0, {0xe31910, 0x102e3e0}, 0x1)
+	C:/Program Files/Go/src/database/sql/sql.go:1282 +0x54
+database/sql.(*DB).query(0xda4f20?, {0xe31910, 0x102e3e0}, {0xdc64b7, 0x2b}, {0xc0000718d8, 0x1, 0x1}, 0xe8?)
+	C:/Program Files/Go/src/database/sql/sql.go:1721 +0x57
+database/sql.(*DB).QueryContext.func1(0x0?)
+	C:/Program Files/Go/src/database/sql/sql.go:1704 +0x4f
+database/sql.(*DB).retry(0x0?, 0xc0000717c8)
+	C:/Program Files/Go/src/database/sql/sql.go:1538 +0x42
+database/sql.(*DB).QueryContext(0x1a5cf2c9df8?, {0xe31910?, 0x102e3e0?}, {0xdc64b7?, 0xc0000280e0?}, {0xc0000718d8?, 0xc000071888?, 0xb0aee5?})
+	C:/Program Files/Go/src/database/sql/sql.go:1703 +0xc5
+database/sql.(*DB).QueryRowContext(...)
+	C:/Program Files/Go/src/database/sql/sql.go:1804
+database/sql.(*DB).QueryRow(0xc00000a0c0?, {0xdc64b7?, 0x2000000?}, {0xc0000718d8?, 0x0?, 0xff?})
+	C:/Program Files/Go/src/database/sql/sql.go:1818 +0x45
+main.userExists(0xd60580?, {0xc00000a0c0, 0xf})
+	D:/Jao/loginauth.go:90 +0x7b
+main.logindb(0xc000068100?, {0xc00000a0c0, 0xf}, {0xc000010471, 0x4})
+	D:/Jao/loginauth.go:37 +0x45
+main.loginHandler({0xe31400, 0xc000180000}, 0x0?)
+	D:/Jao/appi.go:20 +0x85
+net/http.HandlerFunc.ServeHTTP(0xd6fe40?, {0xe31400?, 0xc000180000?}, 0xc00000e125?)
+	C:/Program Files/Go/src/net/http/server.go:2136 +0x29
+github.com/go-chi/chi.(*Mux).routeHTTP(0xc0000f60c0, {0xe31400, 0xc000180000}, 0xc000068100)
+	C:/Users/Piyush/go/pkg/mod/github.com/go-chi/chi@v1.5.4/mux.go:436 +0x1f4
+net/http.HandlerFunc.ServeHTTP(0xe319f0?, {0xe31400?, 0xc000180000?}, 0xfca580?)
+	C:/Program Files/Go/src/net/http/server.go:2136 +0x29
+github.com/go-chi/chi.(*Mux).ServeHTTP(0xc0000f60c0, {0xe31400, 0xc000180000}, 0xc000068000)
+	C:/Users/Piyush/go/pkg/mod/github.com/go-chi/chi@v1.5.4/mux.go:87 +0x331
+net/http.serverHandler.ServeHTTP({0xe306b0?}, {0xe31400?, 0xc000180000?}, 0x6?)
+	C:/Program Files/Go/src/net/http/server.go:2938 +0x8e
+net/http.(*conn).serve(0xc0000f8090, {0xe319b8, 0xc000088e40})
+	C:/Program Files/Go/src/net/http/server.go:2009 +0x5f4
+created by net/http.(*Server).Serve in goroutine 1
+	C:/Program Files/Go/src/net/http/server.go:3086 +0x5cb
+2023/08/31 01:56:03 http: panic serving 127.0.0.1:55120: runtime error: invalid memory address or nil pointer dereference
+goroutine 6 [running]:
+net/http.(*conn).serve.func1()
+	C:/Program Files/Go/src/net/http/server.go:1868 +0xb9
+panic({0xd71940?, 0xfcabb0?})
+	C:/Program Files/Go/src/runtime/panic.go:920 +0x270
+database/sql.(*DB).conn(0x0, {0xe31910, 0x102e3e0}, 0x1)
+	C:/Program Files/Go/src/database/sql/sql.go:1282 +0x54
+database/sql.(*DB).query(0xda4f20?, {0xe31910, 0x102e3e0}, {0xdc64b7, 0x2b}, {0xc00006d8d8, 0x1, 0x1}, 0xe8?)
+	C:/Program Files/Go/src/database/sql/sql.go:1721 +0x57
+database/sql.(*DB).QueryContext.func1(0x0?)
+	C:/Program Files/Go/src/database/sql/sql.go:1704 +0x4f
+database/sql.(*DB).retry(0x0?, 0xc00006d7c8)
+	C:/Program Files/Go/src/database/sql/sql.go:1538 +0x42
+database/sql.(*DB).QueryContext(0x1a5cf342030?, {0xe31910?, 0x102e3e0?}, {0xdc64b7?, 0xc00008a2b0?}, {0xc00006d8d8?, 0xc00006d888?, 0xb0aee5?})
+	C:/Program Files/Go/src/database/sql/sql.go:1703 +0xc5
+database/sql.(*DB).QueryRowContext(...)
+	C:/Program Files/Go/src/database/sql/sql.go:1804
+database/sql.(*DB).QueryRow(0xc00009c540?, {0xdc64b7?, 0x2000000?}, {0xc00006d8d8?, 0x0?, 0xb0cc1e?})
+	C:/Program Files/Go/src/database/sql/sql.go:1818 +0x45
+main.userExists(0xd60580?, {0xc00009c540, 0xf})
+	D:/Jao/loginauth.go:90 +0x7b
+main.logindb(0xc000104100?, {0xc00009c540, 0xf}, {0xc0000ba1a1, 0x4})
+	D:/Jao/loginauth.go:37 +0x45
+main.loginHandler({0xe31400, 0xc00010a000}, 0x0?)
+	D:/Jao/appi.go:20 +0x85
+net/http.HandlerFunc.ServeHTTP(0xd6fe40?, {0xe31400?, 0xc00010a000?}, 0xc0000b02ed?)
+	C:/Program Files/Go/src/net/http/server.go:2136 +0x29
+github.com/go-chi/chi.(*Mux).routeHTTP(0xc0000f60c0, {0xe31400, 0xc00010a000}, 0xc000104100)
+	C:/Users/Piyush/go/pkg/mod/github.com/go-chi/chi@v1.5.4/mux.go:436 +0x1f4
+net/http.HandlerFunc.ServeHTTP(0xe319f0?, {0xe31400?, 0xc00010a000?}, 0xfca580?)
+	C:/Program Files/Go/src/net/http/server.go:2136 +0x29
+github.com/go-chi/chi.(*Mux).ServeHTTP(0xc0000f60c0, {0xe31400, 0xc00010a000}, 0xc000104000)
+	C:/Users/Piyush/go/pkg/mod/github.com/go-chi/chi@v1.5.4/mux.go:87 +0x331
+net/http.serverHandler.ServeHTTP({0xe306b0?}, {0xe31400?, 0xc00010a000?}, 0x6?)
+	C:/Program Files/Go/src/net/http/server.go:2938 +0x8e
+net/http.(*conn).serve(0xc000072120, {0xe319b8, 0xc000088e40})
+	C:/Program Files/Go/src/net/http/server.go:2009 +0x5f4
+created by net/http.(*Server).Serve in goroutine 1
+	C:/Program Files/Go/src/net/http/server.go:3086 +0x5cb

@@ -2,6 +2,7 @@ package main
 
 import (
 	//"fmt"
+	"database/sql"
 	"log"
 	"net/http"
 	"os"
@@ -18,27 +19,29 @@ const (
 	dbname   = "moe"
 )
 
+var db *sql.DB
 
-func main1(){
+func main1() {
 	db := adminconnect()
 	defer db.Close()
 	//username := "banana"
-	email:= "fried@mail.com"
+	email := "fried@mail.com"
 	password := "abcd"
 
 	//reguser(db, email, password, username)
 	logindb(db, email, password)
 }
 
-
 func main() {
+	db = adminconnect()
+	defer db.Close()
 	logFile := initiatelog()
 	defer logFile.Close()
 	r := chi.NewRouter()
 	// Define the login route
 	r.Post("/login", loginHandler)
 	// Start the HTTP server
-	http.ListenAndServe(":8080", r)
+	http.ListenAndServe("localhost:8080", r)
 	//conecct
 	////db := adminconnect()
 	////defer db.Close()
