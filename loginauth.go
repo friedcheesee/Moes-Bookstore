@@ -63,21 +63,29 @@ func authenticateUser(db *sql.DB, email, password string) (bool,error) {
 	}
 	return true,nil
 }
-
-func reguser(db *sql.DB, email , password ,username string) {
+// 0 success
+// 1 user exists
+// 2 internal error
+func reguser(db *sql.DB, email , password ,username string)(int ,error) {
 	hashedPassword, err := hashPassword(password)
 	if userExists(db, email) {
 		fmt.Println("User already exists.")
-		return
+		return 1,nil
 	}
-	CheckError(err)
+	if err != nil {
+		log.Print("error registering user",err)
+		return 2,err
+	}
 	if !validateEmail(email) {
 		fmt.Println("Invalid email")
 		log.Fatal("Invalid email")
+		return 2,nil
 	}
 	storeCredentials(db, username, hashedPassword, email)
 	CheckError(err)
+	return 0,nil
 }
+
 
 func storeCredentials(db *sql.DB, username string, hashedPassword string, email string) {
 	_, err := db.Exec("INSERT INTO users (username, password, email) VALUES ($1, $2, $3)", username, hashedPassword, email)

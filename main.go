@@ -40,6 +40,7 @@ func main() {
 	r := chi.NewRouter()
 	// Define the login route
 	r.Post("/login", loginHandler)
+	r.Post("/reguser", registerUserHandler)
 	// Start the HTTP server
 	http.ListenAndServe("localhost:8080", r)
 	//conecct

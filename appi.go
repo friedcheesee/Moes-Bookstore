@@ -16,7 +16,7 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 	password := r.FormValue("password")
 
 	// Call the login function
-    	
+
     isLoggedIn, err, code := logindb(db, email, password)
 	if err != nil {
 		// Set custom HTTP status and error message based on the error code
@@ -55,4 +55,38 @@ func getErrorDetails(code int) (int, string) {
 	default:
 		return http.StatusInternalServerError, "Internal server error"
 	}
+}
+
+func registerUserHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	// Parse form data
+	err := r.ParseForm()
+	if err != nil {
+		http.Error(w, "Bad request", http.StatusBadRequest)
+		return
+	}
+
+	username := r.FormValue("username")
+	password := r.FormValue("password")
+    email := r.FormValue("email")
+
+	code, err := reguser(db, email, password,username)
+    if err != nil {
+        http.Error(w, `{"status": "success", "message": "Internal server error"}`, http.StatusInternalServerError)
+        return
+    }
+    if code == 1 {
+        http.Error(w, `{"status": "success", "message": "User already exists"}`, http.StatusBadRequest)
+        return
+    }
+    if code == 2 {
+        http.Error(w, `{"status": "success", "message": "Internal error"}`, http.StatusBadRequest)
+        return
+    } else {
+        fmt.Fprintf(w,`{"status": "success", "message": "User registered successfully: %s"}`, username)
+    }
 }
