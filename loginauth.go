@@ -99,6 +99,7 @@ func userExists(db *sql.DB, email string) bool {
 	CheckError(row.Scan(&count))
 	return count > 0
 }
+
 func validateEmail(email string) bool {
 	// Regular expression pattern for basic email validation
 	pattern := `^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$`
@@ -109,9 +110,13 @@ func validateEmail(email string) bool {
 	// Use the regular expression to match against the email
 	return re.MatchString(email)
 }
-func isUserActive(db *sql.DB, uid int) bool {
-	var isActive bool
-	err := db.QueryRow("SELECT active FROM users WHERE uid = $1", uid).Scan(&isActive)
-	CheckError(err)
-	return isActive
+
+
+func isAccountActive(db *sql.DB, email, password string) bool {
+    var active bool
+    err := db.QueryRow("SELECT active FROM users WHERE email = $1 AND password = $2", email, password).Scan(&active)
+    if err != nil {
+        return false
+    }
+    return active
 }

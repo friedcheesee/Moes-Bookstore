@@ -257,3 +257,22 @@ func searchBooks(db *sql.DB, query, genre, author string) ([]Book, error) {
 
 	return books, nil
 }
+
+func viewCart(db *sql.DB, uid int) ([]CartItem, error) {
+    rows, err := db.Query("SELECT c.bookid, b.book_name, b.author, b.genre, b.cost FROM cart c JOIN books b ON c.bookid = b.bookid WHERE c.uid = $1", uid)
+    if err != nil {
+        return nil, err
+    }
+    defer rows.Close()
+
+    var cartItems []CartItem
+    for rows.Next() {
+        var item CartItem
+        if err := rows.Scan(&item.BookID, &item.BookName, &item.Author, &item.Genre, &item.Cost); err != nil {
+            return nil, err
+        }
+        cartItems = append(cartItems, item)
+    }
+
+    return cartItems, nil
+}

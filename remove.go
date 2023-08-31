@@ -28,15 +28,15 @@ func getuserid(db *sql.DB,email string) int {
 
 }
 
-func deactivate(db *sql.DB,username string,password string){
-	logindb(db, username, password)
-	_, err := db.Exec("update users set active=false where username=$1", username)
+func deactivate(db *sql.DB,email string,password string){
+	authenticateUser(db, email, password)
+	_, err := db.Exec("update users set active=false where email=$1", email)
 	CheckError(err)
 	fmt.Println("User account deactivated")
 }
-func reactivate(db *sql.DB,username string,password string){
-	logindb(db, username, password)
-	_, err := db.Exec("update users set active=true where username=$1", username)
+func reactivate(db *sql.DB,email string,password string){
+	authenticateUser(db, email, password)
+	_, err := db.Exec("update users set active=true where email=$1", email)
 	CheckError(err)
 	fmt.Println("User account reactivated")
 }

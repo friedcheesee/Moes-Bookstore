@@ -256,3 +256,52 @@ func buyBooksHandler(w http.ResponseWriter, r *http.Request) {
     w.WriteHeader(http.StatusOK)
     fmt.Fprintf(w, `{"status": "success", "message": "Books bought successfully"}`)
 }
+
+func viewCartHandler(w http.ResponseWriter, r *http.Request) {
+    // Get the user's UID from the global variable or session
+    uid := UID
+
+    // Call the function to retrieve items from the cart
+    cartItems, err := viewCart(db, uid)
+    if err != nil {
+        http.Error(w, `{"status": "error", "message": "Error fetching cart items"}`, http.StatusInternalServerError)
+        return
+    }
+
+    // Return the cart items as JSON response
+    w.Header().Set("Content-Type", "application/json")
+    json.NewEncoder(w).Encode(cartItems)
+}
+
+func deactivateHandler(w http.ResponseWriter, r *http.Request) {
+    // Parse input parameters from the request (email and password)
+    email := r.FormValue("email")
+    password := r.FormValue("password")
+    // Call the deactivate function
+    deactivate(db, email, password)
+    // Return a success response
+    w.WriteHeader(http.StatusOK)
+    fmt.Fprintln(w, `{"status": "success", "message": "Account deactivated successfully"}`)
+}
+func reactivateHandler(w http.ResponseWriter, r *http.Request) {
+    // Parse input parameters from the request (email and password)
+    email := r.FormValue("email")
+    password := r.FormValue("password")
+    reactivate(db, email, password)
+    // Return a success response
+    w.WriteHeader(http.StatusOK)
+    fmt.Fprintln(w, `{"status": "success", "message": "Account reactivated successfully"}`)
+}
+func authenticateActive(next http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+
+		email := r.Header.Get("email")
+		password := r.Header.Get("password")
+		isActive := isAccountActive(db, email, password)
+		if !isActive {
+			http.Error(w, `{"status": "error", "message": "Account is not active. Please reactivate your account"}`, http.StatusUnauthorized)
+			return
+		}
+		next.ServeHTTP(w, r)
+	}
+}

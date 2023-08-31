@@ -1379,3 +1379,16 @@ created by net/http.(*Server).Serve in goroutine 1
 2023/09/01 01:05:32 Book Sample Book is already bought
 2023/09/01 01:05:33 Book Sample Book is already bought
 2023/09/01 01:08:15 Book Sample Book is already bought
+2023/09/01 01:40:05 Book Sample Book is already bought
+2023/09/01 01:43:14 Book Sample Book is already bought
+2023/09/01 01:43:16 Book Sample Book is already bought
+2023/09/01 01:55:24 Error: &s sql: no rows in result set
+2023/09/01 01:55:24 Wrong password crypto/bcrypt: hashedSecret too short to be a bcrypted password
+2023/09/01 01:55:48 Error: &s sql: no rows in result set
+2023/09/01 01:55:48 Wrong password crypto/bcrypt: hashedSecret too short to be a bcrypted password
+2023/09/01 01:56:22 Error: &s sql: no rows in result set
+2023/09/01 01:56:22 Wrong password crypto/bcrypt: hashedSecret too short to be a bcrypted password
+2023/09/01 01:57:26 Error: &s sql: no rows in result set
+2023/09/01 01:57:26 Wrong password crypto/bcrypt: hashedSecret too short to be a bcrypted password
+2023/09/01 01:57:29 Error: &s sql: no rows in result set
+2023/09/01 01:57:29 Wrong password crypto/bcrypt: hashedSecret too short to be a bcrypted password

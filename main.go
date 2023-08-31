@@ -43,12 +43,16 @@ func main() {
 	r.Post("/login", loginHandler)
 	r.Post("/reguser", registerUserHandler)
 	r.Get("/search", authenticate(searchBooksHandler))
-	//write a call to add to cart
-	r.Post("/addtocart", addToCartHandler)
-	r.Post("/inventory", viewOwnedBooksHandler)
-	r.Post("/review", giveReviewHandler)
-	r.Post("/buy", buyBooksHandler)
-	r.Post("/deletecart", deleteFromCartHandler)
+	r.Post("/cart/add", authenticate(addToCartHandler))
+	r.Post("/cart/delete", authenticate(deleteFromCartHandler))
+	r.Post("/cart/buy", authenticate(buyBooksHandler))
+	r.Post("/cart/view", authenticate(viewCartHandler))
+	r.Post("/inventory", authenticate(viewOwnedBooksHandler))
+	r.Post("/review", authenticate(giveReviewHandler))
+	r.Post("/deactivate", authenticate(deactivateHandler))
+	r.Post("/reactivate", authenticate(reactivateHandler))
+
+	
 
 	// Start the HTTP server
 	http.ListenAndServe("localhost:8080", r)

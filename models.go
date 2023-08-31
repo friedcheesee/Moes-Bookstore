@@ -15,3 +15,11 @@ type Book struct {
 	Genre  string  `json:"genre"`
 	Cost   float64 `json:"cost"`
 }
+type CartItem struct {
+    BookID   int     `json:"bookid"`
+    BookName string  `json:"book_name"`
+    Author   string  `json:"author"`
+    Genre    string  `json:"genre"`
+    Cost     float64 `json:"cost"`
+}
+
