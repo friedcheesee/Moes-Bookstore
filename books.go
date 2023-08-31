@@ -163,26 +163,26 @@ func displayAvailableBooks(db *sql.DB) error {
 }
 
 
-func viewOwnedBooks(db *sql.DB, uid int) error {
+func viewOwnedBooks(db *sql.DB, uid int) ([]Book,error) {
 	rows, err := db.Query("SELECT bookid, book_name, genre FROM bought_books WHERE uid = $1", uid)
 	if err != nil {
-		log.Println("Error retrieving owned books:", err)
-		return err
+		fmt.Println("Error retrieving owned books:", err)
+		return nil,err
 	}
 	defer rows.Close()
 
-	fmt.Println("Owned Books:")
-	fmt.Println("=============")
+	var ownedBooks []Book
 	for rows.Next() {
-		var bookID int
-		var bookName, genre string
-		if err := rows.Scan(&bookID, &bookName, &genre); err != nil {
-			log.Println("Error retrieving owned books:", err)
-			return err
+		var book Book
+		err := rows.Scan(&book.ID, &book.Name,&book.Genre)
+		if err != nil {
+			fmt.Println("Error retrieving owned books from rows:", err)
+			return nil, err
 		}
-		fmt.Printf("Book ID: %d\nTitle: %s\nGenre: %s\n\n", bookID, bookName, genre)
+		ownedBooks = append(ownedBooks, book)
 	}
-	return nil
+	fmt.Println("Owned Books:")
+	return ownedBooks, nil
 }
 
 func giveReview(db *sql.DB, uid, bookID int, review string) error {

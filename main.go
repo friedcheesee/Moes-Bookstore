@@ -45,6 +45,7 @@ func main() {
 	r.Get("/search", authenticate(searchBooksHandler))
 	//write a call to add to cart
 	r.Post("/addtocart", addToCartHandler)
+	r.Post("/inventory", viewOwnedBooksHandler)
 	// Start the HTTP server
 	http.ListenAndServe("localhost:8080", r)
 	//conecct
@@ -58,16 +59,16 @@ func main() {
 	////email:= "fried@mail.com"
 	////password := "abcd"
 	//review:= "this is a review2"
-	////reguser(db, email, password, username)
-	////logindb(db, email, password)
+	////reguser(db, email, password, username)-
+	////logindb(db, email, password)-
 	//displayBookReviews(db, 1)
 	////bookname:="Sample"
-	////searchBooks(db,bookname, "", "")
+	////searchBooks(db,bookname, "", "")-
 	////ff := getuserid(db, email)
 	////fmt.Println(ff)
 	//deactivate(db, username, password)
-	//addToCart(db, ff, 1)
-	//viewOwnedBooks(db, ff)
+	//addToCart(db, ff, 1)-
+	//viewOwnedBooks(db, ff)-
 	//giveReview(db, ff, 1, review)
 	//displayAvailableBooks(db)
 	//deleteFromCart(db, ff, 1)

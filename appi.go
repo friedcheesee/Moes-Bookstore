@@ -82,7 +82,6 @@ func registerUserHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Bad request", http.StatusBadRequest)
 		return
 	}
-
 	username := r.FormValue("username")
 	password := r.FormValue("password")
 	email := r.FormValue("email")
@@ -160,3 +159,26 @@ func addToCartHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	// Return success response
 
+    func viewOwnedBooksHandler(w http.ResponseWriter, r *http.Request) {
+        // Check if the user is authenticated
+        if UID == 0 {
+            http.Error(w, `{"status": "error", "message": "Please log in to view your owned books"}`, http.StatusUnauthorized)
+            return
+        }
+        // Call the function to get the owned books for the authenticated user
+        ownedBooks, err := viewOwnedBooks(db, UID)
+        if err != nil {
+            http.Error(w, `{"status": "error", "message": "Failed to retrieve owned books"}`, http.StatusInternalServerError)
+            return
+        }
+        // Return the owned books as a JSON response
+        responseJSON, err := json.Marshal(ownedBooks)
+        if err != nil {
+            http.Error(w, `{"status": "error", "message": "Failed to format response"}`, http.StatusInternalServerError)
+            return
+        }
+        w.Header().Set("Content-Type", "application/json")
+        w.WriteHeader(http.StatusOK)
+        w.Write(responseJSON)
+    }
+    
