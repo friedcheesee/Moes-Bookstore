@@ -21,7 +21,7 @@ const (
 )
 
 var db *sql.DB
-var UID int = 0
+//var UID int = 0
 var store = sessions.NewCookieStore([]byte("12345678"))
 
 func main1() {
@@ -44,7 +44,7 @@ func main() {
 	// Define the login route
 	r.Post("/login", loginHandler)
 	r.Post("/reguser", registerUserHandler)
-	r.Get("/search", authenticate(searchBooksHandler))
+	r.Get("/search", searchBooksHandler)
 	r.Post("/cart/add", authenticate(addToCartHandler))
 	r.Post("/cart/delete", authenticate(deleteFromCartHandler))
 	r.Post("/cart/buy", authenticate(buyBooksHandler))

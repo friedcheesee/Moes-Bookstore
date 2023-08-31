@@ -1392,3 +1392,5 @@ created by net/http.(*Server).Serve in goroutine 1
 2023/09/01 01:57:26 Wrong password crypto/bcrypt: hashedSecret too short to be a bcrypted password
 2023/09/01 01:57:29 Error: &s sql: no rows in result set
 2023/09/01 01:57:29 Wrong password crypto/bcrypt: hashedSecret too short to be a bcrypted password
+2023/09/01 02:40:35 Book fgrabert5 is already bought
+2023/09/01 02:43:04 Book fgrabert5 is already bought

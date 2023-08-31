@@ -75,7 +75,7 @@ func buyBooks(db *sql.DB, uid int) (int,error) {
 			return 1,err
 		}
 		if isBought {
-			fmt.Printf("Book %s is already bought, please remove it from the cart to buy other books\n", bookName)
+			fmt.Printf("Book %d is already bought, please remove it from the cart to buy other books\n", bookID)
 			log.Printf("Book %s is already bought\n", bookName)
 			return 1,nil
 		}

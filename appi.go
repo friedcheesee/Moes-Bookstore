@@ -5,19 +5,36 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-
+    //"github.com/gorilla/sessions"
 	//"time"
+    "context"
 	"strconv"
 	//"github.com/go-chi/chi"
 	_ "github.com/lib/pq"
 )
-
 func authenticate(next http.HandlerFunc) http.HandlerFunc {
+    return func(w http.ResponseWriter, r *http.Request) {
+        session, _ := store.Get(r, "session-name")
+        uid, ok := session.Values["uid"].(int)
+        if !ok {
+            http.Error(w, "Unauthorized", http.StatusUnauthorized)
+            return
+        }
+
+        // Now you have the uid available, you can pass it to the handler using a context
+        ctx := context.WithValue(r.Context(), "uid", uid)
+        next.ServeHTTP(w, r.WithContext(ctx))
+    }
+}
+
+func authenticate1(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		if UID == 0 {
-			http.Error(w, `{"status": "error", "message": "Please log in to access this endpoint"}`, http.StatusUnauthorized)
-			return
-		}
+        // Get the user's UID from the global variable or session
+    
+		//if UID == 0 {
+		//	http.Error(w, `{"status": "error", "message": "Please log in to access this endpoint"}`, http.StatusUnauthorized)
+		//	return
+		//}
 		// User is authenticated, call the next handler
 		next.ServeHTTP(w, r)
 	}
@@ -27,10 +44,10 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 	// Parse input parameters from the request (username and password)
 	email := r.FormValue("email")
 	password := r.FormValue("password")
-	UID=getID(db, email)
-	// session, _ := store.Get(r, "session-name")
-	// session.Values["uid"] = userid
-	// session.Save(r, w)
+	UID:=getID(db, email)
+	session, _ := store.Get(r, "session-name")
+	session.Values["uid"] = UID
+	session.Save(r, w)
 
 	isLoggedIn, err, code := logindb(db, email, password)
 	if err != nil {
@@ -104,6 +121,8 @@ func registerUserHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 func searchBooksHandler(w http.ResponseWriter, r *http.Request) {
+
+
 	// Parse query parameters
 	query := r.URL.Query().Get("query")   // Search query
 	genre := r.URL.Query().Get("genre")   // Genre filter
@@ -139,6 +158,7 @@ func addToCartHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, `{"status": "error", "message": "Invalid bookID"}`, http.StatusBadRequest)
 		return
 	}
+    UID := r.Context().Value("uid").(int)
 	// Check if the user is authenticated
 	if UID == 0 {
 		http.Error(w, `{"status": "error", "message": "Please log in to add items to your cart"}`, http.StatusUnauthorized)
@@ -163,6 +183,7 @@ func addToCartHandler(w http.ResponseWriter, r *http.Request) {
 
 func viewOwnedBooksHandler(w http.ResponseWriter, r *http.Request) {
 	// Check if the user is authenticated
+    UID := r.Context().Value("uid").(int)
 	if UID == 0 {
 		http.Error(w, `{"status": "error", "message": "Please log in to view your owned books"}`, http.StatusUnauthorized)
 		return
@@ -185,6 +206,7 @@ func viewOwnedBooksHandler(w http.ResponseWriter, r *http.Request) {
 }
 func giveReviewHandler(w http.ResponseWriter, r *http.Request) {
 	// Check if the user is authenticated
+    UID := r.Context().Value("uid").(int)
 	if UID == 0 {
 		http.Error(w, `{"status": "error", "message": "Please log in to give a review"}`, http.StatusUnauthorized)
 		return
@@ -214,6 +236,7 @@ func giveReviewHandler(w http.ResponseWriter, r *http.Request) {
 }
 func deleteFromCartHandler(w http.ResponseWriter, r *http.Request) {
 	// Check if the user is authenticated
+    UID := r.Context().Value("uid").(int)
 	if UID == 0 {
 		http.Error(w, `{"status": "error", "message": "Please log in to delete a book from the cart"}`, http.StatusUnauthorized)
 		return
@@ -238,6 +261,7 @@ func deleteFromCartHandler(w http.ResponseWriter, r *http.Request) {
 }
 func buyBooksHandler(w http.ResponseWriter, r *http.Request) {
 	// Check if the user is authenticated
+    UID := r.Context().Value("uid").(int)
 	if UID == 0 {
 		http.Error(w, `{"status": "error", "message": "Please log in to buy books"}`, http.StatusUnauthorized)
 		return
@@ -250,7 +274,7 @@ func buyBooksHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if code == 1 {
-		http.Error(w, `{"status": "error", "message": "Remove owned books from the cart to buy books"}`, http.StatusBadRequest)
+		http.Error(w, `{"status": "error", "message": "Remove book from the cart to buy books"}`, http.StatusBadRequest)
 		return
 	}
 	// Return success response
@@ -260,6 +284,7 @@ func buyBooksHandler(w http.ResponseWriter, r *http.Request) {
 
 func viewCartHandler(w http.ResponseWriter, r *http.Request) {
 	// Get the user's UID from the global variable or session
+    UID := r.Context().Value("uid").(int)
 	uid := UID
 
 	// Call the function to retrieve items from the cart
