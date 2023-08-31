@@ -2,13 +2,25 @@ package main
 
 import (
 	"fmt"
-	//"log"
+	"log"
 	"net/http"
+    "encoding/json"
 	//"time"
     //"strconv"
 	//"github.com/go-chi/chi"
 	_ "github.com/lib/pq"
 )
+func authenticate(next http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		if UID == 0 {
+			http.Error(w, `{"status": "error", "message": "Please log in to access this endpoint"}`, http.StatusUnauthorized)
+			return
+		}
+		// User is authenticated, call the next handler
+		next.ServeHTTP(w, r)
+	}
+}
+
 
 func loginHandler(w http.ResponseWriter, r *http.Request) {
 	// Parse input parameters from the request (username and password)
@@ -24,7 +36,7 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, `{"status": "error", "message": "`+errorMessage+`"}`, httpStatus)
 		return
 	}
-
+    UID = getuserid(db,email)
 	// Return the login status as JSON response
 	if isLoggedIn {
 		w.WriteHeader(http.StatusOK)
@@ -89,4 +101,31 @@ func registerUserHandler(w http.ResponseWriter, r *http.Request) {
     } else {
         fmt.Fprintf(w,`{"status": "success", "message": "User registered successfully: %s"}`, username)
     }
+}
+func searchBooksHandler(w http.ResponseWriter, r *http.Request) {
+	// Parse query parameters
+	query := r.URL.Query().Get("query")   // Search query
+	genre := r.URL.Query().Get("genre")   // Genre filter
+	author := r.URL.Query().Get("author") // Author filter
+
+	// Create a database connection
+	// Call your searchBooks function with the provided parameters
+	books, err := searchBooks(db, query, genre, author)
+	if err != nil {
+		http.Error(w, "Search error", http.StatusInternalServerError)
+		log.Println("Error searching for books:", err)
+		return
+	}
+
+	// Marshal books to JSON
+	booksJSON, err := json.Marshal(books)
+	if err != nil {
+		http.Error(w, "JSON marshaling error", http.StatusInternalServerError)
+		return
+	}
+
+	// Set the response content type and write JSON response
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	w.Write(booksJSON)
 }

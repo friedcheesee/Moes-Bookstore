@@ -2,7 +2,6 @@ package main
 import (
 	"fmt"
 	"log"
-	"strings"
 	"database/sql"
 )
 func addToCart(db *sql.DB, uid, bookid int){
@@ -216,39 +215,28 @@ func displayBookReviews(db *sql.DB, bookID int) error {
     return nil
 }
 
-func searchBooksdb(db *sql.DB, searchTerm string, genreFilter string, authorFilter string) error {
-    query := "SELECT bookid, book_name, author, genre, cost FROM books WHERE lower(book_name) LIKE $1"
-    params := []interface{}{"%" + strings.ToLower(searchTerm) + "%"}
+func searchBooks(db *sql.DB, query, genre, author string) ([]Book, error) {
+	// Implement your searchBooks function logic here
+	// Use the provided query, genre, and author parameters to query the database
 
-    if genreFilter != "" {
-        query += " AND lower(genre) = $2"
-        params = append(params, strings.ToLower(genreFilter))
-    }
+	// Example code (modify as per your database schema and queries)
+	rows, err := db.Query("SELECT bookid, book_name, author, genre, cost FROM books WHERE book_name ILIKE $1 AND genre ILIKE $2 AND author ILIKE $3",
+		"%"+query+"%", "%"+genre+"%", "%"+author+"%")
+	if err != nil {
+		CheckError(err)
+		return nil, err
+	}
+	defer rows.Close()
 
-    if authorFilter != "" {
-        query += " AND lower(author) = $3"
-        params = append(params, strings.ToLower(authorFilter))
-    }
+	var books []Book
+	for rows.Next() {
+		var book Book
+		err := rows.Scan(&book.ID, &book.Name, &book.Author, &book.Genre, &book.Cost)
+		if err != nil {
+			return nil, err
+		}
+		books = append(books, book)
+	}
 
-    rows, err := db.Query(query, params...)
-    if err != nil {
-        log.Println("Error searching for books:", err)
-        return err
-    }
-    defer rows.Close()
-
-    fmt.Println("Search Results:")
-    fmt.Println("================")
-    for rows.Next() {
-        var bookID int
-        var bookName, author, genre string
-        var cost float64
-        if err := rows.Scan(&bookID, &bookName, &author, &genre, &cost); err != nil {
-            log.Println("Error retrieving search results:", err)
-            return err
-        }
-        fmt.Printf("Book ID: %d\nTitle: %s\nAuthor: %s\nGenre: %s\nCost: $%.2f\n\n",
-            bookID, bookName, author, genre, cost)
-    }
-    return nil
+	return books, nil
 }

@@ -1368,3 +1368,9 @@ net/http.(*conn).serve(0xc000072120, {0xe319b8, 0xc000088e40})
 	C:/Program Files/Go/src/net/http/server.go:2009 +0x5f4
 created by net/http.(*Server).Serve in goroutine 1
 	C:/Program Files/Go/src/net/http/server.go:3086 +0x5cb
+2023/08/31 17:03:36 Error: &s sql: no rows in result set
+2023/08/31 17:03:36 Wrong password crypto/bcrypt: hashedSecret too short to be a bcrypted password
+2023/08/31 17:03:46 Error: &s sql: no rows in result set
+2023/08/31 17:03:46 Wrong password crypto/bcrypt: hashedSecret too short to be a bcrypted password
+2023/08/31 17:04:43 Error: &s sql: no rows in result set
+2023/08/31 17:04:43 Wrong password crypto/bcrypt: hashedSecret too short to be a bcrypted password
