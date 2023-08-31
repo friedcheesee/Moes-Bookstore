@@ -41,6 +41,7 @@ func main() {
 	// Define the login route
 	r.Post("/login", loginHandler)
 	r.Post("/reguser", registerUserHandler)
+	r.Get("/search", searchBooksHandler)
 	// Start the HTTP server
 	http.ListenAndServe("localhost:8080", r)
 	//conecct

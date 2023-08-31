@@ -216,7 +216,7 @@ func displayBookReviews(db *sql.DB, bookID int) error {
     return nil
 }
 
-func searchBooks(db *sql.DB, searchTerm string, genreFilter string, authorFilter string) error {
+func searchBooksdb(db *sql.DB, searchTerm string, genreFilter string, authorFilter string) error {
     query := "SELECT bookid, book_name, author, genre, cost FROM books WHERE lower(book_name) LIKE $1"
     params := []interface{}{"%" + strings.ToLower(searchTerm) + "%"}
 

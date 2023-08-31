@@ -2,3 +2,4 @@ has checkerror function to log everything
 uses paramtered sql question to prevent injections
 has roles to reduce risk
 appropriate logging methods during transaction, to perform roll back too.
+In this modified code, the placeholders $1, $2, and $3 are used in the SQL query. When you call db.Query, the parameters (query, genre, author) are automatically escaped and sanitized, preventing SQL injection attacks.
