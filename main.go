@@ -42,9 +42,9 @@ func main() {
 	// Define the login route
 	r.Post("/login", loginHandler)
 	r.Post("/reguser", registerUserHandler)
-	
 	r.Get("/search", authenticate(searchBooksHandler))
-	//r.Get("/search", searchBooksHandler)
+	//write a call to add to cart
+	r.Post("/addtocart", addToCartHandler)
 	// Start the HTTP server
 	http.ListenAndServe("localhost:8080", r)
 	//conecct

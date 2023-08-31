@@ -4,27 +4,41 @@ import (
 	"log"
 	"database/sql"
 )
-func addToCart(db *sql.DB, uid, bookid int){
+
+// 0 added
+// 1 already exists
+// 2 internal error
+func addToCart(db *sql.DB, uid, bookid int) (int ,error) {
 	// Check if the book already exists in the cart
 	var count int
 	err := db.QueryRow("SELECT COUNT(*) FROM cart WHERE uid = $1 AND bookid = $2", uid, bookid).Scan(&count)
 	//check the count of statements where the uid owns bookid. if owns 1 time, cant own again.
-	CheckError(err)
+	if err != nil {
+		log.Println("Error checking if book already exists in cart:", err)
+		return 2,err
+	}
 	if count > 0 {
 		fmt.Println("Book already exists in the cart")
-		return
+		return 1,nil
 	}
 	// Get book information from the books table
 	var bookName, author string
 	var cost float64
 	err = db.QueryRow("SELECT book_name, author, cost FROM books WHERE bookid = $1", bookid).Scan(&bookName, &author, &cost)
-	CheckError(err)
+	if err != nil {
+		log.Println("Error retrieving book information:", err)
+		return 2,err
+	}
 
 	// Insert the book into the cart
 	_, err = db.Exec("INSERT INTO cart (uid, bookid, book_name, author, cost) VALUES ($1, $2, $3, $4, $5)",
 		uid, bookid, bookName, author, cost)
-	CheckError(err)
+	if err != nil {
+		log.Println("Error adding book to cart:", err)
+		return 2,err
+	} 
 	fmt.Println("Book added to cart successfully")
+	return 0,nil
 }
 
 func buyBooks(db *sql.DB, uid int) error {

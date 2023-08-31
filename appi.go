@@ -1,15 +1,17 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
-    "encoding/json"
+
 	//"time"
-    //"strconv"
+	"strconv"
 	//"github.com/go-chi/chi"
 	_ "github.com/lib/pq"
 )
+
 func authenticate(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if UID == 0 {
@@ -21,7 +23,6 @@ func authenticate(next http.HandlerFunc) http.HandlerFunc {
 	}
 }
 
-
 func loginHandler(w http.ResponseWriter, r *http.Request) {
 	// Parse input parameters from the request (username and password)
 	email := r.FormValue("email")
@@ -29,14 +30,14 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Call the login function
 
-    isLoggedIn, err, code := logindb(db, email, password)
+	isLoggedIn, err, code := logindb(db, email, password)
 	if err != nil {
 		// Set custom HTTP status and error message based on the error code
 		httpStatus, errorMessage := getErrorDetails(code)
 		http.Error(w, `{"status": "error", "message": "`+errorMessage+`"}`, httpStatus)
 		return
 	}
-    UID = getuserid(db,email)
+	UID = getuserid(db, email)
 	// Return the login status as JSON response
 	if isLoggedIn {
 		w.WriteHeader(http.StatusOK)
@@ -84,23 +85,23 @@ func registerUserHandler(w http.ResponseWriter, r *http.Request) {
 
 	username := r.FormValue("username")
 	password := r.FormValue("password")
-    email := r.FormValue("email")
+	email := r.FormValue("email")
 
-	code, err := reguser(db, email, password,username)
-    if err != nil {
-        http.Error(w, `{"status": "success", "message": "Internal server error"}`, http.StatusInternalServerError)
-        return
-    }
-    if code == 1 {
-        http.Error(w, `{"status": "success", "message": "User already exists"}`, http.StatusBadRequest)
-        return
-    }
-    if code == 2 {
-        http.Error(w, `{"status": "success", "message": "Internal error"}`, http.StatusBadRequest)
-        return
-    } else {
-        fmt.Fprintf(w,`{"status": "success", "message": "User registered successfully: %s"}`, username)
-    }
+	code, err := reguser(db, email, password, username)
+	if err != nil {
+		http.Error(w, `{"status": "error", "message": "Internal server error"}`, http.StatusInternalServerError)
+		return
+	}
+	if code == 1 {
+		http.Error(w, `{"status": "error", "message": "User already exists"}`, http.StatusBadRequest)
+		return
+	}
+	if code == 2 {
+		http.Error(w, `{"status": "error", "message": "Internal error"}`, http.StatusBadRequest)
+		return
+	} else {
+		fmt.Fprintf(w, `{"status": "success", "message": "User registered successfully: %s"}`, username)
+	}
 }
 func searchBooksHandler(w http.ResponseWriter, r *http.Request) {
 	// Parse query parameters
@@ -129,3 +130,33 @@ func searchBooksHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	w.Write(booksJSON)
 }
+
+func addToCartHandler(w http.ResponseWriter, r *http.Request) {
+	// Parse input parameters from the request (bookID)
+	bookIDStr := r.FormValue("bookid")
+	bookid, err := strconv.Atoi(bookIDStr)
+	if err != nil {
+		http.Error(w, `{"status": "error", "message": "Invalid bookID"}`, http.StatusBadRequest)
+		return
+	}
+	// Check if the user is authenticated
+	if UID == 0 {
+		http.Error(w, `{"status": "error", "message": "Please log in to add items to your cart"}`, http.StatusUnauthorized)
+		return
+	}
+	// Call the addToCart function with the authenticated user's UID and the bookID
+	code, err := addToCart(db, UID, bookid)
+    //fmt.Println("code",code)
+	if err != nil {
+			http.Error(w, `{"status": "error", "message": "Internal error"}`, http.StatusInternalServerError)
+			return
+		}
+        if code == 1 {
+            http.Error(w, `{"status": "error", "message": "Book already in cart"}`, http.StatusBadRequest)
+            return
+        }
+        w.WriteHeader(http.StatusOK)
+			fmt.Fprintf(w, `{"status": "success", "message": "bookid %s added to cart successfully"}`, bookIDStr)
+	}
+	// Return success response
+
