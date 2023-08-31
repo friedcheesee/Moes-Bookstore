@@ -46,6 +46,10 @@ func main() {
 	//write a call to add to cart
 	r.Post("/addtocart", addToCartHandler)
 	r.Post("/inventory", viewOwnedBooksHandler)
+	r.Post("/review", giveReviewHandler)
+	r.Post("/buy", buyBooksHandler)
+	r.Post("/deletecart", deleteFromCartHandler)
+
 	// Start the HTTP server
 	http.ListenAndServe("localhost:8080", r)
 	//conecct
@@ -69,14 +73,11 @@ func main() {
 	//deactivate(db, username, password)
 	//addToCart(db, ff, 1)-
 	//viewOwnedBooks(db, ff)-
-	//giveReview(db, ff, 1, review)
+	//giveReview(db, ff, 1, review)--
 	//displayAvailableBooks(db)
-	//deleteFromCart(db, ff, 1)
-	//err := buyBooks(db, ff)
+	//deleteFromCart(db, ff, 1)--
+	//err := buyBooks(db, ff)-
 	//CheckError(err)
-	////if(!isUserActive(db,ff)){
-	////	fmt.Println("User is not active")
-	////}
 }
 func CheckError(err error) {
 	if err != nil {

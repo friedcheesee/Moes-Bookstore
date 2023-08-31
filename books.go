@@ -40,12 +40,13 @@ func addToCart(db *sql.DB, uid, bookid int) (int ,error) {
 	fmt.Println("Book added to cart successfully")
 	return 0,nil
 }
-
-func buyBooks(db *sql.DB, uid int) error {
+//0 bought
+//1 already owned books not bought
+func buyBooks(db *sql.DB, uid int) (int,error) {
 	tx, err := db.Begin()
 	if err != nil {
 		log.Println("Error during transaction: &s", err)
-		return err
+		return 1,err
 	}
 	defer tx.Rollback()
 
@@ -53,7 +54,7 @@ func buyBooks(db *sql.DB, uid int) error {
 	rows, err := tx.Query("SELECT c.bookid, b.book_name, b.genre, b.download_url FROM cart c JOIN books b ON c.bookid = b.bookid WHERE c.uid = $1", uid)
 	if err != nil {
 		log.Println("Error during transaction: &s", err)
-		return err
+		return 1,err
 	}
 	defer rows.Close()
 
@@ -62,7 +63,7 @@ func buyBooks(db *sql.DB, uid int) error {
 		var bookName, genre, download_url string
 		if err := rows.Scan(&bookID, &bookName, &genre, &download_url); err != nil {
 			log.Println("Error during transaction: &s", err)
-			return err
+			return 1,err
 		}
 		rows.Close() //i added
 
@@ -71,12 +72,12 @@ func buyBooks(db *sql.DB, uid int) error {
 		err := tx.QueryRow("SELECT EXISTS (SELECT 1 FROM bought_books WHERE uid = $1 AND bookid = $2)", uid, bookID).Scan(&isBought)
 		if err != nil {
 			log.Println("Error during transaction:", err)
-			return err
+			return 1,err
 		}
 		if isBought {
 			fmt.Printf("Book %s is already bought, please remove it from the cart to buy other books\n", bookName)
 			log.Printf("Book %s is already bought\n", bookName)
-			return nil
+			return 1,nil
 		}
 
 		// Move the book from cart to bought_books
@@ -84,24 +85,24 @@ func buyBooks(db *sql.DB, uid int) error {
 		uid, bookID, bookName, genre, download_url)
 		if err != nil {
 			log.Println("Error during transaction: &s", err)
-			return err
+			return 1,err
 		}
 
 		// Remove the book from the cart
 		_, err = tx.Exec("DELETE FROM cart WHERE uid = $1 AND bookid = $2", uid, bookID)
 		if err != nil {
 			log.Println("Error during transaction: &s", err)
-			return err
+			return 1,err
 		}
 	}
 
 	if err := tx.Commit(); err != nil {
 		log.Println("Error during transaction: &s", err)
-		return err
+		return 1,err
 	}
 
 	fmt.Println("Books bought successfully")
-	return nil
+	return 0,nil
 }
 
 func deleteFromCart(db *sql.DB, uid, bookid int) {
@@ -185,26 +186,28 @@ func viewOwnedBooks(db *sql.DB, uid int) ([]Book,error) {
 	return ownedBooks, nil
 }
 
-func giveReview(db *sql.DB, uid, bookID int, review string) error {
+//0 success
+//1 review exists/failed
+func giveReview(db *sql.DB, uid, bookID int, review string) (int ,error) {
 	// Check if a review by the same user for the same book already exists
 	var existingReview int
 	err := db.QueryRow("SELECT reviewid FROM reviews WHERE uid = $1 AND bookid = $2", uid, bookID).Scan(&existingReview)
 	if err == nil {
 		fmt.Println("A review by the same user for the same book already exists")
-		return nil
+		return 1,nil
 	} else if err != sql.ErrNoRows {
 		log.Println("Error checking for existing review:", err)
-		return err
+		return 1, err
 	}
 
 	// Insert the new review
 	_, err = db.Exec("INSERT INTO reviews (uid, bookid, review) VALUES ($1, $2, $3)", uid, bookID, review)
 	if err != nil {
 		log.Println("Error giving review:", err)
-		return err
+		return 1,err
 	}
 	fmt.Println("Review added successfully")
-	return nil
+	return 0,nil
 }
 
 func displayBookReviews(db *sql.DB, bookID int) error {

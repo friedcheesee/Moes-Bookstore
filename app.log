@@ -1375,3 +1375,6 @@ created by net/http.(*Server).Serve in goroutine 1
 2023/08/31 17:04:43 Error: &s sql: no rows in result set
 2023/08/31 17:04:43 Wrong password crypto/bcrypt: hashedSecret too short to be a bcrypted password
 2023/08/31 19:44:33 Error adding book to cart: pq: insert or update on table "cart" violates foreign key constraint "cart_uid_fkey"
+2023/09/01 01:05:30 Book Sample Book is already bought
+2023/09/01 01:05:32 Book Sample Book is already bought
+2023/09/01 01:05:33 Book Sample Book is already bought

@@ -145,40 +145,114 @@ func addToCartHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	// Call the addToCart function with the authenticated user's UID and the bookID
 	code, err := addToCart(db, UID, bookid)
-    //fmt.Println("code",code)
+	//fmt.Println("code",code)
 	if err != nil {
-			http.Error(w, `{"status": "error", "message": "Internal error"}`, http.StatusInternalServerError)
-			return
-		}
-        if code == 1 {
-            http.Error(w, `{"status": "error", "message": "Book already in cart"}`, http.StatusBadRequest)
-            return
-        }
-        w.WriteHeader(http.StatusOK)
-			fmt.Fprintf(w, `{"status": "success", "message": "bookid %s added to cart successfully"}`, bookIDStr)
+		http.Error(w, `{"status": "error", "message": "Internal error"}`, http.StatusInternalServerError)
+		return
+	}
+	if code == 1 {
+		http.Error(w, `{"status": "error", "message": "Book already in cart"}`, http.StatusBadRequest)
+		return
+	}
+	w.WriteHeader(http.StatusOK)
+	fmt.Fprintf(w, `{"status": "success", "message": "bookid %s added to cart successfully"}`, bookIDStr)
+}
+
+// Return success response
+
+func viewOwnedBooksHandler(w http.ResponseWriter, r *http.Request) {
+	// Check if the user is authenticated
+	if UID == 0 {
+		http.Error(w, `{"status": "error", "message": "Please log in to view your owned books"}`, http.StatusUnauthorized)
+		return
+	}
+	// Call the function to get the owned books for the authenticated user
+	ownedBooks, err := viewOwnedBooks(db, UID)
+	if err != nil {
+		http.Error(w, `{"status": "error", "message": "Failed to retrieve owned books"}`, http.StatusInternalServerError)
+		return
+	}
+	// Return the owned books as a JSON response
+	responseJSON, err := json.Marshal(ownedBooks)
+	if err != nil {
+		http.Error(w, `{"status": "error", "message": "Failed to format response"}`, http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	w.Write(responseJSON)
+}
+func giveReviewHandler(w http.ResponseWriter, r *http.Request) {
+	// Check if the user is authenticated
+	if UID == 0 {
+		http.Error(w, `{"status": "error", "message": "Please log in to give a review"}`, http.StatusUnauthorized)
+		return
+	}
+	// Parse input parameters from the request (bookID and review)
+	bookIDStr := r.FormValue("bookID")
+	review := r.FormValue("review")
+	// Convert bookID to integer
+	bookID, err := strconv.Atoi(bookIDStr)
+	if err != nil {
+		http.Error(w, `{"status": "error", "message": "Invalid book ID"}`, http.StatusBadRequest)
+		return
+	}
+	// Call the function to give a review
+	code, err := giveReview(db, UID, bookID, review)
+	if err != nil {
+		http.Error(w, `{"status": "error", "message": "Failed to give a review"}`, http.StatusInternalServerError)
+		return
+	}
+	if code == 1 {
+		http.Error(w, `{"status": "error", "message": "Review already exists"}`, http.StatusBadRequest)
+		return
 	}
 	// Return success response
+	w.WriteHeader(http.StatusOK)
+	fmt.Fprintf(w, `{"status": "success", "message": "Review added successfully"}`)
+}
+func deleteFromCartHandler(w http.ResponseWriter, r *http.Request) {
+	// Check if the user is authenticated
+	if UID == 0 {
+		http.Error(w, `{"status": "error", "message": "Please log in to delete a book from the cart"}`, http.StatusUnauthorized)
+		return
+	}
 
-    func viewOwnedBooksHandler(w http.ResponseWriter, r *http.Request) {
-        // Check if the user is authenticated
-        if UID == 0 {
-            http.Error(w, `{"status": "error", "message": "Please log in to view your owned books"}`, http.StatusUnauthorized)
-            return
-        }
-        // Call the function to get the owned books for the authenticated user
-        ownedBooks, err := viewOwnedBooks(db, UID)
-        if err != nil {
-            http.Error(w, `{"status": "error", "message": "Failed to retrieve owned books"}`, http.StatusInternalServerError)
-            return
-        }
-        // Return the owned books as a JSON response
-        responseJSON, err := json.Marshal(ownedBooks)
-        if err != nil {
-            http.Error(w, `{"status": "error", "message": "Failed to format response"}`, http.StatusInternalServerError)
-            return
-        }
-        w.Header().Set("Content-Type", "application/json")
-        w.WriteHeader(http.StatusOK)
-        w.Write(responseJSON)
+	// Parse input parameters from the request (bookID)
+	bookIDStr := r.FormValue("bookID")
+
+	// Convert bookID to integer
+	bookID, err := strconv.Atoi(bookIDStr)
+	if err != nil {
+		http.Error(w, `{"status": "error", "message": "Invalid book ID"}`, http.StatusBadRequest)
+		return
+	}
+
+	// Call the function to delete a book from the cart
+	deleteFromCart(db, UID, bookID)
+
+	// Return success response
+	w.WriteHeader(http.StatusOK)
+	fmt.Fprintf(w, `{"status": "success", "message": "Book deleted from cart successfully"}`)
+}
+func buyBooksHandler(w http.ResponseWriter, r *http.Request) {
+    // Check if the user is authenticated
+    if UID == 0 {
+        http.Error(w, `{"status": "error", "message": "Please log in to buy books"}`, http.StatusUnauthorized)
+        return
     }
-    
+
+    // Call the function to buy books
+    code ,err := buyBooks(db, UID)
+    if err != nil {
+        http.Error(w, `{"status": "error", "message": "Failed to buy books"}`, http.StatusInternalServerError)
+        return
+    }
+    if code == 1 {
+        http.Error(w, `{"status": "error", "message": "Remove owned books from the cart to buy books"}`, http.StatusBadRequest)
+        return
+    }
+    // Return success response
+    w.WriteHeader(http.StatusOK)
+    fmt.Fprintf(w, `{"status": "success", "message": "Books bought successfully"}`)
+}
