@@ -53,6 +53,7 @@ func main() {
 	r.Post("/review", authenticate(giveReviewHandler))
 	r.Post("/deactivate", authenticate(deactivateHandler))
 	r.Post("/reactivate", authenticate(reactivateHandler))
+	r.Post("/logout", authenticate(logoutHandler))
 
 	
 

@@ -17,7 +17,7 @@ func authenticate(next http.HandlerFunc) http.HandlerFunc {
         session, _ := store.Get(r, "session-name")
         uid, ok := session.Values["uid"].(int)
         if !ok {
-            http.Error(w, "Unauthorized", http.StatusUnauthorized)
+            http.Error(w, `{"status": "error", "message": "Please log in to access this endpoint"}`, http.StatusUnauthorized)
             return
         }
 
@@ -25,19 +25,6 @@ func authenticate(next http.HandlerFunc) http.HandlerFunc {
         ctx := context.WithValue(r.Context(), "uid", uid)
         next.ServeHTTP(w, r.WithContext(ctx))
     }
-}
-
-func authenticate1(next http.HandlerFunc) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-        // Get the user's UID from the global variable or session
-    
-		//if UID == 0 {
-		//	http.Error(w, `{"status": "error", "message": "Please log in to access this endpoint"}`, http.StatusUnauthorized)
-		//	return
-		//}
-		// User is authenticated, call the next handler
-		next.ServeHTTP(w, r)
-	}
 }
 
 func loginHandler(w http.ResponseWriter, r *http.Request) {
@@ -330,4 +317,13 @@ func authenticateActive(next http.HandlerFunc) http.HandlerFunc {
 		}
 		next.ServeHTTP(w, r)
 	}
+}
+func logoutHandler(w http.ResponseWriter, r *http.Request) {
+    session, _ := store.Get(r, "session-name")
+    session.Values["uid"] = nil
+    session.Save(r, w)
+
+    w.WriteHeader(http.StatusOK)
+    fmt.Fprintf(w, `{"status": "success", "message": "Logout successful"}`)
+    // ... return response
 }
