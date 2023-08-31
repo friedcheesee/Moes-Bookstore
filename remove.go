@@ -20,14 +20,6 @@ func delconnect() *sql.DB {
 	return db
 }
 
-//call fn only after authentication
-func getuserid(db *sql.DB,email string) int {
-	rows, err := db.Query("select UID from users where email=$1", email)
-	CheckError(err)
-	return readID(rows)
-
-}
-
 func deactivate(db *sql.DB,email string,password string){
 	authenticateUser(db, email, password)
 	_, err := db.Exec("update users set active=false where email=$1", email)
@@ -57,24 +49,7 @@ func readID(rows *sql.Rows) int{
 	return 0
 	
 }
-func readID1(rows *sql.Rows) (int) {
-    defer rows.Close()
-    if rows.Next() {
-        var userID int
-        if err := rows.Scan(&userID); err != nil {
-			CheckError(err)
-            return userID   // Return error if scanning fails
-        }
-        fmt.Printf("User ID: %d\n", userID)
-        return userID// Return userID if scanning is successful
-    }
 
-    if err := rows.Err(); err != nil {
-        CheckError(err) // Return error if there's an error in rows
-    }
-
-    	return 0  // Return specific error for no rows found
-}
 
 func isAccountExpired(db *sql.DB, uid int) (bool, error) {
     var expiryDate time.Time

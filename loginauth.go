@@ -29,6 +29,19 @@ func hashPassword(password string) (string, error) {
 	}
 	return string(hashedBytes), nil
 }
+func getID(db *sql.DB, email string) (int) {
+    var uid int
+    err := db.QueryRow("SELECT uid FROM users WHERE email = $1", email).Scan(&uid)
+    if err != nil {
+        if err == sql.ErrNoRows {
+			log.Printf("No user found with the provided email")
+            return 0 
+        }
+        return 0
+    }
+    return uid
+}
+
 
 // 0 - success
 // 1 - email not registered

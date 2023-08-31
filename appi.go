@@ -27,8 +27,10 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 	// Parse input parameters from the request (username and password)
 	email := r.FormValue("email")
 	password := r.FormValue("password")
-
-	// Call the login function
+	UID=getID(db, email)
+	// session, _ := store.Get(r, "session-name")
+	// session.Values["uid"] = userid
+	// session.Save(r, w)
 
 	isLoggedIn, err, code := logindb(db, email, password)
 	if err != nil {
@@ -37,7 +39,6 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, `{"status": "error", "message": "`+errorMessage+`"}`, httpStatus)
 		return
 	}
-	UID = getuserid(db, email)
 	// Return the login status as JSON response
 	if isLoggedIn {
 		w.WriteHeader(http.StatusOK)
@@ -236,61 +237,61 @@ func deleteFromCartHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, `{"status": "success", "message": "Book deleted from cart successfully"}`)
 }
 func buyBooksHandler(w http.ResponseWriter, r *http.Request) {
-    // Check if the user is authenticated
-    if UID == 0 {
-        http.Error(w, `{"status": "error", "message": "Please log in to buy books"}`, http.StatusUnauthorized)
-        return
-    }
+	// Check if the user is authenticated
+	if UID == 0 {
+		http.Error(w, `{"status": "error", "message": "Please log in to buy books"}`, http.StatusUnauthorized)
+		return
+	}
 
-    // Call the function to buy books
-    code ,err := buyBooks(db, UID)
-    if err != nil {
-        http.Error(w, `{"status": "error", "message": "Failed to buy books"}`, http.StatusInternalServerError)
-        return
-    }
-    if code == 1 {
-        http.Error(w, `{"status": "error", "message": "Remove owned books from the cart to buy books"}`, http.StatusBadRequest)
-        return
-    }
-    // Return success response
-    w.WriteHeader(http.StatusOK)
-    fmt.Fprintf(w, `{"status": "success", "message": "Books bought successfully"}`)
+	// Call the function to buy books
+	code, err := buyBooks(db, UID)
+	if err != nil {
+		http.Error(w, `{"status": "error", "message": "Failed to buy books"}`, http.StatusInternalServerError)
+		return
+	}
+	if code == 1 {
+		http.Error(w, `{"status": "error", "message": "Remove owned books from the cart to buy books"}`, http.StatusBadRequest)
+		return
+	}
+	// Return success response
+	w.WriteHeader(http.StatusOK)
+	fmt.Fprintf(w, `{"status": "success", "message": "Books bought successfully"}`)
 }
 
 func viewCartHandler(w http.ResponseWriter, r *http.Request) {
-    // Get the user's UID from the global variable or session
-    uid := UID
+	// Get the user's UID from the global variable or session
+	uid := UID
 
-    // Call the function to retrieve items from the cart
-    cartItems, err := viewCart(db, uid)
-    if err != nil {
-        http.Error(w, `{"status": "error", "message": "Error fetching cart items"}`, http.StatusInternalServerError)
-        return
-    }
+	// Call the function to retrieve items from the cart
+	cartItems, err := viewCart(db, uid)
+	if err != nil {
+		http.Error(w, `{"status": "error", "message": "Error fetching cart items"}`, http.StatusInternalServerError)
+		return
+	}
 
-    // Return the cart items as JSON response
-    w.Header().Set("Content-Type", "application/json")
-    json.NewEncoder(w).Encode(cartItems)
+	// Return the cart items as JSON response
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(cartItems)
 }
 
 func deactivateHandler(w http.ResponseWriter, r *http.Request) {
-    // Parse input parameters from the request (email and password)
-    email := r.FormValue("email")
-    password := r.FormValue("password")
-    // Call the deactivate function
-    deactivate(db, email, password)
-    // Return a success response
-    w.WriteHeader(http.StatusOK)
-    fmt.Fprintln(w, `{"status": "success", "message": "Account deactivated successfully"}`)
+	// Parse input parameters from the request (email and password)
+	email := r.FormValue("email")
+	password := r.FormValue("password")
+	// Call the deactivate function
+	deactivate(db, email, password)
+	// Return a success response
+	w.WriteHeader(http.StatusOK)
+	fmt.Fprintln(w, `{"status": "success", "message": "Account deactivated successfully"}`)
 }
 func reactivateHandler(w http.ResponseWriter, r *http.Request) {
-    // Parse input parameters from the request (email and password)
-    email := r.FormValue("email")
-    password := r.FormValue("password")
-    reactivate(db, email, password)
-    // Return a success response
-    w.WriteHeader(http.StatusOK)
-    fmt.Fprintln(w, `{"status": "success", "message": "Account reactivated successfully"}`)
+	// Parse input parameters from the request (email and password)
+	email := r.FormValue("email")
+	password := r.FormValue("password")
+	reactivate(db, email, password)
+	// Return a success response
+	w.WriteHeader(http.StatusOK)
+	fmt.Fprintln(w, `{"status": "success", "message": "Account reactivated successfully"}`)
 }
 func authenticateActive(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {

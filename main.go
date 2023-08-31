@@ -6,10 +6,11 @@ import (
 	"log"
 	"net/http"
 	"os"
-
+    "github.com/gorilla/sessions"
 	"github.com/go-chi/chi"
 	_ "github.com/lib/pq"
 )
+
 
 const (
 	host     = "localhost"
@@ -21,6 +22,7 @@ const (
 
 var db *sql.DB
 var UID int = 0
+var store = sessions.NewCookieStore([]byte("12345678"))
 
 func main1() {
 	db := adminconnect()
@@ -72,7 +74,7 @@ func main() {
 	//displayBookReviews(db, 1)
 	////bookname:="Sample"
 	////searchBooks(db,bookname, "", "")-
-	////ff := getuserid(db, email)
+	////ff := 
 	////fmt.Println(ff)
 	//deactivate(db, username, password)
 	//addToCart(db, ff, 1)-
