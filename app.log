@@ -1414,3 +1414,8 @@ created by net/http.(*Server).Serve in goroutine 1
 2023/09/01 21:49:39 logged in - handler
 2023/09/01 21:49:42 logged out - handler
 2023/09/01 22:38:49 Connected to database
+2023/09/01 23:25:53 Connected to database
+2023/09/01 23:25:58 User logged in successfully
+2023/09/01 23:25:58 logged in - handler
+2023/09/01 23:26:01 Owned books retrieved successfully
+2023/09/01 23:26:01 viewed owned books - handler
