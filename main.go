@@ -19,9 +19,7 @@ const (
 	password = "admin"
 	dbname   = "moe"
 )
-
 var db *sql.DB
-//var UID int = 0
 var store = sessions.NewCookieStore([]byte("12345678"))
 
 func main1() {
@@ -43,23 +41,29 @@ func main() {
 	r := chi.NewRouter()
 	r.Post("/login", checkActiveAccount(loginHandler))
 	r.Post("/reguser", registerUserHandler)
-	r.Get("/search", searchBooksHandler)
-	r.Post("/cart/add", authenticate(addToCartHandler))
-	r.Post("/cart/delete", authenticate(deleteFromCartHandler))
-	r.Post("/cart/buy", authenticate(buyBooksHandler))
-	r.Post("/cart/view", authenticate(viewCartHandler))
-	r.Post("/inventory", authenticate(viewOwnedBooksHandler))
-	r.Post("/review", authenticate(giveReviewHandler))
-	r.Post("/delete", authenticate(deactivateHandler))
-	r.Post("/logout", authenticate(logoutHandler))
+	r.Route("/user", func(r chi.Router){
+		r.Use(authenticate)
+		r.Get("/search", searchBooksHandler)
+		r.Post("/cart/add", addToCartHandler)
+		r.Post("/cart/delete", deleteFromCartHandler)
+		r.Post("/cart/buy", buyBooksHandler)
+		r.Post("/cart/view", viewCartHandler)
+		r.Post("/inventory", viewOwnedBooksHandler)
+		r.Post("/review", giveReviewHandler)
+		r.Post("/delete", deactivateHandler)
+		r.Post("/logout", logoutHandler)
+	})
+	
+	r.Route("/admin", func(r chi.Router){
+		r.Use(isAdmin)
+		r.Post("/add", addBookHandler)
+		r.Post("/delete", removeBookHandler)
+		r.Post("/view", viewUsersHandler)
+		r.Post("/view/books", viewAvailableBooksHandler)
+	})
 
 	//r.Post("/available", authenticate(displayAvailableBooksHandler))
 	//r.Post("/reviews", authenticate(displayBookReviewsHandler))
-	
-
-
-	
-
 	// Start the HTTP server
 	http.ListenAndServe("localhost:8080", r)
 	//conecct
@@ -89,6 +93,7 @@ func main() {
 	//err := buyBooks(db, ff)-
 	//CheckError(err)
 }
+
 func CheckError(err error) {
 	if err != nil {
 		log.Println("Error: &s", err)

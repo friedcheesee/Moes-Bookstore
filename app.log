@@ -1394,3 +1394,10 @@ created by net/http.(*Server).Serve in goroutine 1
 2023/09/01 01:57:29 Wrong password crypto/bcrypt: hashedSecret too short to be a bcrypted password
 2023/09/01 02:40:35 Book fgrabert5 is already bought
 2023/09/01 02:43:04 Book fgrabert5 is already bought
+2023/09/01 15:57:30 Error during transaction: &s pq: column "id" does not exist
+2023/09/01 15:57:47 Error during transaction: &s pq: column "id" does not exist
+2023/09/01 15:58:56 Error during transaction: &s pq: column "name" does not exist
+2023/09/01 17:19:52 Book added successfully
+2023/09/01 17:21:35 Error adding book: pq: duplicate key value violates unique constraint "books_book_name_author_key"
+2023/09/01 17:24:29 Book removed successfully
+2023/09/01 17:53:19 Wrong password crypto/bcrypt: hashedPassword is not the hash of the given password

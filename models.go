@@ -23,3 +23,14 @@ type CartItem struct {
     Cost     float64 `json:"cost"`
 }
 
+type BuyBooksResponse struct {
+    Code          int
+    Recommendation string
+}
+
+type User struct {
+	ID       int    // Assuming your user has an ID field
+	Username string // Assuming your user has a Username field
+	Email    string // Assuming your user has an Email field
+	// Add other fields you need
+}
