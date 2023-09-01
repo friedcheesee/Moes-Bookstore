@@ -1419,3 +1419,7 @@ created by net/http.(*Server).Serve in goroutine 1
 2023/09/01 23:25:58 logged in - handler
 2023/09/01 23:26:01 Owned books retrieved successfully
 2023/09/01 23:26:01 viewed owned books - handler
+2023/09/02 00:34:44 Connected to database
+2023/09/02 00:34:47 User logged in successfully
+2023/09/02 00:34:47 logged in - handler
+2023/09/02 00:34:54 logged out - handler

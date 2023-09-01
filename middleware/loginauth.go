@@ -1,4 +1,4 @@
-package main
+package ah
 import (
 	"database/sql"
 	"fmt"
@@ -7,20 +7,10 @@ import (
 	"regexp"
 	_ "github.com/lib/pq"        // PostgreSQL driver
 	"golang.org/x/crypto/bcrypt" // For encrypting and decrypting passwords
+	"moe/log"
 )
 
-// logs errors
-func CheckError(err error) { // to log errors where ever necessary
-	if err != nil {
-		log.Println("Error:", err)
-		//panic(err)
-	}
-}
-// to log events
-func LogEvent(message string) {
-	// Log the message
-	log.Println(message)
-}
+
 
 //global database connection
 func Adminconnect() *sql.DB {
@@ -35,13 +25,13 @@ func Adminconnect() *sql.DB {
 	
 	// open database
 	db, err := sql.Open("postgres", psqlconn)
-	CheckError(err)
+	moelog.CheckError(err)
 	
 	// check connection
 	err = db.Ping()
-	CheckError(err)
+	moelog.CheckError(err)
 	fmt.Println("Connected!")
-	LogEvent("Connected to database")
+	moelog.LogEvent("Connected to database")
 	return db
 }
 
@@ -55,7 +45,7 @@ func hashPassword(password string) (string, error) {
 }
 
 //to fetch ID from database, used only once during login function to set cookies.
-func getID(db *sql.DB, email string) int {
+func GetID(db *sql.DB, email string) int {
 	var uid int
 	err := db.QueryRow("SELECT uid FROM users WHERE email = $1", email).Scan(&uid)
 	if err != nil {
@@ -72,30 +62,30 @@ func getID(db *sql.DB, email string) int {
 // 0 - success
 // 1 - email not registered
 // 2 - wrong password
-func logindb(db *sql.DB, email string, password string) (bool, error, int) {
+func Logindb(db *sql.DB, email string, password string) (bool, error, int) {
 	if !userExists(db, email) {
-		LogEvent("User not found")
+		moelog.LogEvent("User not found")
 		return false, nil, 1 // User not found
 	}
-	isAuthenticated, err := authenticateUser(db, email, password)
+	isAuthenticated, err := AuthenticateUser(db, email, password)
 	if err != nil {
-		CheckError(err)
-		LogEvent("Authentication error")
+		moelog.CheckError(err)
+		moelog.LogEvent("Authentication error")
 		return false, err, 2 // Authentication error
 	}
 	if !isAuthenticated {
-		LogEvent("Incorrect password")
+		moelog.LogEvent("Incorrect password")
 		return false, nil, 3 // Incorrect password
 	}
-	LogEvent("User logged in successfully")
+	moelog.LogEvent("User logged in successfully")
 	return true, nil, 0 // Success
 }
 
 // Authenticate user using the provided email and password
-func authenticateUser(db *sql.DB, email, password string) (bool, error) {
+func AuthenticateUser(db *sql.DB, email, password string) (bool, error) {
 	var storedPasswordHash string
 	row := db.QueryRow("SELECT password FROM users WHERE email = $1", email)
-	CheckError(row.Scan(&storedPasswordHash))
+	moelog.CheckError(row.Scan(&storedPasswordHash))
 
 	// Compare stored password hash with provided hashed password
 	err := bcrypt.CompareHashAndPassword([]byte(storedPasswordHash), []byte(password))
@@ -110,33 +100,33 @@ func authenticateUser(db *sql.DB, email, password string) (bool, error) {
 // 0 success
 // 1 user exists
 // 2 internal error
-func reguser(db *sql.DB, email, password, username string) (int, error) {
+func Reguser(db *sql.DB, email, password, username string) (int, error) {
 	hashedPassword, err := hashPassword(password)
 	if userExists(db, email) {
 		fmt.Println("User already exists.")
-		LogEvent("User already exists")
+		moelog.LogEvent("User already exists")
 		return 1, nil
 	}
 	if err != nil {
-		CheckError(err)
-		LogEvent("Error hashing password")
+		moelog.CheckError(err)
+		moelog.LogEvent("Error hashing password")
 		fmt.Println("Error hashing password")
 		return 2, err
 	}
 	if !validateEmail(email) {
-		LogEvent("Invalid email")
+		moelog.LogEvent("Invalid email")
 		fmt.Println("Invalid email")
 		return 2, nil
 	}
 	storeCredentials(db, username, hashedPassword, email)
-	CheckError(err)
+	moelog.CheckError(err)
 	return 0, nil
 }
 //to store credentials in db while registering user
 func storeCredentials(db *sql.DB, username string, hashedPassword string, email string) {
 	_, err := db.Exec("INSERT INTO users (username, password, email) VALUES ($1, $2, $3)", username, hashedPassword, email)
-	CheckError(err)
-	LogEvent("User registered successfully")
+	moelog.CheckError(err)
+	moelog.LogEvent("User registered successfully")
 	fmt.Println("User registered successfully")
 }
 
@@ -144,7 +134,7 @@ func storeCredentials(db *sql.DB, username string, hashedPassword string, email 
 func userExists(db *sql.DB, email string) bool {
 	var count int
 	row := db.QueryRow("SELECT COUNT(*) FROM users WHERE email = $1", email)
-	CheckError(row.Scan(&count))
+	moelog.CheckError(row.Scan(&count))
 	return count > 0
 }
 
@@ -161,7 +151,7 @@ func validateEmail(email string) bool {
 }
 
 //used in handlers to check if user logging in has deleted their account
-func isAccountActive(db *sql.DB, email string) bool {
+func IsAccountActive(db *sql.DB, email string) bool {
 	var active bool
 	err := db.QueryRow("SELECT active FROM users WHERE email = $1 ", email).Scan(&active)
 	if err != nil {
@@ -170,9 +160,9 @@ func isAccountActive(db *sql.DB, email string) bool {
 	return active
 }
 
-func delete(db *sql.DB,email string,password string){
-	authenticateUser(db, email, password)
+func Delete(db *sql.DB,email string,password string){
+	AuthenticateUser(db, email, password)
 	_, err := db.Exec("update users set active=false where email=$1", email)
-	CheckError(err)
+	moelog.CheckError(err)
 	fmt.Println("User account deactivated")
 }

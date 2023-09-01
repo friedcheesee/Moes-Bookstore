@@ -8,12 +8,29 @@ import (
 	"context"
 	"database/sql"
 	"strconv"
-
-	//"github.com/go-chi/chi"
 	_ "github.com/lib/pq"
+	"moe/log"
+	"moe/middleware"
+	//"github.com/gorilla/sessions"
 )
 
+// type LoginHandlerr struct {
+//     st *sessions.CookieStore
+// } 
 
+// func (h *LoginHandlerr) Authenticate1(next http.Handler) http.Handler {
+//     return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+// 		session, _ := h.st.Get(r, "session-name")
+// 		uid, ok := session.Values["uid"].(int)
+// 		//check if the user is logged in
+// 		if !ok {
+// 			http.Error(w, `{"status": "error", "message": "Please log in to access this endpoint"}`, http.StatusUnauthorized)
+// 			return
+// 		}
+// 		ctx := context.WithValue(r.Context(), "uid", uid)
+// 		next.ServeHTTP(w, r.WithContext(ctx))
+//     })
+// }
 
 // Middleware to check if the user is an admin
 func CheckUserAdminStatus(db *sql.DB, uid int) (bool, error) {
@@ -53,7 +70,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	//Parsing input parameters from the request (username and password)
 	email := r.FormValue("email")
 	password := r.FormValue("password")
-	UID := getID(db, email) // getting uid from db (only once, to initiate session)
+	UID := ah.GetID(db, email) // getting uid from db (only once, to initiate session)
 
 	//Create a session and set the user's UID with the session
 	session, _ := store.Get(r, "session-name")
@@ -61,7 +78,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	session.Save(r, w)
 	//Now that session is set, we can get uid in any other function/handler from this variable
 
-	isLoggedIn, err, code := logindb(db, email, password)
+	isLoggedIn, err, code := ah.Logindb(db, email, password)
 	if err != nil {
 		// Set custom HTTP status and error message based on the error code
 		httpStatus, errorMessage := GetErrorDetails(code)
@@ -84,7 +101,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusUnauthorized)
 		fmt.Fprintf(w, `{"status": "error", "message": "`+errorMessage+`"}`)
 	}
-	LogEvent("logged in - handler")
+	moelog.LogEvent("logged in - handler")
 }
 
 // Utility function to get custom HTTP status and error message based on code - used for login handler
@@ -120,7 +137,7 @@ func RegisterUserHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Call the reguser function to register the user
 	//codes: 1 for user already exists, 2 for internal error
-	code, err := reguser(db, email, password, username)
+	code, err := ah.Reguser(db, email, password, username)
 	if err != nil {
 		http.Error(w, `{"status": "error", "message": "Internal server error"}`, http.StatusInternalServerError)
 		return
@@ -135,7 +152,7 @@ func RegisterUserHandler(w http.ResponseWriter, r *http.Request) {
 	} else {
 		fmt.Fprintf(w, `{"status": "success", "message": "User registered successfully: %s"}`, username)
 	}
-	LogEvent("registered user - handler")
+	moelog.LogEvent("registered user - handler")
 }
 
 // to search for books using query, genre and author
@@ -163,7 +180,7 @@ func SearchBooksHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Set the response content type and write JSON response
-	LogEvent("searched books - handler")
+	moelog.LogEvent("searched books - handler")
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	w.Write(booksJSON)
@@ -187,7 +204,7 @@ func AddToCartHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Call the addToCart function with the authenticated user's UID and the bookID
-	code, err := addToCart(db, UID, bookid)
+	code, err := AddToCart(db, UID, bookid)
 	//fmt.Println("code",code)
 	if err != nil {
 		http.Error(w, `{"status": "error", "message": "Internal error"}`, http.StatusInternalServerError)
@@ -199,7 +216,7 @@ func AddToCartHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	w.WriteHeader(http.StatusOK)
 	fmt.Fprintf(w, `{"status": "success", "message": "bookid %s added to cart successfully"}`, bookIDStr)
-	LogEvent("added to cart - handler")
+	moelog.LogEvent("added to cart - handler")
 }
 
 // to view owned books
@@ -222,7 +239,7 @@ func ViewOwnedBooksHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, `{"status": "error", "message": "Failed to format response"}`, http.StatusInternalServerError)
 		return
 	}
-	LogEvent("viewed owned books - handler")
+	moelog.LogEvent("viewed owned books - handler")
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	w.Write(responseJSON)
@@ -262,7 +279,7 @@ func GiveReviewHandler(w http.ResponseWriter, r *http.Request) {
 	// Return success response
 	w.WriteHeader(http.StatusOK)
 	fmt.Fprintf(w, `{"status": "success", "message": "Review added successfully"}`)
-	LogEvent("gave review - handler")
+	moelog.LogEvent("gave review - handler")
 }
 
 // handler to delete bookid from cart
@@ -291,7 +308,7 @@ func DeleteFromCartHandler(w http.ResponseWriter, r *http.Request) {
 	// Return success response
 	w.WriteHeader(http.StatusOK)
 	fmt.Fprintf(w, `{"status": "success", "message": "Book deleted from cart successfully. if present"}`)
-	LogEvent("deleted from cart - handler")
+	moelog.LogEvent("deleted from cart - handler")
 }
 
 // handler to buy books
@@ -333,7 +350,7 @@ func BuyBooksHandler(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte(response))
-		LogEvent("bought books - handler")
+		moelog.LogEvent("bought books - handler")
 	}
 }
 
@@ -355,7 +372,7 @@ func ViewCartHandler(w http.ResponseWriter, r *http.Request) {
 		cartItems = []CartItem{} //return empty struct if cart is empty
 	}
 	json.NewEncoder(w).Encode(cartItems)
-	LogEvent("viewed cart - handler")
+	moelog.LogEvent("viewed cart - handler")
 }
 
 // middleware handler to delete account
@@ -364,11 +381,11 @@ func DeleteHandler(w http.ResponseWriter, r *http.Request) {
 	email := r.FormValue("email")
 	password := r.FormValue("password")
 	// Call the deactivate function
-	delete(db, email, password)
+	ah.Delete(db, email, password)
 	// Return success response
 	w.WriteHeader(http.StatusOK)
 	fmt.Fprintln(w, `{"status": "success", "message": "Account deactivated successfully"}`)
-	LogEvent("deleted account - handler")
+	moelog.LogEvent("deleted account - handler")
 }
 
 // middleware handler to logout
@@ -380,7 +397,7 @@ func LogoutHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	fmt.Fprintf(w, `{"status": "success", "message": "Logout successful"}`)
 
-	LogEvent("logged out - handler")
+	moelog.LogEvent("logged out - handler")
 }
 
 // middleware handler to check if account is active(not deleted)
@@ -390,14 +407,14 @@ func CheckActiveAccount(next http.HandlerFunc) http.HandlerFunc {
 		password := r.FormValue("password")
 
 		// Authenticate the user
-		isAuthenticated, err := authenticateUser(db, email, password)
+		isAuthenticated, err := ah.AuthenticateUser(db, email, password)
 		if err != nil || !isAuthenticated {
 			http.Error(w, `{"status": "error", "message": "Invalid credentials"}`, http.StatusUnauthorized)
 			return
 		}
 
 		// Check if the account is active
-		isActive := isAccountActive(db, email)
+		isActive := ah.IsAccountActive(db, email)
 		if !isActive {
 			http.Error(w, `{"status": "error", "message": "Account has been deleted, please sign up with another email"}`, http.StatusUnauthorized)
 			return
@@ -459,7 +476,7 @@ func AddBookHandler(w http.ResponseWriter, r *http.Request) {
 	// Return success response
 	w.WriteHeader(http.StatusOK)
 	fmt.Fprintf(w, `{"status": "success", "message": "Book added successfully"}`)
-    LogEvent("added book - handler")
+    moelog.LogEvent("added book - handler")
 }
 
 //to remove books for admins
@@ -484,7 +501,7 @@ func RemoveBookHandler(w http.ResponseWriter, r *http.Request) {
 	// Return success response
 	w.WriteHeader(http.StatusOK)
 	fmt.Fprintf(w, `{"status": "success", "message": "Book removed successfully"}`)
-    LogEvent("removed book - handler")
+    moelog.LogEvent("removed book - handler")
 }
 
 //to view users for admins
@@ -499,7 +516,7 @@ func ViewUsersHandler(w http.ResponseWriter, r *http.Request) {
 	// Return the users as JSON response
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(users)
-    LogEvent("viewed users - handler")
+    moelog.LogEvent("viewed users - handler")
 }
 
 //to view all available books 
@@ -514,5 +531,5 @@ func ViewAvailableBooksHandler(w http.ResponseWriter, r *http.Request) {
 	// Return the books as JSON response
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(books)
-    LogEvent("viewed available books - handler")
+    moelog.LogEvent("viewed available books - handler")
 }

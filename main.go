@@ -4,9 +4,10 @@ import (
 	"database/sql"
 	"log"
 	//"moe/middleware" //middleware
-	
+	"moe/log"
 //"moe/login"
 "net/http"
+"moe/middleware"
 	"os"
 	"github.com/go-chi/chi"
 	"github.com/gorilla/sessions"
@@ -33,11 +34,11 @@ func main() {
 	initCookieStore() //initialise cookie store
 
 	//initialising log file
-	logFile = initiatelog()
+	logFile = moelog.Initiatelog()
 	defer logFile.Close()
 
 	//connecting to database
-	db = Adminconnect()
+	db = ah.Adminconnect()
 	defer db.Close()
 
 	//using chi router to handle requests
@@ -71,18 +72,6 @@ func main() {
 }
 
 
-
-
-
-// opens the log file
-func initiatelog() *os.File {
-	logFile, err := os.OpenFile("app.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666) //create a log file, if already exists, appends to the file.
-	if err != nil {
-		log.Fatalln("Failed to open error log file:", err)
-	}
-	log.SetOutput(logFile)
-	return logFile
-}
 
 // creates session store variable for cookies with a random key
 func initCookieStore() *sessions.CookieStore {

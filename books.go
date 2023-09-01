@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"moe/log"
 	//"moe/login"
 )
 
@@ -11,7 +12,7 @@ import (
 // 0 added
 // 1 already exists
 // 2 internal error
-func addToCart(db *sql.DB, uid, bookid int) (int, error) {
+func AddToCart(db *sql.DB, uid, bookid int) (int, error) {
 	// Check if the book already exists in the cart
 	var count int
 	err := db.QueryRow("SELECT COUNT(*) FROM cart WHERE uid = $1 AND bookid = $2", uid, bookid).Scan(&count)
@@ -41,7 +42,7 @@ func addToCart(db *sql.DB, uid, bookid int) (int, error) {
 		log.Println("Error adding book to cart:", err)
 		return 2, err
 	}
-	LogEvent("Book added to cart successfully")
+	moelog.LogEvent("Book added to cart successfully")
 	fmt.Println("Book added to cart successfully")
 	return 0, nil
 }
@@ -92,7 +93,7 @@ func buyBooks(db *sql.DB, uid int) (int, error, []Book) {
 		}
 		if isBought {
 			fmt.Printf("Book %d is already bought, please remove it from the cart to buy other books\n", bookID)
-			LogEvent("Book already bought "+bookName)
+			moelog.LogEvent("Book already bought "+bookName)
 			return 1, nil, nil
 		}
 
@@ -117,7 +118,7 @@ func buyBooks(db *sql.DB, uid int) (int, error, []Book) {
 		log.Println("Error during transaction: ", err)
 		return 1, err, nil
 	}
-	LogEvent("Books bought successfully, if present in cart")
+	moelog.LogEvent("Books bought successfully, if present in cart")
 	fmt.Println("Books bought successfully, if present in cart")
 	return 0, nil, recc
 }
@@ -129,7 +130,7 @@ func deleteFromCart(db *sql.DB, uid, bookid int) {
 		log.Println("Error deleting book from cart:", err)
 		panic(err)
 	}
-	LogEvent("Book deleted from cart successfully, if present")
+	moelog.LogEvent("Book deleted from cart successfully, if present")
 	fmt.Println("Book deleted from cart successfully, if present")
 }
 
@@ -153,7 +154,7 @@ func viewOwnedBooks(db *sql.DB, uid int) ([]Book, error) {
 		}
 		ownedBooks = append(ownedBooks, book)
 	}
-	LogEvent("Owned books retrieved successfully")
+	moelog.LogEvent("Owned books retrieved successfully")
 	return ownedBooks, nil
 }
 
@@ -167,7 +168,7 @@ func giveReview(db *sql.DB, uid, bookID int, review string) (int, error) {
 	err := db.QueryRow("SELECT reviewid FROM reviews WHERE uid = $1 AND bookid = $2", uid, bookID).Scan(&existingReview)
 	if err == nil {
 		fmt.Println("A review by the same user for the same book already exists")
-		LogEvent("A review by the same user for the same book already exists")
+		moelog.LogEvent("A review by the same user for the same book already exists")
 		return 1, nil
 	} else if err != sql.ErrNoRows {
 		log.Println("Error checking for existing review:", err)
@@ -180,7 +181,7 @@ func giveReview(db *sql.DB, uid, bookID int, review string) (int, error) {
 		log.Println("Error giving review:", err)
 		return 1, err
 	}
-	LogEvent("Review added successfully")
+	moelog.LogEvent("Review added successfully")
 	fmt.Println("Review added successfully")
 	return 0, nil
 }
@@ -207,7 +208,7 @@ func searchBooks(db *sql.DB, query, genre, author string) ([]Book, error) {
 		book.DownloadURL="buy the book to access URL"
 		books = append(books, book)
 	}
-	LogEvent("Books retrieved successfully")
+	moelog.LogEvent("Books retrieved successfully")
 	return books, nil
 }
 
@@ -229,7 +230,7 @@ func viewCart(db *sql.DB, uid int) ([]CartItem, error) {
 		}
 		cartItems = append(cartItems, item)
 	}
-	LogEvent("Cart items retrieved successfully")
+	moelog.LogEvent("Cart items retrieved successfully")
 	return cartItems, nil
 }
 
@@ -253,6 +254,6 @@ func getBooksByGenreOrAuthor(db *sql.DB, genre, author string) ([]Book, error) {
 		}
 		books = append(books, book)
 	}
-	LogEvent("Recommendations fetched successfully")
+	moelog.LogEvent("Recommendations fetched successfully")
 	return books, nil
 }

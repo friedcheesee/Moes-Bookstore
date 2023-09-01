@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"moe/log"
 	//"moe/middleware" //middleware
 )
 
@@ -15,7 +16,7 @@ func removeBook(db *sql.DB, bookID int) error {
 		log.Println("Error removing book:", err)
 		return err
 	}
-	LogEvent("(admin) Book removed successfully")
+	moelog.LogEvent("(admin) Book removed successfully")
 	return nil
 }
 
@@ -29,7 +30,7 @@ func addBook(db *sql.DB, bookName, author, genre string, cost float64) error {
 		log.Println("Error adding book:", err)
 		return err
 	}
-	LogEvent("(admin) Book added successfully")
+	moelog.LogEvent("(admin) Book added successfully")
 	return nil
 }
 
@@ -86,6 +87,6 @@ func displayAvailableBooks(db *sql.DB) ([]Book, error) {
 
 		books = append(books, book)
 	}
-	LogEvent("(admin) Available books retrieved successfully")
+	moelog.LogEvent("(admin) Available books retrieved successfully")
 	return books, nil
 }
