@@ -1,0 +1,363 @@
+{
+	"info": {
+		"_postman_id": "187c28ee-b318-49ed-8d0d-3cc38a724e9a",
+		"name": "Moe's Bookstore",
+		"description": "API requests with parameters preset for the Golang bookstore project.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "29437588"
+	},
+	"item": [
+		{
+			"name": "Login",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "email",
+							"value": "new@mail.com",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "abcd",
+							"type": "text"
+						}
+					]
+				},
+				"url": "http://localhost:8080/login"
+			},
+			"response": []
+		},
+		{
+			"name": "Logout",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": "http://localhost:8080/user/logout"
+			},
+			"response": []
+		},
+		{
+			"name": "Register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "email",
+							"value": "newdty@mail.com",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "abcd",
+							"type": "text"
+						},
+						{
+							"key": "username",
+							"value": "fresh",
+							"type": "text"
+						}
+					]
+				},
+				"url": "http://localhost:8080/reguser"
+			},
+			"response": []
+		},
+		{
+			"name": "Search books",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "query",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "genre",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "author",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080/user/search?query=&author=&genre=drama",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"search"
+					],
+					"query": [
+						{
+							"key": "query",
+							"value": ""
+						},
+						{
+							"key": "author",
+							"value": ""
+						},
+						{
+							"key": "genre",
+							"value": "drama"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Inventory",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": "http://localhost:8080/user/inventory"
+			},
+			"response": []
+		},
+		{
+			"name": "Give review",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "review",
+							"value": "apple banana",
+							"type": "text"
+						},
+						{
+							"key": "bookID",
+							"value": "2",
+							"type": "text"
+						}
+					]
+				},
+				"url": "http://localhost:8080/user/review"
+			},
+			"response": []
+		},
+		{
+			"name": "Add to cart",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "bookid",
+							"value": "5",
+							"type": "text"
+						}
+					]
+				},
+				"url": "http://localhost:8080/user/cart/add"
+			},
+			"response": []
+		},
+		{
+			"name": "Delete from cart",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "bookID",
+							"value": "12",
+							"type": "text"
+						}
+					]
+				},
+				"url": "http://localhost:8080/user/cart/delete"
+			},
+			"response": []
+		},
+		{
+			"name": "Buy books",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": "http://localhost:8080/user/cart/buy"
+			},
+			"response": []
+		},
+		{
+			"name": "View cart",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": "http://localhost:8080/user/cart/view"
+			},
+			"response": []
+		},
+		{
+			"name": "Delete",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "email",
+							"value": "friedd@mail.com",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "abcd",
+							"type": "text"
+						}
+					]
+				},
+				"url": "http://localhost:8080/user/delete"
+			},
+			"response": []
+		},
+		{
+			"name": "Admin book add",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "bookName",
+							"value": "asde",
+							"type": "text"
+						},
+						{
+							"key": "author",
+							"value": "adasd",
+							"type": "text"
+						},
+						{
+							"key": "genre",
+							"value": "fantasy",
+							"type": "text"
+						},
+						{
+							"key": "cost",
+							"value": "0",
+							"type": "text"
+						}
+					]
+				},
+				"url": "http://localhost:8080/admin/add"
+			},
+			"response": []
+		},
+		{
+			"name": "Admin book delete",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "bookName",
+							"value": "asde",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "author",
+							"value": "adasd",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "genre",
+							"value": "fantasy",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "cost",
+							"value": "0",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "bookID",
+							"value": "53",
+							"type": "text"
+						}
+					]
+				},
+				"url": "http://localhost:8080/admin/delete"
+			},
+			"response": []
+		},
+		{
+			"name": "Admin View users",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": "http://localhost:8080/admin/view"
+			},
+			"response": []
+		},
+		{
+			"name": "Admin View all books",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": "http://localhost:8080/admin/view/books"
+			},
+			"response": []
+		}
+	]
+}

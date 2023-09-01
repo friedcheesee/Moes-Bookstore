@@ -3,9 +3,7 @@ package main
 import (
 	"database/sql"
 	"log"
-	//"moe/middleware" //middleware
 	"moe/log"
-//"moe/login"
 "net/http"
 "moe/middleware"
 	"os"

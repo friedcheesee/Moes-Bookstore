@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"moe/log"
-	//"moe/login"
 )
 
 // codes returned by this function, to debug/show status of cart addition

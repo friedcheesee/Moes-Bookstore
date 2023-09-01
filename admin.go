@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"moe/log"
-	//"moe/middleware" //middleware
 )
 
 // function for admins to remove a book from available books
