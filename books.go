@@ -109,7 +109,7 @@ func buyBooks(db *sql.DB, uid int) (int, error, []Book) {
 		return 1, err, nil
 	}
 
-	fmt.Println("Books bought successfully")
+	fmt.Println("Books bought successfully, if present in cart")
 	return 0, nil, recc
 }
 
@@ -119,7 +119,7 @@ func deleteFromCart(db *sql.DB, uid, bookid int) {
 		log.Println("Error deleting book from cart:", err)
 		panic(err)
 	}
-	fmt.Println("Book deleted from cart successfully")
+	fmt.Println("Book deleted from cart successfully, if present")
 }
 
 

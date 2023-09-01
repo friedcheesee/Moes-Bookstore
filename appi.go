@@ -30,7 +30,6 @@ func authenticate(next http.Handler) http.Handler {
 	})
 }
 
-
 func loginHandler(w http.ResponseWriter, r *http.Request) {
 	// Parse input parameters from the request (username and password)
 	email := r.FormValue("email")
@@ -247,7 +246,7 @@ func deleteFromCartHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Return success response
 	w.WriteHeader(http.StatusOK)
-	fmt.Fprintf(w, `{"status": "success", "message": "Book deleted from cart successfully"}`)
+	fmt.Fprintf(w, `{"status": "success", "message": "Book deleted from cart successfully. if present"}`)
 }
 func buyBooksHandler(w http.ResponseWriter, r *http.Request) {
 	// Check if the user is authenticated
@@ -274,14 +273,14 @@ func buyBooksHandler(w http.ResponseWriter, r *http.Request) {
 		recommendation := recommendations[0]
 
 		// Construct the response
-		response := fmt.Sprintf(`{"status": "success", "message": "Books bought successfully", "recommendation": {"name": "%s", "author": "%s"}}`, recommendation.Name, recommendation.Author)
+		response := fmt.Sprintf(`{"status": "success", "message": "Books bought successfully, if present in cart", "recommendation": {"name": "%s", "author": "%s"}}`, recommendation.Name, recommendation.Author)
 
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte(response))
 	} else {
 		// No recommendations available
-		response := `{"status": "success", "message": "Books bought successfully", "recommendation": null}`
+		response := `{"status": "success", "message": "Books bought successfully, if present in cart", "recommendation": null}`
 
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
@@ -303,6 +302,9 @@ func viewCartHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Return the cart items as JSON response
 	w.Header().Set("Content-Type", "application/json")
+	if cartItems == nil {
+		cartItems = []CartItem{}
+	}
 	json.NewEncoder(w).Encode(cartItems)
 }
 
@@ -362,98 +364,98 @@ func checkActiveAccount(next http.HandlerFunc) http.HandlerFunc {
 }
 
 func isAdmin(next http.Handler) http.Handler {
-    return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-        // Get the user's UID from the session or wherever it's stored
-        session, _ := store.Get(r, "session-name")
-        uid, ok := session.Values["uid"].(int)
-        if !ok {
-            http.Error(w, `{"status": "error", "message": "Please log in to access this endpoint"}`, http.StatusUnauthorized)
-            return
-        }
-        
-        // Query the database to check if the user with the given UID is an admin
-        isAdmin, err := checkUserAdminStatus(db, uid)
-        if err != nil {
-            http.Error(w, `{"status": "error", "message": "Error checking admin status"}`, http.StatusInternalServerError)
-            return
-        }
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// Get the user's UID from the session or wherever it's stored
+		session, _ := store.Get(r, "session-name")
+		uid, ok := session.Values["uid"].(int)
+		if !ok {
+			http.Error(w, `{"status": "error", "message": "Please log in to access this endpoint"}`, http.StatusUnauthorized)
+			return
+		}
 
-        if !isAdmin {
-            http.Error(w, `{"status": "error", "message": "You do not have admin privileges"}`, http.StatusForbidden)
-            return
-        }
-        
-        // If the user is an admin, call the next handler.
-        next.ServeHTTP(w, r)
-    })
+		// Query the database to check if the user with the given UID is an admin
+		isAdmin, err := checkUserAdminStatus(db, uid)
+		if err != nil {
+			http.Error(w, `{"status": "error", "message": "Error checking admin status"}`, http.StatusInternalServerError)
+			return
+		}
+
+		if !isAdmin {
+			http.Error(w, `{"status": "error", "message": "You do not have admin privileges"}`, http.StatusForbidden)
+			return
+		}
+
+		// If the user is an admin, call the next handler.
+		next.ServeHTTP(w, r)
+	})
 }
 func addBookHandler(w http.ResponseWriter, r *http.Request) {
-    // Parse input parameters from the request (bookName, author, genre, cost, stock)
-    bookName := r.FormValue("bookName")
-    author := r.FormValue("author")
-    genre := r.FormValue("genre")
-    costStr := r.FormValue("cost")
-    // Convert cost and stock to float64 and int respectively
-    cost, err := strconv.ParseFloat(costStr, 64)
-    if err != nil {
-        http.Error(w, `{"status": "error", "message": "Invalid cost"}`, http.StatusBadRequest)
-        return
-    }
+	// Parse input parameters from the request (bookName, author, genre, cost, stock)
+	bookName := r.FormValue("bookName")
+	author := r.FormValue("author")
+	genre := r.FormValue("genre")
+	costStr := r.FormValue("cost")
+	// Convert cost and stock to float64 and int respectively
+	cost, err := strconv.ParseFloat(costStr, 64)
+	if err != nil {
+		http.Error(w, `{"status": "error", "message": "Invalid cost"}`, http.StatusBadRequest)
+		return
+	}
 
-    // Call the addBook function
-    err = addBook(db, bookName, author, genre, cost)
-    if err != nil {
-        http.Error(w, `{"status": "error", "message": "Failed to add book"}`, http.StatusInternalServerError)
-        return
-    }
+	// Call the addBook function
+	err = addBook(db, bookName, author, genre, cost)
+	if err != nil {
+		http.Error(w, `{"status": "error", "message": "Failed to add book"}`, http.StatusInternalServerError)
+		return
+	}
 
-    // Return success response
-    w.WriteHeader(http.StatusOK)
-    fmt.Fprintf(w, `{"status": "success", "message": "Book added successfully"}`)
+	// Return success response
+	w.WriteHeader(http.StatusOK)
+	fmt.Fprintf(w, `{"status": "success", "message": "Book added successfully"}`)
 }
 func removeBookHandler(w http.ResponseWriter, r *http.Request) {
-    // Parse input parameters from the request (bookID)
-    bookIDStr := r.FormValue("bookID")
+	// Parse input parameters from the request (bookID)
+	bookIDStr := r.FormValue("bookID")
 
-    // Convert bookID to integer
-    bookID, err := strconv.Atoi(bookIDStr)
-    if err != nil {
-        http.Error(w, `{"status": "error", "message": "Invalid book ID"}`, http.StatusBadRequest)
-        return
-    }
+	// Convert bookID to integer
+	bookID, err := strconv.Atoi(bookIDStr)
+	if err != nil {
+		http.Error(w, `{"status": "error", "message": "Invalid book ID"}`, http.StatusBadRequest)
+		return
+	}
 
-    // Call the removeBook function
-    err = removeBook(db, bookID)
-    if err != nil {
-        http.Error(w, `{"status": "error", "message": "Failed to remove book"}`, http.StatusInternalServerError)
-        return
-    }
+	// Call the removeBook function
+	err = removeBook(db, bookID)
+	if err != nil {
+		http.Error(w, `{"status": "error", "message": "Failed to remove book"}`, http.StatusInternalServerError)
+		return
+	}
 
-    // Return success response
-    w.WriteHeader(http.StatusOK)
-    fmt.Fprintf(w, `{"status": "success", "message": "Book removed successfully"}`)
+	// Return success response
+	w.WriteHeader(http.StatusOK)
+	fmt.Fprintf(w, `{"status": "success", "message": "Book removed successfully"}`)
 }
 func viewUsersHandler(w http.ResponseWriter, r *http.Request) {
-    // Call the getUsers function
-    users, err := getUsers(db)
-    if err != nil {
-        http.Error(w, `{"status": "error", "message": "Failed to retrieve users"}`, http.StatusInternalServerError)
-        return
-    }
+	// Call the getUsers function
+	users, err := getUsers(db)
+	if err != nil {
+		http.Error(w, `{"status": "error", "message": "Failed to retrieve users"}`, http.StatusInternalServerError)
+		return
+	}
 
-    // Return the users as JSON response
-    w.Header().Set("Content-Type", "application/json")
-    json.NewEncoder(w).Encode(users)
+	// Return the users as JSON response
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(users)
 }
 func viewAvailableBooksHandler(w http.ResponseWriter, r *http.Request) {
-    // Call the displayAvailableBooks function
-    books, err := displayAvailableBooks(db)
-    if err != nil {
-        http.Error(w, `{"status": "error", "message": "Failed to retrieve books"}`, http.StatusInternalServerError)
-        return
-    }
+	// Call the displayAvailableBooks function
+	books, err := displayAvailableBooks(db)
+	if err != nil {
+		http.Error(w, `{"status": "error", "message": "Failed to retrieve books"}`, http.StatusInternalServerError)
+		return
+	}
 
-    // Return the books as JSON response
-    w.Header().Set("Content-Type", "application/json")
-    json.NewEncoder(w).Encode(books)
+	// Return the books as JSON response
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(books)
 }
