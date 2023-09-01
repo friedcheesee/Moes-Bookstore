@@ -1401,3 +1401,16 @@ created by net/http.(*Server).Serve in goroutine 1
 2023/09/01 17:21:35 Error adding book: pq: duplicate key value violates unique constraint "books_book_name_author_key"
 2023/09/01 17:24:29 Book removed successfully
 2023/09/01 17:53:19 Wrong password crypto/bcrypt: hashedPassword is not the hash of the given password
+2023/09/01 21:43:17 Connected to database
+2023/09/01 21:43:21 User logged in successfully
+2023/09/01 21:43:21 logged in - handler
+2023/09/01 21:43:26 Books retrieved successfully
+2023/09/01 21:43:26 searched books - handler
+2023/09/01 21:43:30 Owned books retrieved successfully
+2023/09/01 21:43:30 viewed owned books - handler
+2023/09/01 21:43:36 logged out - handler
+2023/09/01 21:49:36 Connected to database
+2023/09/01 21:49:39 User logged in successfully
+2023/09/01 21:49:39 logged in - handler
+2023/09/01 21:49:42 logged out - handler
+2023/09/01 22:38:49 Connected to database

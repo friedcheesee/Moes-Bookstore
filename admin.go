@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	//"moe/middleware" //middleware
 )
 
 // function for admins to remove a book from available books
@@ -14,7 +15,7 @@ func removeBook(db *sql.DB, bookID int) error {
 		log.Println("Error removing book:", err)
 		return err
 	}
-	logEvent("(admin) Book removed successfully")
+	LogEvent("(admin) Book removed successfully")
 	return nil
 }
 
@@ -28,7 +29,7 @@ func addBook(db *sql.DB, bookName, author, genre string, cost float64) error {
 		log.Println("Error adding book:", err)
 		return err
 	}
-	logEvent("(admin) Book added successfully")
+	LogEvent("(admin) Book added successfully")
 	return nil
 }
 
@@ -85,6 +86,6 @@ func displayAvailableBooks(db *sql.DB) ([]Book, error) {
 
 		books = append(books, book)
 	}
-	logEvent("(admin) Available books retrieved successfully")
+	LogEvent("(admin) Available books retrieved successfully")
 	return books, nil
 }

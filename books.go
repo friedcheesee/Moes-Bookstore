@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	//"moe/login"
 )
 
 // codes returned by this function, to debug/show status of cart addition
@@ -40,7 +41,7 @@ func addToCart(db *sql.DB, uid, bookid int) (int, error) {
 		log.Println("Error adding book to cart:", err)
 		return 2, err
 	}
-	logEvent("Book added to cart successfully")
+	LogEvent("Book added to cart successfully")
 	fmt.Println("Book added to cart successfully")
 	return 0, nil
 }
@@ -91,7 +92,7 @@ func buyBooks(db *sql.DB, uid int) (int, error, []Book) {
 		}
 		if isBought {
 			fmt.Printf("Book %d is already bought, please remove it from the cart to buy other books\n", bookID)
-			logEvent("Book already bought "+bookName)
+			LogEvent("Book already bought "+bookName)
 			return 1, nil, nil
 		}
 
@@ -116,7 +117,7 @@ func buyBooks(db *sql.DB, uid int) (int, error, []Book) {
 		log.Println("Error during transaction: ", err)
 		return 1, err, nil
 	}
-	logEvent("Books bought successfully, if present in cart")
+	LogEvent("Books bought successfully, if present in cart")
 	fmt.Println("Books bought successfully, if present in cart")
 	return 0, nil, recc
 }
@@ -128,7 +129,7 @@ func deleteFromCart(db *sql.DB, uid, bookid int) {
 		log.Println("Error deleting book from cart:", err)
 		panic(err)
 	}
-	logEvent("Book deleted from cart successfully, if present")
+	LogEvent("Book deleted from cart successfully, if present")
 	fmt.Println("Book deleted from cart successfully, if present")
 }
 
@@ -152,7 +153,7 @@ func viewOwnedBooks(db *sql.DB, uid int) ([]Book, error) {
 		}
 		ownedBooks = append(ownedBooks, book)
 	}
-	logEvent("Owned books retrieved successfully")
+	LogEvent("Owned books retrieved successfully")
 	return ownedBooks, nil
 }
 
@@ -166,7 +167,7 @@ func giveReview(db *sql.DB, uid, bookID int, review string) (int, error) {
 	err := db.QueryRow("SELECT reviewid FROM reviews WHERE uid = $1 AND bookid = $2", uid, bookID).Scan(&existingReview)
 	if err == nil {
 		fmt.Println("A review by the same user for the same book already exists")
-		logEvent("A review by the same user for the same book already exists")
+		LogEvent("A review by the same user for the same book already exists")
 		return 1, nil
 	} else if err != sql.ErrNoRows {
 		log.Println("Error checking for existing review:", err)
@@ -179,7 +180,7 @@ func giveReview(db *sql.DB, uid, bookID int, review string) (int, error) {
 		log.Println("Error giving review:", err)
 		return 1, err
 	}
-	logEvent("Review added successfully")
+	LogEvent("Review added successfully")
 	fmt.Println("Review added successfully")
 	return 0, nil
 }
@@ -190,7 +191,7 @@ func searchBooks(db *sql.DB, query, genre, author string) ([]Book, error) {
 	rows, err := db.Query("SELECT bookid, book_name, author, genre, cost FROM books WHERE book_name ILIKE $1 AND genre ILIKE $2 AND author ILIKE $3",
 		"%"+query+"%", "%"+genre+"%", "%"+author+"%")
 	if err != nil {
-		CheckError(err)
+		log.Println("Error searching books:", err)
 		return nil, err
 	}
 	defer rows.Close()
@@ -206,7 +207,7 @@ func searchBooks(db *sql.DB, query, genre, author string) ([]Book, error) {
 		book.DownloadURL="buy the book to access URL"
 		books = append(books, book)
 	}
-	logEvent("Books retrieved successfully")
+	LogEvent("Books retrieved successfully")
 	return books, nil
 }
 
@@ -228,7 +229,7 @@ func viewCart(db *sql.DB, uid int) ([]CartItem, error) {
 		}
 		cartItems = append(cartItems, item)
 	}
-	logEvent("Cart items retrieved successfully")
+	LogEvent("Cart items retrieved successfully")
 	return cartItems, nil
 }
 
@@ -252,6 +253,6 @@ func getBooksByGenreOrAuthor(db *sql.DB, genre, author string) ([]Book, error) {
 		}
 		books = append(books, book)
 	}
-	logEvent("Recommendations fetched successfully")
+	LogEvent("Recommendations fetched successfully")
 	return books, nil
 }

@@ -5,9 +5,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-
-	//"github.com/gorilla/sessions"
-	//"time"
 	"context"
 	"database/sql"
 	"strconv"
@@ -16,8 +13,10 @@ import (
 	_ "github.com/lib/pq"
 )
 
+
+
 // Middleware to check if the user is an admin
-func checkUserAdminStatus(db *sql.DB, uid int) (bool, error) {
+func CheckUserAdminStatus(db *sql.DB, uid int) (bool, error) {
 	var isAdmin bool
 	err := db.QueryRow("SELECT admin FROM users WHERE uid = $1", uid).Scan(&isAdmin)
 	if err != nil {
@@ -31,7 +30,7 @@ func checkUserAdminStatus(db *sql.DB, uid int) (bool, error) {
 }
 
 // middleware handler to check if the user is logged in
-func authenticate(next http.Handler) http.Handler {
+func Authenticate(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// Get the user's UID from the session cookie
 		session, _ := store.Get(r, "session-name")
@@ -49,7 +48,7 @@ func authenticate(next http.Handler) http.Handler {
 }
 
 // handler to aid in login
-func loginHandler(w http.ResponseWriter, r *http.Request) {
+func LoginHandler(w http.ResponseWriter, r *http.Request) {
 
 	//Parsing input parameters from the request (username and password)
 	email := r.FormValue("email")
@@ -65,7 +64,7 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 	isLoggedIn, err, code := logindb(db, email, password)
 	if err != nil {
 		// Set custom HTTP status and error message based on the error code
-		httpStatus, errorMessage := getErrorDetails(code)
+		httpStatus, errorMessage := GetErrorDetails(code)
 		http.Error(w, `{"status": "error", "message": "`+errorMessage+`"}`, httpStatus)
 		return
 	}
@@ -85,11 +84,11 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusUnauthorized)
 		fmt.Fprintf(w, `{"status": "error", "message": "`+errorMessage+`"}`)
 	}
-	logEvent("logged in - handler")
+	LogEvent("logged in - handler")
 }
 
 // Utility function to get custom HTTP status and error message based on code - used for login handler
-func getErrorDetails(code int) (int, string) {
+func GetErrorDetails(code int) (int, string) {
 	switch code {
 	case 1:
 		return http.StatusNotFound, "Email not found"
@@ -103,7 +102,7 @@ func getErrorDetails(code int) (int, string) {
 }
 
 // to register a user, returning appropriate status codes
-func registerUserHandler(w http.ResponseWriter, r *http.Request) {
+func RegisterUserHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
@@ -136,11 +135,11 @@ func registerUserHandler(w http.ResponseWriter, r *http.Request) {
 	} else {
 		fmt.Fprintf(w, `{"status": "success", "message": "User registered successfully: %s"}`, username)
 	}
-	logEvent("registered user - handler")
+	LogEvent("registered user - handler")
 }
 
 // to search for books using query, genre and author
-func searchBooksHandler(w http.ResponseWriter, r *http.Request) {
+func SearchBooksHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Parse query parameters
 	query := r.URL.Query().Get("query")
@@ -164,14 +163,14 @@ func searchBooksHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Set the response content type and write JSON response
-	logEvent("searched books - handler")
+	LogEvent("searched books - handler")
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	w.Write(booksJSON)
 }
 
 // to add to cart, returning appropriate status codes
-func addToCartHandler(w http.ResponseWriter, r *http.Request) {
+func AddToCartHandler(w http.ResponseWriter, r *http.Request) {
 	// Parse input parameters from the request (bookID)
 	bookIDStr := r.FormValue("bookid")
 	bookid, err := strconv.Atoi(bookIDStr)
@@ -200,11 +199,11 @@ func addToCartHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	w.WriteHeader(http.StatusOK)
 	fmt.Fprintf(w, `{"status": "success", "message": "bookid %s added to cart successfully"}`, bookIDStr)
-	logEvent("added to cart - handler")
+	LogEvent("added to cart - handler")
 }
 
 // to view owned books
-func viewOwnedBooksHandler(w http.ResponseWriter, r *http.Request) {
+func ViewOwnedBooksHandler(w http.ResponseWriter, r *http.Request) {
 	// Check if the user is authenticated
 	UID := r.Context().Value("uid").(int)
 	if UID == 0 {
@@ -223,7 +222,7 @@ func viewOwnedBooksHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, `{"status": "error", "message": "Failed to format response"}`, http.StatusInternalServerError)
 		return
 	}
-	logEvent("viewed owned books - handler")
+	LogEvent("viewed owned books - handler")
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	w.Write(responseJSON)
@@ -231,7 +230,7 @@ func viewOwnedBooksHandler(w http.ResponseWriter, r *http.Request) {
 
 // to view reviews, and return appropriate status codes
 // codes 1 for review already exists, 2 for internal error
-func giveReviewHandler(w http.ResponseWriter, r *http.Request) {
+func GiveReviewHandler(w http.ResponseWriter, r *http.Request) {
 	// Check if the user is authenticated
 	UID := r.Context().Value("uid").(int)
 	if UID == 0 {
@@ -263,11 +262,11 @@ func giveReviewHandler(w http.ResponseWriter, r *http.Request) {
 	// Return success response
 	w.WriteHeader(http.StatusOK)
 	fmt.Fprintf(w, `{"status": "success", "message": "Review added successfully"}`)
-	logEvent("gave review - handler")
+	LogEvent("gave review - handler")
 }
 
 // handler to delete bookid from cart
-func deleteFromCartHandler(w http.ResponseWriter, r *http.Request) {
+func DeleteFromCartHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Check if the user is authenticated
 	UID := r.Context().Value("uid").(int)
@@ -292,12 +291,12 @@ func deleteFromCartHandler(w http.ResponseWriter, r *http.Request) {
 	// Return success response
 	w.WriteHeader(http.StatusOK)
 	fmt.Fprintf(w, `{"status": "success", "message": "Book deleted from cart successfully. if present"}`)
-	logEvent("deleted from cart - handler")
+	LogEvent("deleted from cart - handler")
 }
 
 // handler to buy books
 // codes 1 for conflicting books, 2 for internal error
-func buyBooksHandler(w http.ResponseWriter, r *http.Request) {
+func BuyBooksHandler(w http.ResponseWriter, r *http.Request) {
 	// Check if the user is authenticated
 	UID := r.Context().Value("uid").(int)
 	if UID == 0 {
@@ -334,12 +333,12 @@ func buyBooksHandler(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte(response))
-		logEvent("bought books - handler")
+		LogEvent("bought books - handler")
 	}
 }
 
 // middle ware handler to view cart
-func viewCartHandler(w http.ResponseWriter, r *http.Request) {
+func ViewCartHandler(w http.ResponseWriter, r *http.Request) {
 	// Get the user's UID from the global variable or session
 	uid := r.Context().Value("uid").(int)
 
@@ -356,11 +355,11 @@ func viewCartHandler(w http.ResponseWriter, r *http.Request) {
 		cartItems = []CartItem{} //return empty struct if cart is empty
 	}
 	json.NewEncoder(w).Encode(cartItems)
-	logEvent("viewed cart - handler")
+	LogEvent("viewed cart - handler")
 }
 
 // middleware handler to delete account
-func deleteHandler(w http.ResponseWriter, r *http.Request) {
+func DeleteHandler(w http.ResponseWriter, r *http.Request) {
 	// Parse input parameters from the request (email and password)
 	email := r.FormValue("email")
 	password := r.FormValue("password")
@@ -369,11 +368,11 @@ func deleteHandler(w http.ResponseWriter, r *http.Request) {
 	// Return success response
 	w.WriteHeader(http.StatusOK)
 	fmt.Fprintln(w, `{"status": "success", "message": "Account deactivated successfully"}`)
-	logEvent("deleted account - handler")
+	LogEvent("deleted account - handler")
 }
 
 // middleware handler to logout
-func logoutHandler(w http.ResponseWriter, r *http.Request) {
+func LogoutHandler(w http.ResponseWriter, r *http.Request) {
 	session, _ := store.Get(r, "session-name")
 	session.Values["uid"] = nil//deletes session linked to uid
 	session.Save(r, w)
@@ -381,11 +380,11 @@ func logoutHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	fmt.Fprintf(w, `{"status": "success", "message": "Logout successful"}`)
 
-	logEvent("logged out - handler")
+	LogEvent("logged out - handler")
 }
 
 // middleware handler to check if account is active(not deleted)
-func checkActiveAccount(next http.HandlerFunc) http.HandlerFunc {
+func CheckActiveAccount(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		email := r.FormValue("email")
 		password := r.FormValue("password")
@@ -409,7 +408,7 @@ func checkActiveAccount(next http.HandlerFunc) http.HandlerFunc {
 }
 
 //to check if the user is admin
-func isAdmin(next http.Handler) http.Handler {
+func IsAdmin(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// Get the user's UID from the session or wherever it's stored
 		session, _ := store.Get(r, "session-name")
@@ -420,7 +419,7 @@ func isAdmin(next http.Handler) http.Handler {
 		}
 
 		// Query the database to check if the user with the given UID is an admin
-		isAdmin, err := checkUserAdminStatus(db, uid)
+		isAdmin, err := CheckUserAdminStatus(db, uid)
 		if err != nil {
 			http.Error(w, `{"status": "error", "message": "Error checking admin status"}`, http.StatusInternalServerError)
 			return
@@ -437,7 +436,7 @@ func isAdmin(next http.Handler) http.Handler {
 }
 
 //to add books for admins
-func addBookHandler(w http.ResponseWriter, r *http.Request) {
+func AddBookHandler(w http.ResponseWriter, r *http.Request) {
 	// Parse input parameters from the request (bookName, author, genre, cost, stock)
 	bookName := r.FormValue("bookName")
 	author := r.FormValue("author")
@@ -460,11 +459,11 @@ func addBookHandler(w http.ResponseWriter, r *http.Request) {
 	// Return success response
 	w.WriteHeader(http.StatusOK)
 	fmt.Fprintf(w, `{"status": "success", "message": "Book added successfully"}`)
-    logEvent("added book - handler")
+    LogEvent("added book - handler")
 }
 
 //to remove books for admins
-func removeBookHandler(w http.ResponseWriter, r *http.Request) {
+func RemoveBookHandler(w http.ResponseWriter, r *http.Request) {
 	// Parse input parameters from the request (bookID)
 	bookIDStr := r.FormValue("bookID")
 
@@ -485,11 +484,11 @@ func removeBookHandler(w http.ResponseWriter, r *http.Request) {
 	// Return success response
 	w.WriteHeader(http.StatusOK)
 	fmt.Fprintf(w, `{"status": "success", "message": "Book removed successfully"}`)
-    logEvent("removed book - handler")
+    LogEvent("removed book - handler")
 }
 
 //to view users for admins
-func viewUsersHandler(w http.ResponseWriter, r *http.Request) {
+func ViewUsersHandler(w http.ResponseWriter, r *http.Request) {
 	// Call the getUsers function
 	users, err := getUsers(db)
 	if err != nil {
@@ -500,11 +499,11 @@ func viewUsersHandler(w http.ResponseWriter, r *http.Request) {
 	// Return the users as JSON response
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(users)
-    logEvent("viewed users - handler")
+    LogEvent("viewed users - handler")
 }
 
 //to view all available books 
-func viewAvailableBooksHandler(w http.ResponseWriter, r *http.Request) {
+func ViewAvailableBooksHandler(w http.ResponseWriter, r *http.Request) {
 	// Call the displayAvailableBooks function
 	books, err := displayAvailableBooks(db)
 	if err != nil {
@@ -515,5 +514,5 @@ func viewAvailableBooksHandler(w http.ResponseWriter, r *http.Request) {
 	// Return the books as JSON response
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(books)
-    logEvent("viewed available books - handler")
+    LogEvent("viewed available books - handler")
 }

@@ -1,18 +1,29 @@
 package main
-
 import (
 	"database/sql"
 	"fmt"
 	"log"
 	"os"
 	"regexp"
-
 	_ "github.com/lib/pq"        // PostgreSQL driver
 	"golang.org/x/crypto/bcrypt" // For encrypting and decrypting passwords
 )
 
+// logs errors
+func CheckError(err error) { // to log errors where ever necessary
+	if err != nil {
+		log.Println("Error:", err)
+		//panic(err)
+	}
+}
+// to log events
+func LogEvent(message string) {
+	// Log the message
+	log.Println(message)
+}
+
 //global database connection
-func adminconnect() *sql.DB {
+func Adminconnect() *sql.DB {
 
 	// Access environment variables
 	host := os.Getenv("DB_HOST")
@@ -30,7 +41,7 @@ func adminconnect() *sql.DB {
 	err = db.Ping()
 	CheckError(err)
 	fmt.Println("Connected!")
-	logEvent("Connected to database")
+	LogEvent("Connected to database")
 	return db
 }
 
@@ -63,20 +74,20 @@ func getID(db *sql.DB, email string) int {
 // 2 - wrong password
 func logindb(db *sql.DB, email string, password string) (bool, error, int) {
 	if !userExists(db, email) {
-		logEvent("User not found")
+		LogEvent("User not found")
 		return false, nil, 1 // User not found
 	}
 	isAuthenticated, err := authenticateUser(db, email, password)
 	if err != nil {
 		CheckError(err)
-		logEvent("Authentication error")
+		LogEvent("Authentication error")
 		return false, err, 2 // Authentication error
 	}
 	if !isAuthenticated {
-		logEvent("Incorrect password")
+		LogEvent("Incorrect password")
 		return false, nil, 3 // Incorrect password
 	}
-	logEvent("User logged in successfully")
+	LogEvent("User logged in successfully")
 	return true, nil, 0 // Success
 }
 
@@ -103,17 +114,17 @@ func reguser(db *sql.DB, email, password, username string) (int, error) {
 	hashedPassword, err := hashPassword(password)
 	if userExists(db, email) {
 		fmt.Println("User already exists.")
-		logEvent("User already exists")
+		LogEvent("User already exists")
 		return 1, nil
 	}
 	if err != nil {
 		CheckError(err)
-		logEvent("Error hashing password")
+		LogEvent("Error hashing password")
 		fmt.Println("Error hashing password")
 		return 2, err
 	}
 	if !validateEmail(email) {
-		logEvent("Invalid email")
+		LogEvent("Invalid email")
 		fmt.Println("Invalid email")
 		return 2, nil
 	}
@@ -125,7 +136,7 @@ func reguser(db *sql.DB, email, password, username string) (int, error) {
 func storeCredentials(db *sql.DB, username string, hashedPassword string, email string) {
 	_, err := db.Exec("INSERT INTO users (username, password, email) VALUES ($1, $2, $3)", username, hashedPassword, email)
 	CheckError(err)
-	logEvent("User registered successfully")
+	LogEvent("User registered successfully")
 	fmt.Println("User registered successfully")
 }
 

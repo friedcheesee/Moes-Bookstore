@@ -1,10 +1,12 @@
 package main
 
 import (
-	//"fmt"
 	"database/sql"
 	"log"
-	"net/http"
+	//"moe/middleware" //middleware
+	
+//"moe/login"
+"net/http"
 	"os"
 	"github.com/go-chi/chi"
 	"github.com/gorilla/sessions"
@@ -12,6 +14,7 @@ import (
 	_ "github.com/lib/pq"
 )
 
+// load variables from .env file
 func loadEnv() {
 	if err := godotenv.Load(); err != nil {
 		log.Fatalf("Error loading .env file: %v", err)
@@ -25,66 +28,55 @@ var logFile *os.File
 // initialising cookie store, to allow multiple users to be connected to the database
 var store *sessions.CookieStore
 
-
-
 func main() {
 	loadEnv()         //load variables from env to login to db
 	initCookieStore() //initialise cookie store
+
 	//initialising log file
 	logFile = initiatelog()
 	defer logFile.Close()
 
 	//connecting to database
-	db = adminconnect()
+	db = Adminconnect()
 	defer db.Close()
 
 	//using chi router to handle requests
 	r := chi.NewRouter()
-	r.Post("/login", checkActiveAccount(loginHandler)) //if account isnt deleted, lets you login
-	r.Post("/reguser", registerUserHandler)
+	r.Post("/login", CheckActiveAccount(LoginHandler)) //if account isnt deleted, lets you login
+	r.Post("/reguser", RegisterUserHandler)
+
 	//user is a 'subrouter'- every request to /user will undergo the authenticate middleware
 	r.Route("/user", func(r chi.Router) {
-		r.Use(authenticate)
-		r.Get("/search", searchBooksHandler)
-		r.Post("/cart/add", addToCartHandler)
-		r.Post("/cart/delete", deleteFromCartHandler)
-		r.Post("/cart/buy", buyBooksHandler)
-		r.Post("/cart/view", viewCartHandler)
-		r.Post("/inventory", viewOwnedBooksHandler)
-		r.Post("/review", giveReviewHandler)
-		r.Post("/delete", deleteHandler)
-		r.Post("/logout", logoutHandler)
+		r.Use(Authenticate)
+		r.Get("/search", SearchBooksHandler)
+		r.Post("/cart/add", AddToCartHandler)
+		r.Post("/cart/delete", DeleteFromCartHandler)
+		r.Post("/cart/buy", BuyBooksHandler)
+		r.Post("/cart/view", ViewCartHandler)
+		r.Post("/inventory", ViewOwnedBooksHandler)
+		r.Post("/review", GiveReviewHandler)
+		r.Post("/delete", DeleteHandler)
+		r.Post("/logout", LogoutHandler)
 	})
-
-
 
 	//admin is a 'subrouter'- every request to /admin will undergo the isAdmin middleware
 	r.Route("/admin", func(r chi.Router) {
-		r.Use(isAdmin)
-		r.Post("/add", addBookHandler)
-		r.Post("/delete", removeBookHandler)
-		r.Post("/view", viewUsersHandler)
-		r.Post("/view/books", viewAvailableBooksHandler)
+		r.Use(IsAdmin)
+		r.Post("/add", AddBookHandler)
+		r.Post("/delete", RemoveBookHandler)
+		r.Post("/view", ViewUsersHandler)
+		r.Post("/view/books", ViewAvailableBooksHandler)
 	})
 	http.ListenAndServe("localhost:8080", r)
 }
-// to log events
-func logEvent(message string) {
-	// Log the message
-	log.Println(message)
-}
 
-// logs errors
-func CheckError(err error) { // to log errors where ever necessary
-	if err != nil {
-		log.Println("Error:", err)
-		//panic(err)
-	}
-}
+
+
+
 
 // opens the log file
 func initiatelog() *os.File {
-	logFile, err := os.OpenFile("error.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666) //create a log file, if already exists, appends to the file.
+	logFile, err := os.OpenFile("app.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666) //create a log file, if already exists, appends to the file.
 	if err != nil {
 		log.Fatalln("Failed to open error log file:", err)
 	}
