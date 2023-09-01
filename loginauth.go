@@ -53,7 +53,7 @@ func logindb(db *sql.DB, email string, password string) (bool, error, int) {
 	}
 	isAuthenticated, err := authenticateUser(db, email, password)
 	if err != nil {
-		fmt.Println("wring pw",err)
+		fmt.Println("auth error",err)
 		return false, err, 2 // Authentication error
 	}
 	if !isAuthenticated {
@@ -125,9 +125,9 @@ func validateEmail(email string) bool {
 }
 
 
-func isAccountActive(db *sql.DB, email, password string) bool {
+func isAccountActive(db *sql.DB, email string) bool {
     var active bool
-    err := db.QueryRow("SELECT active FROM users WHERE email = $1 AND password = $2", email, password).Scan(&active)
+    err := db.QueryRow("SELECT active FROM users WHERE email = $1 ", email).Scan(&active)
     if err != nil {
         return false
     }

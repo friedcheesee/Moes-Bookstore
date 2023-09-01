@@ -296,21 +296,11 @@ func deactivateHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	fmt.Fprintln(w, `{"status": "success", "message": "Account deactivated successfully"}`)
 }
-func reactivateHandler(w http.ResponseWriter, r *http.Request) {
-	// Parse input parameters from the request (email and password)
-	email := r.FormValue("email")
-	password := r.FormValue("password")
-	reactivate(db, email, password)
-	// Return a success response
-	w.WriteHeader(http.StatusOK)
-	fmt.Fprintln(w, `{"status": "success", "message": "Account reactivated successfully"}`)
-}
+
 func authenticateActive(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-
 		email := r.Header.Get("email")
-		password := r.Header.Get("password")
-		isActive := isAccountActive(db, email, password)
+		isActive := isAccountActive(db, email)
 		if !isActive {
 			http.Error(w, `{"status": "error", "message": "Account is not active. Please reactivate your account"}`, http.StatusUnauthorized)
 			return
@@ -326,4 +316,27 @@ func logoutHandler(w http.ResponseWriter, r *http.Request) {
     w.WriteHeader(http.StatusOK)
     fmt.Fprintf(w, `{"status": "success", "message": "Logout successful"}`)
     // ... return response
+}
+
+func checkActiveAccount(next http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		email := r.FormValue("email")
+		password := r.FormValue("password")
+
+		// Authenticate the user
+		isAuthenticated, err := authenticateUser(db, email, password)
+		if err != nil || !isAuthenticated {
+			http.Error(w, `{"status": "error", "message": "Invalid credentials"}`, http.StatusUnauthorized)
+			return
+		}
+
+		// Check if the account is active
+		isActive := isAccountActive(db, email)
+		if !isActive {
+			http.Error(w, `{"status": "error", "message": "Account has been deleted, please sign up with another email"}`, http.StatusUnauthorized)
+			return
+		}
+		// User is authenticated and account is active, call the next handler
+		next.ServeHTTP(w, r)
+	}
 }

@@ -41,8 +41,7 @@ func main() {
 	logFile := initiatelog()
 	defer logFile.Close()
 	r := chi.NewRouter()
-	// Define the login route
-	r.Post("/login", loginHandler)
+	r.Post("/login", checkActiveAccount(loginHandler))
 	r.Post("/reguser", registerUserHandler)
 	r.Get("/search", searchBooksHandler)
 	r.Post("/cart/add", authenticate(addToCartHandler))
@@ -51,9 +50,13 @@ func main() {
 	r.Post("/cart/view", authenticate(viewCartHandler))
 	r.Post("/inventory", authenticate(viewOwnedBooksHandler))
 	r.Post("/review", authenticate(giveReviewHandler))
-	r.Post("/deactivate", authenticate(deactivateHandler))
-	r.Post("/reactivate", authenticate(reactivateHandler))
+	r.Post("/delete", authenticate(deactivateHandler))
 	r.Post("/logout", authenticate(logoutHandler))
+
+	//r.Post("/available", authenticate(displayAvailableBooksHandler))
+	//r.Post("/reviews", authenticate(displayBookReviewsHandler))
+	
+
 
 	
 
