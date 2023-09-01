@@ -1423,3 +1423,15 @@ created by net/http.(*Server).Serve in goroutine 1
 2023/09/02 00:34:47 User logged in successfully
 2023/09/02 00:34:47 logged in - handler
 2023/09/02 00:34:54 logged out - handler
+2023/09/02 01:21:41 Connected to database
+2023/09/02 01:21:48 User logged in successfully
+2023/09/02 01:21:48 logged in - handler
+2023/09/02 01:21:51 Owned books retrieved successfully
+2023/09/02 01:21:51 viewed owned books - handler
+2023/09/02 01:22:01 Book added to cart successfully
+2023/09/02 01:22:01 added to cart - handler
+2023/09/02 01:22:04 Recommendations fetched successfully
+2023/09/02 01:22:04 Books bought successfully, if present in cart
+2023/09/02 01:22:11 Owned books retrieved successfully
+2023/09/02 01:22:11 viewed owned books - handler
+2023/09/02 01:22:20 logged out - handler
