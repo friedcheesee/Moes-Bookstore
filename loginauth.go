@@ -125,6 +125,7 @@ func reguser(db *sql.DB, email, password, username string) (int, error) {
 func storeCredentials(db *sql.DB, username string, hashedPassword string, email string) {
 	_, err := db.Exec("INSERT INTO users (username, password, email) VALUES ($1, $2, $3)", username, hashedPassword, email)
 	CheckError(err)
+	logEvent("User registered successfully")
 	fmt.Println("User registered successfully")
 }
 

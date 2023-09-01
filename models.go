@@ -14,6 +14,7 @@ type Book struct {
 	Author string  `json:"author"`
 	Genre  string  `json:"genre"`
 	Cost   float64 `json:"cost"`
+	DownloadURL string  `json:"download_url"`
 }
 type CartItem struct {
     BookID   int     `json:"bookid"`
