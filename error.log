@@ -11,3 +11,12 @@
 2023/09/01 20:27:20 Book added to cart successfully
 2023/09/01 20:27:24 Book already boughtjbalbeck9
 2023/09/01 20:27:24 Book jbalbeck9 is already bought
+2023/09/01 21:07:32 Connected to database
+2023/09/01 21:07:36 User logged in successfully
+2023/09/01 21:07:36 logged in - handler
+2023/09/01 21:07:47 Book deleted from cart successfully, if present
+2023/09/01 21:07:47 deleted from cart - handler
+2023/09/01 21:07:53 Book added to cart successfully
+2023/09/01 21:07:53 added to cart - handler
+2023/09/01 21:07:57 Recommendations fetched successfully
+2023/09/01 21:07:57 Book already bought jbalbeck9

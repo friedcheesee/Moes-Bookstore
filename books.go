@@ -184,27 +184,6 @@ func giveReview(db *sql.DB, uid, bookID int, review string) (int, error) {
 	return 0, nil
 }
 
-// to display reviewd for a book - not used yet.
-// func displayBookReviews(db *sql.DB, bookID int) error {
-// 	rows, err := db.Query("SELECT review FROM reviews WHERE bookid = $1", bookID)
-// 	if err != nil {
-// 		log.Println("Error retrieving reviews:", err)
-// 		return err
-// 	}
-// 	defer rows.Close()
-
-
-// 	for rows.Next() {
-// 		var review string
-// 		if err := rows.Scan(&review); err != nil {
-// 			log.Println("Error retrieving reviews:", err)
-// 			return err
-// 		}
-// 		fmt.Println(review)
-// 	}
-// 	return nil
-// }
-
 // to search a book based on query(bookname), genre and author
 func searchBooks(db *sql.DB, query, genre, author string) ([]Book, error) {
 	//query to search books
@@ -249,8 +228,10 @@ func viewCart(db *sql.DB, uid int) ([]CartItem, error) {
 		}
 		cartItems = append(cartItems, item)
 	}
+	logEvent("Cart items retrieved successfully")
 	return cartItems, nil
 }
+
 //reccomendation system, selects relevant book based on recent purchase
 func getBooksByGenreOrAuthor(db *sql.DB, genre, author string) ([]Book, error) {
 	// Query the database to select books that match the genre or author
@@ -271,5 +252,6 @@ func getBooksByGenreOrAuthor(db *sql.DB, genre, author string) ([]Book, error) {
 		}
 		books = append(books, book)
 	}
+	logEvent("Recommendations fetched successfully")
 	return books, nil
 }

@@ -3,22 +3,22 @@ package main
 import (
 	"database/sql"
 	"fmt"
-	//"fmt"
 	"log"
-
-	_ "github.com/lib/pq"
 )
 
+// function for admins to remove a book from available books
 func removeBook(db *sql.DB, bookID int) error {
+	// query to delete book based on bookid
 	_, err := db.Exec("DELETE FROM books WHERE bookid = $1", bookID)
 	if err != nil {
 		log.Println("Error removing book:", err)
 		return err
 	}
-	log.Println("Book removed successfully")
+	logEvent("(admin) Book removed successfully")
 	return nil
 }
 
+// function for admins to add a book to available books
 func addBook(db *sql.DB, bookName, author, genre string, cost float64) error {
 	fmt.Println("Adding book")
 	fmt.Println(bookName, author, genre, cost)
@@ -28,11 +28,14 @@ func addBook(db *sql.DB, bookName, author, genre string, cost float64) error {
 		log.Println("Error adding book:", err)
 		return err
 	}
-	log.Println("Book added successfully")
+	logEvent("(admin) Book added successfully")
 	return nil
 }
+
+// function for admins to view all users
 func getUsers(db *sql.DB) ([]User, error) {
-	// Query the database to select all active users
+
+	// Query the database to select all active users (in other words, accounts which are not deleted yet)
 	rows, err := db.Query("SELECT uid, username, email FROM users WHERE active = true")
 	if err != nil {
 		log.Println("Error retrieving active users:", err)
@@ -40,6 +43,7 @@ func getUsers(db *sql.DB) ([]User, error) {
 	}
 	defer rows.Close()
 
+	// Store the results in an array of User structs
 	var users []User
 	for rows.Next() {
 		var user User
@@ -51,6 +55,8 @@ func getUsers(db *sql.DB) ([]User, error) {
 	}
 	return users, nil
 }
+
+// function for admins to view all available books
 func displayAvailableBooks(db *sql.DB) ([]Book, error) {
 	rows, err := db.Query("SELECT bookid, book_name, author, genre, cost FROM books")
 	if err != nil {
@@ -59,8 +65,8 @@ func displayAvailableBooks(db *sql.DB) ([]Book, error) {
 	}
 	defer rows.Close()
 
+	// Store the results in an array of Book structs
 	var books []Book
-
 	for rows.Next() {
 		var bookID int
 		var bookName, author, genre string
@@ -79,17 +85,6 @@ func displayAvailableBooks(db *sql.DB) ([]Book, error) {
 
 		books = append(books, book)
 	}
+	logEvent("(admin) Available books retrieved successfully")
 	return books, nil
-}
-
-func checkUserAdminStatus(db *sql.DB, uid int) (bool, error) {
-    var isAdmin bool
-    err := db.QueryRow("SELECT admin FROM users WHERE uid = $1", uid).Scan(&isAdmin)
-    if err != nil {
-        if err == sql.ErrNoRows {
-            return false, nil // User not found, assume not an admin
-        }
-        return false, err
-    }
-    return isAdmin, nil
 }

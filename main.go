@@ -6,7 +6,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-
 	"github.com/go-chi/chi"
 	"github.com/gorilla/sessions"
 	"github.com/joho/godotenv"
@@ -26,10 +25,11 @@ var logFile *os.File
 // initialising cookie store, to allow multiple users to be connected to the database
 var store *sessions.CookieStore
 
+
+
 func main() {
 	loadEnv()         //load variables from env to login to db
 	initCookieStore() //initialise cookie store
-
 	//initialising log file
 	logFile = initiatelog()
 	defer logFile.Close()
@@ -52,9 +52,11 @@ func main() {
 		r.Post("/cart/view", viewCartHandler)
 		r.Post("/inventory", viewOwnedBooksHandler)
 		r.Post("/review", giveReviewHandler)
-		r.Post("/delete", deactivateHandler)
+		r.Post("/delete", deleteHandler)
 		r.Post("/logout", logoutHandler)
 	})
+
+
 
 	//admin is a 'subrouter'- every request to /admin will undergo the isAdmin middleware
 	r.Route("/admin", func(r chi.Router) {
@@ -66,7 +68,6 @@ func main() {
 	})
 	http.ListenAndServe("localhost:8080", r)
 }
-
 // to log events
 func logEvent(message string) {
 	// Log the message
