@@ -53,3 +53,26 @@
 2023/09/02 15:06:55 Connected to database
 2023/09/02 15:06:56 got pinged - handler
 2023/09/02 15:06:59 got pinged - handler
+2023/09/02 18:12:39 Connected to database
+2023/09/02 18:12:52 Connected to database
+2023/09/02 18:13:51 Connected to database
+2023/09/02 18:14:19 Error searching books: dial tcp: lookup db: no such host
+2023/09/02 18:14:19 Error searching for books: dial tcp: lookup db: no such host
+2023/09/02 18:14:23 Error searching books: dial tcp: lookup db: no such host
+2023/09/02 18:14:23 Error searching for books: dial tcp: lookup db: no such host
+2023/09/02 18:14:35 Error: dial tcp: lookup db: no such host
+2023/09/02 18:14:35 Wrong password crypto/bcrypt: hashedSecret too short to be a bcrypted password
+2023/09/02 18:20:32 Connected to database
+2023/09/02 18:20:32 Connected to database
+2023/09/02 18:20:40 User logged in successfully
+2023/09/02 18:20:40 logged in - handler
+2023/09/02 18:40:28 User logged in successfully
+2023/09/02 18:40:28 logged in - handler
+2023/09/02 18:40:29 User logged in successfully
+2023/09/02 18:40:29 logged in - handler
+2023/09/02 18:40:32 Book added to cart successfully
+2023/09/02 18:40:32 added to cart - handler
+2023/09/02 18:45:53 Connected to database
+2023/09/02 18:45:53 Connected to database
+2023/09/02 18:48:12 Connected to database
+2023/09/02 18:48:12 Connected to database
