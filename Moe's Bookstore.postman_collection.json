@@ -92,19 +92,19 @@
 					"urlencoded": [
 						{
 							"key": "query",
-							"value": "",
+							"value": "Sample",
 							"type": "text",
 							"disabled": true
 						},
 						{
 							"key": "genre",
-							"value": "",
+							"value": "Fantasy",
 							"type": "text",
 							"disabled": true
 						},
 						{
 							"key": "author",
-							"value": "",
+							"value": "Juthor",
 							"type": "text",
 							"disabled": true
 						}
@@ -356,6 +356,15 @@
 				"method": "POST",
 				"header": [],
 				"url": "http://localhost:8080/admin/view/books"
+			},
+			"response": []
+		},
+		{
+			"name": "Ping golang serve",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": "http://localhost:8080/ping"
 			},
 			"response": []
 		}

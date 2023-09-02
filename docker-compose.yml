@@ -13,7 +13,7 @@ services:
       - postgres-data:/var/lib/postgresql/data
       - ./sql-scripts:/docker-entrypoint-initdb.d  # Mount the SQL scripts directory
 
-  your-app-name:
+  moe: 
     build:
       context: .
     ports:
