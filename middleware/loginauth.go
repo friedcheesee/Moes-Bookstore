@@ -1,18 +1,37 @@
 package ah
+
 import (
 	"database/sql"
 	"fmt"
 	"log"
+	moelog "moe/log"
 	"os"
 	"regexp"
+
 	_ "github.com/lib/pq"        // PostgreSQL driver
 	"golang.org/x/crypto/bcrypt" // For encrypting and decrypting passwords
-	"moe/log"
 )
 
+func Newconnect() *sql.DB {
+	//host := "localhost"
+	port := "5432"
+	user := "postgres"
+	password := "admin"
+	dbname := "moe"
 
+	// Create the PostgreSQL connection URL
+	dbURL := fmt.Sprintf("postgresql://%s:%s@localhost:%s/%s?sslmode=disable", user, password, port, dbname)
 
-//global database connection
+	// Open a connection to the database
+	db, err := sql.Open("postgres", dbURL)
+	if err != nil {
+		fmt.Println("Error connecting to the database:", err)
+		return nil
+	}
+	return db
+}
+
+// global database connection
 func Adminconnect() *sql.DB {
 
 	// Access environment variables
@@ -22,20 +41,24 @@ func Adminconnect() *sql.DB {
 	password := os.Getenv("DB_PASSWORD")
 	dbname := os.Getenv("DB_NAME")
 	psqlconn := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
-	
+
 	// open database
 	db, err := sql.Open("postgres", psqlconn)
 	moelog.CheckError(err)
-	
+
 	// check connection
 	err = db.Ping()
-	moelog.CheckError(err)
-	fmt.Println("Connected!")
-	moelog.LogEvent("Connected to database")
+	if err != nil {
+		fmt.Println("Error: Could not establish a connection with the database")
+		moelog.CheckError(err)
+	} else {
+		fmt.Println("Connected!")
+		moelog.LogEvent("Connected to database")
+	}
 	return db
 }
 
-//function will will convert the password into a hash, which will be stored in the database.
+// function will will convert the password into a hash, which will be stored in the database.
 func hashPassword(password string) (string, error) {
 	hashedBytes, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {
@@ -44,7 +67,7 @@ func hashPassword(password string) (string, error) {
 	return string(hashedBytes), nil
 }
 
-//to fetch ID from database, used only once during login function to set cookies.
+// to fetch ID from database, used only once during login function to set cookies.
 func GetID(db *sql.DB, email string) int {
 	var uid int
 	err := db.QueryRow("SELECT uid FROM users WHERE email = $1", email).Scan(&uid)
@@ -122,7 +145,8 @@ func Reguser(db *sql.DB, email, password, username string) (int, error) {
 	moelog.CheckError(err)
 	return 0, nil
 }
-//to store credentials in db while registering user
+
+// to store credentials in db while registering user
 func storeCredentials(db *sql.DB, username string, hashedPassword string, email string) {
 	_, err := db.Exec("INSERT INTO users (username, password, email) VALUES ($1, $2, $3)", username, hashedPassword, email)
 	moelog.CheckError(err)
@@ -130,7 +154,7 @@ func storeCredentials(db *sql.DB, username string, hashedPassword string, email 
 	fmt.Println("User registered successfully")
 }
 
-//used in reguser and loginuser to check if user exists
+// used in reguser and loginuser to check if user exists
 func userExists(db *sql.DB, email string) bool {
 	var count int
 	row := db.QueryRow("SELECT COUNT(*) FROM users WHERE email = $1", email)
@@ -138,7 +162,7 @@ func userExists(db *sql.DB, email string) bool {
 	return count > 0
 }
 
-//used in reguser to check if email is valid
+// used in reguser to check if email is valid
 func validateEmail(email string) bool {
 	// Regular expression pattern for basic email validation
 	pattern := `^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$`
@@ -150,7 +174,7 @@ func validateEmail(email string) bool {
 	return re.MatchString(email)
 }
 
-//used in handlers to check if user logging in has deleted their account
+// used in handlers to check if user logging in has deleted their account
 func IsAccountActive(db *sql.DB, email string) bool {
 	var active bool
 	err := db.QueryRow("SELECT active FROM users WHERE email = $1 ", email).Scan(&active)
@@ -160,7 +184,7 @@ func IsAccountActive(db *sql.DB, email string) bool {
 	return active
 }
 
-func Delete(db *sql.DB,email string,password string){
+func Delete(db *sql.DB, email string, password string) {
 	AuthenticateUser(db, email, password)
 	_, err := db.Exec("update users set active=false where email=$1", email)
 	moelog.CheckError(err)

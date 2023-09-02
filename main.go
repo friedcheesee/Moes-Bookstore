@@ -13,6 +13,7 @@ import (
 	_ "github.com/lib/pq"
 )
 
+
 // load variables from .env file
 func loadEnv() {
 	if err := godotenv.Load(); err != nil {
@@ -36,14 +37,14 @@ func main() {
 	defer logFile.Close()
 
 	//connecting to database
-	db = ah.Adminconnect()
+	db = ah.Newconnect()
 	defer db.Close()
 
 	//using chi router to handle requests
 	r := chi.NewRouter()
 	r.Post("/login", CheckActiveAccount(LoginHandler)) //if account isnt deleted, lets you login
 	r.Post("/reguser", RegisterUserHandler)
-
+	r.Post("/ping", pingHandler)
 	//user is a 'subrouter'- every request to /user will undergo the authenticate middleware
 	r.Route("/user", func(r chi.Router) {
 		r.Use(Authenticate)
@@ -66,7 +67,7 @@ func main() {
 		r.Post("/view", ViewUsersHandler)
 		r.Post("/view/books", ViewAvailableBooksHandler)
 	})
-	http.ListenAndServe("localhost:8080", r)
+	http.ListenAndServe("0.0.0.0:8080", r)
 }
 
 

@@ -375,6 +375,11 @@ func ViewCartHandler(w http.ResponseWriter, r *http.Request) {
 	moelog.LogEvent("viewed cart - handler")
 }
 
+func pingHandler(w http.ResponseWriter, r *http.Request) {
+    fmt.Fprintf(w, "Pong!")
+	moelog.LogEvent("got pinged - handler")
+}
+
 // middleware handler to delete account
 func DeleteHandler(w http.ResponseWriter, r *http.Request) {
 	// Parse input parameters from the request (email and password)
