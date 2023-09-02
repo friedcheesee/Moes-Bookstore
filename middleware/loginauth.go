@@ -12,30 +12,8 @@ import (
 	"golang.org/x/crypto/bcrypt" // For encrypting and decrypting passwords
 )
 
-func Newconnect() *sql.DB {
-	//host := "localhost"
-	port := "5432"
-	user := "postgres"
-	password := "admin"
-	dbname := "moe"
-
-	// Create the PostgreSQL connection URL
-	dbURL := fmt.Sprintf("postgresql://%s:%s@db:%s/%s?sslmode=disable", user, password, port, dbname)
-
-	// Open a connection to the database
-	db, err := sql.Open("postgres", dbURL)
-	if err != nil {
-		fmt.Println("Error connecting to the database:", err)
-		return nil
-	} else {
-		fmt.Println("Connected!")
-		moelog.LogEvent("Connected to database")
-	}
-	return db
-}
-
 // global database connection
-func Adminconnect() *sql.DB {
+func Newconnect() *sql.DB {
 
 	// Access environment variables
 	host := os.Getenv("DB_HOST")
@@ -43,17 +21,15 @@ func Adminconnect() *sql.DB {
 	user := os.Getenv("DB_USER")
 	password := os.Getenv("DB_PASSWORD")
 	dbname := os.Getenv("DB_NAME")
-	psqlconn := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
 
-	// open database
-	db, err := sql.Open("postgres", psqlconn)
-	moelog.CheckError(err)
+	// Create the PostgreSQL connection URL
+	dbURL := fmt.Sprintf("postgresql://%s:%s@%s:%s/%s?sslmode=disable", user, password,host, port, dbname)
 
-	// check connection
-	err = db.Ping()
+	// Open a connection to the database
+	db, err := sql.Open("postgres", dbURL)
 	if err != nil {
-		fmt.Println("Error: Could not establish a connection with the database")
-		moelog.CheckError(err)
+		fmt.Println("Error connecting to the database:", err)
+		return nil
 	} else {
 		fmt.Println("Connected!")
 		moelog.LogEvent("Connected to database")

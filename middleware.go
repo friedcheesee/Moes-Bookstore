@@ -14,24 +14,6 @@ import (
 	//"github.com/gorilla/sessions"
 )
 
-// type LoginHandlerr struct {
-//     st *sessions.CookieStore
-// } 
-
-// func (h *LoginHandlerr) Authenticate1(next http.Handler) http.Handler {
-//     return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-// 		session, _ := h.st.Get(r, "session-name")
-// 		uid, ok := session.Values["uid"].(int)
-// 		//check if the user is logged in
-// 		if !ok {
-// 			http.Error(w, `{"status": "error", "message": "Please log in to access this endpoint"}`, http.StatusUnauthorized)
-// 			return
-// 		}
-// 		ctx := context.WithValue(r.Context(), "uid", uid)
-// 		next.ServeHTTP(w, r.WithContext(ctx))
-//     })
-// }
-
 // Middleware to check if the user is an admin
 func CheckUserAdminStatus(db *sql.DB, uid int) (bool, error) {
 	var isAdmin bool
