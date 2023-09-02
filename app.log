@@ -24,20 +24,6 @@
 2023/09/02 13:05:25 User logged in successfully
 2023/09/02 13:05:25 logged in - handler
 2023/09/02 13:06:26 Connected to database
-2023/09/02 13:54:39 Error: dial tcp: lookup db: no such host
-2023/09/02 13:54:39 Wrong password crypto/bcrypt: hashedSecret too short to be a bcrypted password
-2023/09/02 13:55:28 Error: pq: SSL is not enabled on the server
-2023/09/02 13:55:28 Wrong password crypto/bcrypt: hashedSecret too short to be a bcrypted password
-2023/09/02 13:55:29 Error: pq: SSL is not enabled on the server
-2023/09/02 13:55:29 Wrong password crypto/bcrypt: hashedSecret too short to be a bcrypted password
-2023/09/02 13:57:36 Error: pq: SSL is not enabled on the server
-2023/09/02 13:57:36 Wrong password crypto/bcrypt: hashedSecret too short to be a bcrypted password
-2023/09/02 13:57:37 Error: pq: SSL is not enabled on the server
-2023/09/02 13:57:37 Wrong password crypto/bcrypt: hashedSecret too short to be a bcrypted password
-2023/09/02 13:57:46 Error: pq: SSL is not enabled on the server
-2023/09/02 13:57:46 Wrong password crypto/bcrypt: hashedSecret too short to be a bcrypted password
-2023/09/02 13:59:35 Error: pq: unsupported sslmode "off"; only "require" (default), "verify-full", "verify-ca", and "disable" supported
-2023/09/02 13:59:35 Wrong password crypto/bcrypt: hashedSecret too short to be a bcrypted password
 2023/09/02 14:00:02 User logged in successfully
 2023/09/02 14:00:02 logged in - handler
 2023/09/02 14:00:18 Book added to cart successfully

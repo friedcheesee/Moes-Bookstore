@@ -1,15 +1,18 @@
 package moelog
+
 import (
-	"os"
+	"fmt"
 	"log"
+	"os"
 )
 
 // opens the log file
 func Initiatelog() *os.File {
 	logFile, err := os.OpenFile("app.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666) //create a log file, if already exists, appends to the file.
 	if err != nil {
-		log.Fatalln("Failed to open error log file:", err)
+		fmt.Println("Failed to open error log file:", err)
 	}
+	fmt.Println("Check app.log in the root directory for detailed logs")
 	log.SetOutput(logFile)
 	return logFile
 }
