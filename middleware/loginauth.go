@@ -20,13 +20,16 @@ func Newconnect() *sql.DB {
 	dbname := "moe"
 
 	// Create the PostgreSQL connection URL
-	dbURL := fmt.Sprintf("postgresql://%s:%s@localhost:%s/%s?sslmode=disable", user, password, port, dbname)
+	dbURL := fmt.Sprintf("postgresql://%s:%s@db:%s/%s?sslmode=disable", user, password, port, dbname)
 
 	// Open a connection to the database
 	db, err := sql.Open("postgres", dbURL)
 	if err != nil {
 		fmt.Println("Error connecting to the database:", err)
 		return nil
+	} else {
+		fmt.Println("Connected!")
+		moelog.LogEvent("Connected to database")
 	}
 	return db
 }

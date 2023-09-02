@@ -58,3 +58,12 @@
 2023/09/02 15:01:08 deleted from cart - handler
 2023/09/02 15:01:11 Cart items retrieved successfully
 2023/09/02 15:01:11 viewed cart - handler
+2023/09/02 15:06:26 Connected to database
+2023/09/02 15:06:39 User logged in successfully
+2023/09/02 15:06:39 logged in - handler
+2023/09/02 15:06:42 Owned books retrieved successfully
+2023/09/02 15:06:42 viewed owned books - handler
+2023/09/02 15:06:46 logged out - handler
+2023/09/02 15:06:55 Connected to database
+2023/09/02 15:06:56 got pinged - handler
+2023/09/02 15:06:59 got pinged - handler
