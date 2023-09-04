@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
-	"moe/log"
+	moelog "moe/log"
 )
 
 // codes returned by this function, to debug/show status of cart addition
@@ -74,7 +74,7 @@ func buyBooks(db *sql.DB, uid int) (int, error, []Book) {
 			log.Println("Error during transaction: ", err)
 			return 1, err, nil
 		}
-		rows.Close() 
+		rows.Close()
 
 		//to get recomended books based on the most recent purchase
 		recc, err = getBooksByGenreOrAuthor(db, genre, author)
@@ -92,7 +92,7 @@ func buyBooks(db *sql.DB, uid int) (int, error, []Book) {
 		}
 		if isBought {
 			fmt.Printf("Book %d is already bought, please remove it from the cart to buy other books\n", bookID)
-			moelog.LogEvent("Book already bought "+bookName)
+			moelog.LogEvent("Book already bought " + bookName)
 			return 1, nil, nil
 		}
 
@@ -133,7 +133,7 @@ func deleteFromCart(db *sql.DB, uid, bookid int) {
 	fmt.Println("Book deleted from cart successfully, if present")
 }
 
-//function to see a users inventory
+// function to see a users inventory
 func viewOwnedBooks(db *sql.DB, uid int) ([]Book, error) {
 	rows, err := db.Query("SELECT bookid, book_name, genre, download_url FROM bought_books WHERE uid = $1", uid)
 	if err != nil {
@@ -161,7 +161,7 @@ func viewOwnedBooks(db *sql.DB, uid int) ([]Book, error) {
 // 0 success
 // 1 review exists/failed
 func giveReview(db *sql.DB, uid, bookID int, review string) (int, error) {
-	
+
 	// Check if a review by the same user for the same book already exists
 	var existingReview int
 	err := db.QueryRow("SELECT reviewid FROM reviews WHERE uid = $1 AND bookid = $2", uid, bookID).Scan(&existingReview)
@@ -185,10 +185,12 @@ func giveReview(db *sql.DB, uid, bookID int, review string) (int, error) {
 	return 0, nil
 }
 
-// to search a book based on query(bookname), genre and author
+// to search a book based on query(bookname), genre, and author
 func searchBooks(db *sql.DB, query, genre, author string) ([]Book, error) {
-	//query to search books
-	rows, err := db.Query("SELECT bookid, book_name, author, genre, cost FROM books WHERE book_name ILIKE $1 AND genre ILIKE $2 AND author ILIKE $3",
+	// query to search books
+	rows, err := db.Query("SELECT b.bookid, b.book_name, b.author, b.genre, b.cost, COALESCE(r.review, '') "+
+		"FROM books b LEFT JOIN reviews r ON b.bookid = r.bookid "+
+		"WHERE b.book_name ILIKE $1 AND b.genre ILIKE $2 AND b.author ILIKE $3",
 		"%"+query+"%", "%"+genre+"%", "%"+author+"%")
 	if err != nil {
 		log.Println("Error searching books:", err)
@@ -196,22 +198,22 @@ func searchBooks(db *sql.DB, query, genre, author string) ([]Book, error) {
 	}
 	defer rows.Close()
 
-	//storing results in an array of book structs
+	// storing results in an array of book structs
 	var books []Book
 	for rows.Next() {
 		var book Book
-		err := rows.Scan(&book.ID, &book.Name, &book.Author, &book.Genre, &book.Cost)
+		err := rows.Scan(&book.ID, &book.Name, &book.Author, &book.Genre, &book.Cost, &book.Review)
 		if err != nil {
 			return nil, err
 		}
-		book.DownloadURL="buy the book to access URL"
+		book.DownloadURL = "buy the book to access URL"
 		books = append(books, book)
 	}
 	moelog.LogEvent("Books retrieved successfully")
 	return books, nil
 }
 
-//function to see cart items of a user
+// function to see cart items of a user
 func viewCart(db *sql.DB, uid int) ([]CartItem, error) {
 	// Query the database to select books that match the genre or author
 	rows, err := db.Query("SELECT c.bookid, b.book_name, b.author, b.genre, b.cost FROM cart c JOIN books b ON c.bookid = b.bookid WHERE c.uid = $1", uid)
@@ -233,7 +235,7 @@ func viewCart(db *sql.DB, uid int) ([]CartItem, error) {
 	return cartItems, nil
 }
 
-//reccomendation system, selects relevant book based on recent purchase
+// reccomendation system, selects relevant book based on recent purchase
 func getBooksByGenreOrAuthor(db *sql.DB, genre, author string) ([]Book, error) {
 	// Query the database to select books that match the genre or author
 	query := "SELECT bookid, book_name, author, genre FROM books WHERE genre = $1 OR author = $2"

@@ -88,3 +88,8 @@
 2023/09/04 16:31:05 User trying to login is admin: true
 2023/09/04 16:31:05 (admin) Available books retrieved successfully
 2023/09/04 16:31:05 viewed available books - handler
+2023/09/04 16:38:25 Connected to database
+2023/09/04 16:38:25 Connected to database
+2023/09/04 16:38:29 User trying to login is admin: true
+2023/09/04 16:38:29 (admin) Available books retrieved successfully
+2023/09/04 16:38:29 viewed available books - handler

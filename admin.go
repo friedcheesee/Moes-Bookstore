@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
-	"moe/log"
+	moelog "moe/log"
 )
 
 // function for admins to remove a book from available books
@@ -58,8 +58,10 @@ func getUsers(db *sql.DB) ([]User, error) {
 }
 
 // function for admins to view all available books
+// function for admins to view all available books
 func displayAvailableBooks(db *sql.DB) ([]Book, error) {
-	rows, err := db.Query("SELECT bookid, book_name, author, genre, cost, download_url FROM books")
+	rows, err := db.Query("SELECT b.bookid, b.book_name, b.author, b.genre, b.cost, b.download_url, COALESCE(r.review, '') " +
+		"FROM books b LEFT JOIN reviews r ON b.bookid = r.bookid")
 	if err != nil {
 		log.Println("Error retrieving available books:", err)
 		return nil, err
@@ -70,9 +72,9 @@ func displayAvailableBooks(db *sql.DB) ([]Book, error) {
 	var books []Book
 	for rows.Next() {
 		var bookID int
-		var bookName, author, genre, downloadURL string
+		var bookName, author, genre, downloadURL, review string
 		var cost float64
-		if err := rows.Scan(&bookID, &bookName, &author, &genre, &cost, &downloadURL); err != nil {
+		if err := rows.Scan(&bookID, &bookName, &author, &genre, &cost, &downloadURL, &review); err != nil {
 			log.Println("Error retrieving available books:", err)
 			return nil, err
 		}
@@ -83,8 +85,8 @@ func displayAvailableBooks(db *sql.DB) ([]Book, error) {
 			Genre:       genre,
 			Cost:        cost,
 			DownloadURL: downloadURL,
+			Review:      review,
 		}
-
 		books = append(books, book)
 	}
 	moelog.LogEvent("(admin) Available books retrieved successfully")
