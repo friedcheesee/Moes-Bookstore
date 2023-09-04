@@ -93,3 +93,12 @@
 2023/09/04 16:38:29 User trying to login is admin: true
 2023/09/04 16:38:29 (admin) Available books retrieved successfully
 2023/09/04 16:38:29 viewed available books - handler
+2023/09/04 16:42:22 Connected to database
+2023/09/04 16:42:22 Connected to database
+2023/09/04 16:42:38 User logged in successfully
+2023/09/04 16:42:38 logged in - handler
+2023/09/04 16:42:43 Books retrieved successfully
+2023/09/04 16:42:43 searched books - handler
+2023/09/04 16:42:53 User trying to login is admin: true
+2023/09/04 16:42:53 (admin) Available books retrieved successfully
+2023/09/04 16:42:53 viewed available books - handler
