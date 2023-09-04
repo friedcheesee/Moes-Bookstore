@@ -22,6 +22,13 @@ services:
       - db
     environment:
       DATABASE_URL: "postgresql://postgres:admin@db:5432/moe?sslmode=disable"
-
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf  # Mount the custom Nginx configuration file
+    ports:
+      - "80:80"
+    depends_on:
+      - moe  
 volumes:
   postgres-data:

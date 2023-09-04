@@ -76,3 +76,15 @@
 2023/09/02 18:45:53 Connected to database
 2023/09/02 18:48:12 Connected to database
 2023/09/02 18:48:12 Connected to database
+2023/09/04 16:29:48 Connected to database
+2023/09/04 16:29:57 Error: dial tcp: lookup db: no such host
+2023/09/04 16:29:57 Wrong password crypto/bcrypt: hashedSecret too short to be a bcrypted password
+2023/09/04 16:30:01 Error: dial tcp: lookup db: no such host
+2023/09/04 16:30:01 Wrong password crypto/bcrypt: hashedSecret too short to be a bcrypted password
+2023/09/04 16:30:56 Connected to database
+2023/09/04 16:30:56 Connected to database
+2023/09/04 16:31:01 User logged in successfully
+2023/09/04 16:31:01 logged in - handler
+2023/09/04 16:31:05 User trying to login is admin: true
+2023/09/04 16:31:05 (admin) Available books retrieved successfully
+2023/09/04 16:31:05 viewed available books - handler

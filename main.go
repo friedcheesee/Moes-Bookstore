@@ -37,8 +37,8 @@ func main() {
 	defer logFile.Close()
 
 	//connecting to database
-	//db=ah.Adminconnect()
-	db = ah.Newconnect()
+	db=ah.Adminconnect()
+	//db = ah.Newconnect()
 	defer db.Close()
 
 	//using chi router to handle requests

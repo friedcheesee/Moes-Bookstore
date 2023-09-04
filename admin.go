@@ -59,7 +59,7 @@ func getUsers(db *sql.DB) ([]User, error) {
 
 // function for admins to view all available books
 func displayAvailableBooks(db *sql.DB) ([]Book, error) {
-	rows, err := db.Query("SELECT bookid, book_name, author, genre, cost FROM books")
+	rows, err := db.Query("SELECT bookid, book_name, author, genre, cost, download_url FROM books")
 	if err != nil {
 		log.Println("Error retrieving available books:", err)
 		return nil, err
@@ -70,18 +70,19 @@ func displayAvailableBooks(db *sql.DB) ([]Book, error) {
 	var books []Book
 	for rows.Next() {
 		var bookID int
-		var bookName, author, genre string
+		var bookName, author, genre, downloadURL string
 		var cost float64
-		if err := rows.Scan(&bookID, &bookName, &author, &genre, &cost); err != nil {
+		if err := rows.Scan(&bookID, &bookName, &author, &genre, &cost, &downloadURL); err != nil {
 			log.Println("Error retrieving available books:", err)
 			return nil, err
 		}
 		book := Book{
-			ID:     bookID,
-			Name:   bookName,
-			Author: author,
-			Genre:  genre,
-			Cost:   cost,
+			ID:          bookID,
+			Name:        bookName,
+			Author:      author,
+			Genre:       genre,
+			Cost:        cost,
+			DownloadURL: downloadURL,
 		}
 
 		books = append(books, book)
