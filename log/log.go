@@ -12,10 +12,11 @@ func Initiatelog() *os.File {
 	if err != nil {
 		fmt.Println("Failed to open error log file:", err)
 	}
-	fmt.Println("Check app.log in the root directory for detailed logs")
+	fmt.Println("Check app.log in the root directory for detailed logs/previously stored logs")
 	log.SetOutput(logFile)
 	return logFile
 }
+
 // logs errors
 func CheckError(err error) { // to log errors where ever necessary
 	if err != nil {
@@ -23,8 +24,10 @@ func CheckError(err error) { // to log errors where ever necessary
 		//panic(err)
 	}
 }
+
 // to log events
 func LogEvent(message string) {
 	// Log the message
 	log.Println(message)
+	fmt.Println(message)
 }

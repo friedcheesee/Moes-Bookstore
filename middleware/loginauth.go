@@ -52,10 +52,9 @@ func Adminconnect() *sql.DB {
 	// check connection
 	err = db.Ping()
 	moelog.CheckError(err)
-	fmt.Println("Connected!")
-	moelog.LogEvent("Connected to database")
 	if err != nil {
 		fmt.Println("Error: Could not establish a connection with the database")
+		moelog.LogEvent("Error: Could not establish a connection with the database")
 		moelog.CheckError(err)
 	} else {
 		fmt.Println("Connected!")
