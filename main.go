@@ -5,7 +5,7 @@ import (
 	"log"
 	"moe/log"
 "net/http"
-"moe/middleware"
+"moe/login"
 	"os"
 	"github.com/go-chi/chi"
 	"github.com/gorilla/sessions"
@@ -37,8 +37,8 @@ func main() {
 	defer logFile.Close()
 
 	//connecting to database
-	db=ah.Adminconnect()
-	//db = ah.Newconnect()
+	//db=ah.Adminconnect()
+	db = ah.Newconnect()
 	defer db.Close()
 
 	//using chi router to handle requests

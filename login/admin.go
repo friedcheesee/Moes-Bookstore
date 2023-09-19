@@ -1,26 +1,27 @@
-package main
+package ah
 
 import (
 	"database/sql"
 	"fmt"
 	"log"
-	moelog "moe/log"
+	"moe/log"
+	"moe/models"
 )
 
 // function for admins to remove a book from available books
-func removeBook(db *sql.DB, bookID int) error {
+func RemoveBook(db *sql.DB, bookID int) error {
 	// query to delete book based on bookid
 	_, err := db.Exec("DELETE FROM books WHERE bookid = $1", bookID)
 	if err != nil {
 		log.Println("Error removing book:", err)
 		return err
 	}
-	moelog.LogEvent("(admin) Book removed successfully")
+	moelog.LogEvent("(admin) Book removed successfully, if present")
 	return nil
 }
 
 // function for admins to add a book to available books
-func addBook(db *sql.DB, bookName, author, genre string, cost float64) error {
+func AddBook(db *sql.DB, bookName, author, genre string, cost float64) error {
 	fmt.Println("Adding book")
 	fmt.Println(bookName, author, genre, cost)
 	_, err := db.Exec("INSERT INTO books (book_name, author, genre, cost) VALUES ($1, $2, $3, $4)",
@@ -34,7 +35,7 @@ func addBook(db *sql.DB, bookName, author, genre string, cost float64) error {
 }
 
 // function for admins to view all users
-func getUsers(db *sql.DB) ([]User, error) {
+func GetUsers(db *sql.DB) ([]models.User, error) {
 
 	// Query the database to select all active users (in other words, accounts which are not deleted yet)
 	rows, err := db.Query("SELECT uid, username, email FROM users WHERE active = true")
@@ -45,9 +46,9 @@ func getUsers(db *sql.DB) ([]User, error) {
 	defer rows.Close()
 
 	// Store the results in an array of User structs
-	var users []User
+	var users []models.User
 	for rows.Next() {
-		var user User
+		var user models.User
 		if err := rows.Scan(&user.ID, &user.Username, &user.Email); err != nil {
 			log.Println("Error scanning user row:", err)
 			return nil, err
@@ -58,8 +59,7 @@ func getUsers(db *sql.DB) ([]User, error) {
 }
 
 // function for admins to view all available books
-// function for admins to view all available books
-func displayAvailableBooks(db *sql.DB) ([]Book, error) {
+func DisplayAvailableBooks(db *sql.DB) ([]models.Book, error) {
 	rows, err := db.Query("SELECT b.bookid, b.book_name, b.author, b.genre, b.cost, b.download_url, COALESCE(r.review, '') " +
 		"FROM books b LEFT JOIN reviews r ON b.bookid = r.bookid")
 	if err != nil {
@@ -69,7 +69,7 @@ func displayAvailableBooks(db *sql.DB) ([]Book, error) {
 	defer rows.Close()
 
 	// Store the results in an array of Book structs
-	var books []Book
+	var books []models.Book
 	for rows.Next() {
 		var bookID int
 		var bookName, author, genre, downloadURL, review string
@@ -78,7 +78,7 @@ func displayAvailableBooks(db *sql.DB) ([]Book, error) {
 			log.Println("Error retrieving available books:", err)
 			return nil, err
 		}
-		book := Book{
+		book := models.Book{
 			ID:          bookID,
 			Name:        bookName,
 			Author:      author,
@@ -92,3 +92,4 @@ func displayAvailableBooks(db *sql.DB) ([]Book, error) {
 	moelog.LogEvent("(admin) Available books retrieved successfully")
 	return books, nil
 }
+

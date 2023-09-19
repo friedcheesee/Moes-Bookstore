@@ -4,7 +4,8 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
-	moelog "moe/log"
+	"moe/log"
+	"moe/models"
 )
 
 // codes returned by this function, to debug/show status of cart addition
@@ -49,7 +50,7 @@ func AddToCart(db *sql.DB, uid, bookid int) (int, error) {
 // codes returned by this function, to debug/show status if book was successfully bought
 // 0 bought
 // 1 already owned books not bought
-func buyBooks(db *sql.DB, uid int) (int, error, []Book) {
+func buyBooks(db *sql.DB, uid int) (int, error, []models.Book) {
 	tx, err := db.Begin()
 	if err != nil {
 		log.Println("Error during transaction:", err)
@@ -66,7 +67,7 @@ func buyBooks(db *sql.DB, uid int) (int, error, []Book) {
 	defer rows.Close()
 
 	//store in the empty book structure, which will be later returned to the user by the handler
-	var recc []Book
+	var recc []models.Book
 	for rows.Next() {
 		var bookID int
 		var bookName, genre, download_url, author string
@@ -74,7 +75,7 @@ func buyBooks(db *sql.DB, uid int) (int, error, []Book) {
 			log.Println("Error during transaction: ", err)
 			return 1, err, nil
 		}
-		rows.Close()
+		rows.Close() 
 
 		//to get recomended books based on the most recent purchase
 		recc, err = getBooksByGenreOrAuthor(db, genre, author)
@@ -92,7 +93,7 @@ func buyBooks(db *sql.DB, uid int) (int, error, []Book) {
 		}
 		if isBought {
 			fmt.Printf("Book %d is already bought, please remove it from the cart to buy other books\n", bookID)
-			moelog.LogEvent("Book already bought " + bookName)
+			moelog.LogEvent("Book already bought "+bookName)
 			return 1, nil, nil
 		}
 
@@ -133,8 +134,8 @@ func deleteFromCart(db *sql.DB, uid, bookid int) {
 	fmt.Println("Book deleted from cart successfully, if present")
 }
 
-// function to see a users inventory
-func viewOwnedBooks(db *sql.DB, uid int) ([]Book, error) {
+//function to see a users inventory
+func viewOwnedBooks(db *sql.DB, uid int) ([]models.Book, error) {
 	rows, err := db.Query("SELECT bookid, book_name, genre, download_url FROM bought_books WHERE uid = $1", uid)
 	if err != nil {
 		fmt.Println("Error retrieving owned books:", err)
@@ -143,9 +144,9 @@ func viewOwnedBooks(db *sql.DB, uid int) ([]Book, error) {
 	defer rows.Close()
 
 	//using array of book structs to store the books
-	var ownedBooks []Book
+	var ownedBooks []models.Book
 	for rows.Next() {
-		var book Book
+		var book models.Book
 		err := rows.Scan(&book.ID, &book.Name, &book.Genre, &book.DownloadURL)
 		if err != nil {
 			fmt.Println("Error retrieving owned books from rows:", err)
@@ -161,7 +162,7 @@ func viewOwnedBooks(db *sql.DB, uid int) ([]Book, error) {
 // 0 success
 // 1 review exists/failed
 func giveReview(db *sql.DB, uid, bookID int, review string) (int, error) {
-
+	
 	// Check if a review by the same user for the same book already exists
 	var existingReview int
 	err := db.QueryRow("SELECT reviewid FROM reviews WHERE uid = $1 AND bookid = $2", uid, bookID).Scan(&existingReview)
@@ -186,7 +187,7 @@ func giveReview(db *sql.DB, uid, bookID int, review string) (int, error) {
 }
 
 // to search a book based on query(bookname), genre, and author
-func searchBooks(db *sql.DB, query, genre, author string) ([]Book, error) {
+func searchBooks(db *sql.DB, query, genre, author string) ([]models.Book, error) {
 	// query to search books
 	rows, err := db.Query("SELECT b.bookid, b.book_name, b.author, b.genre, b.cost, COALESCE(r.review, '') "+
 		"FROM books b LEFT JOIN reviews r ON b.bookid = r.bookid "+
@@ -199,9 +200,9 @@ func searchBooks(db *sql.DB, query, genre, author string) ([]Book, error) {
 	defer rows.Close()
 
 	// storing results in an array of book structs
-	var books []Book
+	var books []models.Book
 	for rows.Next() {
-		var book Book
+		var book models.Book
 		err := rows.Scan(&book.ID, &book.Name, &book.Author, &book.Genre, &book.Cost, &book.Review)
 		if err != nil {
 			return nil, err
@@ -213,8 +214,9 @@ func searchBooks(db *sql.DB, query, genre, author string) ([]Book, error) {
 	return books, nil
 }
 
-// function to see cart items of a user
-func viewCart(db *sql.DB, uid int) ([]CartItem, error) {
+
+//function to see cart items of a user
+func viewCart(db *sql.DB, uid int) ([]models.CartItem, error) {
 	// Query the database to select books that match the genre or author
 	rows, err := db.Query("SELECT c.bookid, b.book_name, b.author, b.genre, b.cost FROM cart c JOIN books b ON c.bookid = b.bookid WHERE c.uid = $1", uid)
 	if err != nil {
@@ -223,9 +225,9 @@ func viewCart(db *sql.DB, uid int) ([]CartItem, error) {
 	defer rows.Close()
 
 	//store in the empty cartitem structure, which will be later returned to the user by the handler
-	var cartItems []CartItem
+	var cartItems []models.CartItem
 	for rows.Next() {
-		var item CartItem
+		var item models.CartItem
 		if err := rows.Scan(&item.BookID, &item.BookName, &item.Author, &item.Genre, &item.Cost); err != nil {
 			return nil, err
 		}
@@ -235,8 +237,8 @@ func viewCart(db *sql.DB, uid int) ([]CartItem, error) {
 	return cartItems, nil
 }
 
-// reccomendation system, selects relevant book based on recent purchase
-func getBooksByGenreOrAuthor(db *sql.DB, genre, author string) ([]Book, error) {
+//reccomendation system, selects relevant book based on recent purchase
+func getBooksByGenreOrAuthor(db *sql.DB, genre, author string) ([]models.Book, error) {
 	// Query the database to select books that match the genre or author
 	query := "SELECT bookid, book_name, author, genre FROM books WHERE genre = $1 OR author = $2"
 	rows, err := db.Query(query, genre, author)
@@ -246,9 +248,9 @@ func getBooksByGenreOrAuthor(db *sql.DB, genre, author string) ([]Book, error) {
 	defer rows.Close()
 
 	//store in the empty book structure, which will be later returned to the user by the handler
-	var books []Book
+	var books []models.Book
 	for rows.Next() {
-		var book Book
+		var book models.Book
 		if err := rows.Scan(&book.ID, &book.Name, &book.Author, &book.Genre); err != nil {
 			fmt.Print("books", books)
 			return nil, err

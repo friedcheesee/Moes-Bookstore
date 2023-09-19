@@ -1,16 +1,17 @@
 package main
 
 import (
+	"context"
+	"database/sql"
 	"encoding/json"
 	"fmt"
 	"log"
+	moelog "moe/log"
+	ah "moe/login"
 	"net/http"
-	"context"
-	"database/sql"
 	"strconv"
+
 	_ "github.com/lib/pq"
-	"moe/log"
-	"moe/middleware"
 	//"github.com/gorilla/sessions"
 )
 
@@ -215,6 +216,17 @@ func ViewOwnedBooksHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, `{"status": "error", "message": "Failed to retrieve owned books"}`, http.StatusInternalServerError)
 		return
 	}
+	// Check if no books are owned
+	if len(ownedBooks) == 0 {
+		// No books are owned, return a "success" message
+		response := map[string]interface{}{
+			"status":  "success",
+			"message": "No books owned",
+		}
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(response)
+		return
+	}
 	// Return the owned books as a JSON response
 	responseJSON, err := json.Marshal(ownedBooks)
 	if err != nil {
@@ -348,17 +360,26 @@ func ViewCartHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Check if the cart is empty
+	if len(cartItems) == 0 {
+		// Cart is empty, return a status message
+		response := map[string]interface{}{
+			"status":  "success",
+			"message": "Cart is empty",
+		}
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(response)
+		return
+	}
+
 	// Return the cart items as JSON response
 	w.Header().Set("Content-Type", "application/json")
-	if cartItems == nil {
-		cartItems = []CartItem{} //return empty struct if cart is empty
-	}
 	json.NewEncoder(w).Encode(cartItems)
 	moelog.LogEvent("viewed cart - handler")
 }
 
 func pingHandler(w http.ResponseWriter, r *http.Request) {
-    fmt.Fprintf(w, "Pong!")
+	fmt.Fprintf(w, "Pong!")
 	moelog.LogEvent("got pinged - handler")
 }
 
@@ -378,7 +399,7 @@ func DeleteHandler(w http.ResponseWriter, r *http.Request) {
 // middleware handler to logout
 func LogoutHandler(w http.ResponseWriter, r *http.Request) {
 	session, _ := store.Get(r, "session-name")
-	session.Values["uid"] = nil//deletes session linked to uid
+	session.Values["uid"] = nil //deletes session linked to uid
 	session.Save(r, w)
 
 	w.WriteHeader(http.StatusOK)
@@ -396,7 +417,7 @@ func CheckActiveAccount(next http.HandlerFunc) http.HandlerFunc {
 		// Authenticate the user
 		isAuthenticated, err := ah.AuthenticateUser(db, email, password)
 		if err != nil || !isAuthenticated {
-			http.Error(w, `{"status": "error", "message": "Invalid credentials"}`, http.StatusUnauthorized)
+			http.Error(w, `{"status": "error", "message": "Invalid credentials/User doesn't exist"}`, http.StatusUnauthorized)
 			return
 		}
 
@@ -411,7 +432,7 @@ func CheckActiveAccount(next http.HandlerFunc) http.HandlerFunc {
 	}
 }
 
-//to check if the user is admin
+// to check if the user is admin
 func IsAdmin(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// Get the user's UID from the session or wherever it's stored
@@ -439,7 +460,7 @@ func IsAdmin(next http.Handler) http.Handler {
 	})
 }
 
-//to add books for admins
+// to add books for admins
 func AddBookHandler(w http.ResponseWriter, r *http.Request) {
 	// Parse input parameters from the request (bookName, author, genre, cost, stock)
 	bookName := r.FormValue("bookName")
@@ -454,19 +475,19 @@ func AddBookHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Call the addBook function
-	err = addBook(db, bookName, author, genre, cost)
+	err = ah.AddBook(db, bookName, author, genre, cost)
 	if err != nil {
-		http.Error(w, `{"status": "error", "message": "Failed to add book"}`, http.StatusInternalServerError)
+		http.Error(w, `{"status": "error", "message": "Failed to add book, book already exists"}`, http.StatusInternalServerError)
 		return
 	}
 
 	// Return success response
 	w.WriteHeader(http.StatusOK)
 	fmt.Fprintf(w, `{"status": "success", "message": "Book added successfully"}`)
-    moelog.LogEvent("added book - handler")
+	moelog.LogEvent("added book - handler")
 }
 
-//to remove books for admins
+// to remove books for admins
 func RemoveBookHandler(w http.ResponseWriter, r *http.Request) {
 	// Parse input parameters from the request (bookID)
 	bookIDStr := r.FormValue("bookID")
@@ -479,7 +500,7 @@ func RemoveBookHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Call the removeBook function
-	err = removeBook(db, bookID)
+	err = ah.RemoveBook(db, bookID)
 	if err != nil {
 		http.Error(w, `{"status": "error", "message": "Failed to remove book"}`, http.StatusInternalServerError)
 		return
@@ -487,14 +508,14 @@ func RemoveBookHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Return success response
 	w.WriteHeader(http.StatusOK)
-	fmt.Fprintf(w, `{"status": "success", "message": "Book removed successfully"}`)
-    moelog.LogEvent("removed book - handler")
+	fmt.Fprintf(w, `{"status": "success", "message": "Book removed successfully, if present"}`)
+	moelog.LogEvent("removed book - handler")
 }
 
-//to view users for admins
+// to view users for admins
 func ViewUsersHandler(w http.ResponseWriter, r *http.Request) {
 	// Call the getUsers function
-	users, err := getUsers(db)
+	users, err := ah.GetUsers(db)
 	if err != nil {
 		http.Error(w, `{"status": "error", "message": "Failed to retrieve users"}`, http.StatusInternalServerError)
 		return
@@ -503,13 +524,13 @@ func ViewUsersHandler(w http.ResponseWriter, r *http.Request) {
 	// Return the users as JSON response
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(users)
-    moelog.LogEvent("viewed users - handler")
+	moelog.LogEvent("viewed users - handler")
 }
 
-//to view all available books 
+// to view all available books
 func ViewAvailableBooksHandler(w http.ResponseWriter, r *http.Request) {
 	// Call the displayAvailableBooks function
-	books, err := displayAvailableBooks(db)
+	books, err := ah.DisplayAvailableBooks(db)
 	if err != nil {
 		http.Error(w, `{"status": "error", "message": "Failed to retrieve books"}`, http.StatusInternalServerError)
 		return
@@ -518,5 +539,5 @@ func ViewAvailableBooksHandler(w http.ResponseWriter, r *http.Request) {
 	// Return the books as JSON response
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(books)
-    moelog.LogEvent("viewed available books - handler")
+	moelog.LogEvent("viewed available books - handler")
 }

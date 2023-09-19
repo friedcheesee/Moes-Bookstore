@@ -20,7 +20,7 @@
 					"urlencoded": [
 						{
 							"key": "email",
-							"value": "new@mail.com",
+							"value": "fried@mail.com",
 							"type": "text"
 						},
 						{
@@ -60,7 +60,7 @@
 					"urlencoded": [
 						{
 							"key": "email",
-							"value": "newdty@mail.com",
+							"value": "newuser@mail.com",
 							"type": "text"
 						},
 						{
@@ -70,12 +70,21 @@
 						},
 						{
 							"key": "username",
-							"value": "fresh",
+							"value": "its me",
 							"type": "text"
 						}
 					]
 				},
 				"url": "http://localhost:8080/reguser"
+			},
+			"response": []
+		},
+		{
+			"name": "Inventory",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": "http://localhost:8080/user/inventory"
 			},
 			"response": []
 		},
@@ -140,43 +149,6 @@
 			"response": []
 		},
 		{
-			"name": "Inventory",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "urlencoded",
-					"urlencoded": []
-				},
-				"url": "http://localhost:8080/user/inventory"
-			},
-			"response": []
-		},
-		{
-			"name": "Give review",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "urlencoded",
-					"urlencoded": [
-						{
-							"key": "review",
-							"value": "apple banana",
-							"type": "text"
-						},
-						{
-							"key": "bookID",
-							"value": "2",
-							"type": "text"
-						}
-					]
-				},
-				"url": "http://localhost:8080/user/review"
-			},
-			"response": []
-		},
-		{
 			"name": "Add to cart",
 			"request": {
 				"method": "POST",
@@ -186,12 +158,25 @@
 					"urlencoded": [
 						{
 							"key": "bookid",
-							"value": "5",
+							"value": "38",
 							"type": "text"
 						}
 					]
 				},
 				"url": "http://localhost:8080/user/cart/add"
+			},
+			"response": []
+		},
+		{
+			"name": "View cart",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": "http://localhost:8080/user/cart/view"
 			},
 			"response": []
 		},
@@ -205,7 +190,7 @@
 					"urlencoded": [
 						{
 							"key": "bookID",
-							"value": "12",
+							"value": "15",
 							"type": "text"
 						}
 					]
@@ -228,20 +213,31 @@
 			"response": []
 		},
 		{
-			"name": "View cart",
+			"name": "Give review",
 			"request": {
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "urlencoded",
-					"urlencoded": []
+					"urlencoded": [
+						{
+							"key": "review",
+							"value": "very nice",
+							"type": "text"
+						},
+						{
+							"key": "bookID",
+							"value": "15",
+							"type": "text"
+						}
+					]
 				},
-				"url": "http://localhost:8080/user/cart/view"
+				"url": "http://localhost:8080/user/review"
 			},
 			"response": []
 		},
 		{
-			"name": "Delete",
+			"name": "Delete account",
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -274,12 +270,12 @@
 					"urlencoded": [
 						{
 							"key": "bookName",
-							"value": "asde",
+							"value": "new book",
 							"type": "text"
 						},
 						{
 							"key": "author",
-							"value": "adasd",
+							"value": "i wrote this book",
 							"type": "text"
 						},
 						{
@@ -289,7 +285,7 @@
 						},
 						{
 							"key": "cost",
-							"value": "0",
+							"value": "10",
 							"type": "text"
 						}
 					]
@@ -307,32 +303,8 @@
 					"mode": "urlencoded",
 					"urlencoded": [
 						{
-							"key": "bookName",
-							"value": "asde",
-							"type": "text",
-							"disabled": true
-						},
-						{
-							"key": "author",
-							"value": "adasd",
-							"type": "text",
-							"disabled": true
-						},
-						{
-							"key": "genre",
-							"value": "fantasy",
-							"type": "text",
-							"disabled": true
-						},
-						{
-							"key": "cost",
-							"value": "0",
-							"type": "text",
-							"disabled": true
-						},
-						{
 							"key": "bookID",
-							"value": "53",
+							"value": "55",
 							"type": "text"
 						}
 					]
@@ -355,6 +327,10 @@
 			"request": {
 				"method": "POST",
 				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
 				"url": "http://localhost:8080/admin/view/books"
 			},
 			"response": []

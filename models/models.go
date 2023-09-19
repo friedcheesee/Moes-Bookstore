@@ -1,4 +1,4 @@
-package main
+package models
 
 type Book struct {
 	ID          int     `json:"id"`
@@ -7,7 +7,7 @@ type Book struct {
 	Genre       string  `json:"genre"`
 	Cost        float64 `json:"cost"`
 	DownloadURL string  `json:"download_url"`
-	Review      string  `json:"review"`
+	Review     string    `json:"review"`
 }
 type CartItem struct {
 	BookID   int     `json:"bookid"`

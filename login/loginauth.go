@@ -12,36 +12,11 @@ import (
 	"golang.org/x/crypto/bcrypt" // For encrypting and decrypting passwords
 )
 
-// global database connection
-func Newconnect() *sql.DB {
-
-	// Access environment variables
-	host := os.Getenv("DB_HOST")
-	port := os.Getenv("DB_PORT")
-	user := os.Getenv("DB_USER")
-	password := os.Getenv("DB_PASSWORD")
-	dbname := os.Getenv("DB_NAME")
-
-	// Create the PostgreSQL connection URL
-	dbURL := fmt.Sprintf("postgresql://%s:%s@%s:%s/%s?sslmode=disable", user, password, host, port, dbname)
-
-	// Open a connection to the database
-	db, err := sql.Open("postgres", dbURL)
-	if err != nil {
-		fmt.Println("Error connecting to the database:", err)
-		return nil
-	} else {
-		fmt.Println("Connected!")
-		moelog.LogEvent("Connected to database")
-	}
-	return db
-}
-
 func Adminconnect() *sql.DB {
-	// Access environment variables
+	// Access environment variables //the values are hard coded here instead for simplicity. App inside docker uses .env file.
 	host := "localhost"
 	user := "postgres"
-	password := "admin"
+	password := "admin" //change this to your password when running locally
 	dbname := "moe"
 	psqlconn := fmt.Sprintf("host=%s port=5432 user=%s password=%s dbname=%s sslmode=disable", host, user, password, dbname)
 
@@ -53,9 +28,34 @@ func Adminconnect() *sql.DB {
 	err = db.Ping()
 	moelog.CheckError(err)
 	if err != nil {
-		fmt.Println("Error: Could not establish a connection with the database")
 		moelog.LogEvent("Error: Could not establish a connection with the database")
 		moelog.CheckError(err)
+	} else {
+		fmt.Println("Connected!")
+		moelog.LogEvent("Connected to database")
+	}
+	return db
+}
+
+// global database connection
+func Newconnect() *sql.DB {
+
+	// Access environment variables
+	host := os.Getenv("DB_HOST")
+	port := os.Getenv("DB_PORT")
+	user := os.Getenv("DB_USER")
+	password := os.Getenv("DB_PASSWORD")
+	dbname := os.Getenv("DB_NAME")
+
+	// Create the PostgreSQL connection URL
+	dbURL := fmt.Sprintf("postgresql://%s:%s@%s:%s/%s?sslmode=disable", user, password,host, port, dbname)
+
+	// Open a connection to the database
+	db, err := sql.Open("postgres", dbURL)
+	if err != nil {
+		fmt.Println("Error connecting to the database:", err)
+		moelog.LogEvent("Error: Could not establish a connection with the database")
+		return nil
 	} else {
 		fmt.Println("Connected!")
 		moelog.LogEvent("Connected to database")
