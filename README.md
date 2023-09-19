@@ -1,4 +1,3 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/LECuYE4o)
 # Moe's Bookstore
 
 This is a fully functional bookstore written in golang, which uses PostgreSQL as a database. The app has many API endpoints which the users can call to access many functions like login, register, logout, search books, add to cart, remove from cart, buy books, download books from inventory. The app also has separate API's for admins to manage users. A Sample database has been provided in the 'sql-scripts' directory.(automatically configured)
