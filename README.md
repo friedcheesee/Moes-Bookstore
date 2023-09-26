@@ -73,7 +73,6 @@ With Docker:
 5. Open Postman and import the configuration provided.
 6. Start sending requests via Postman, starting from Login/Register.
 
-[A short video guide to install with docker](https://youtu.be/G8YjCzNMhLY) 
    
 Without docker:
 
