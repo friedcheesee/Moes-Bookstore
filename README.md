@@ -26,7 +26,7 @@ The app opens on port 8080, and the database opens on port 5432, and returns res
 - The app has been containerized, along with the database.
 - App uses bcrypt and a random 32bit key to hash the passwords stored in the database.
 
-![working](/assets/working.png)
+![working](./assets/working.png)
 
 
 ## Prerequisites
